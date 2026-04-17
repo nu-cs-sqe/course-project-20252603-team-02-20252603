@@ -5,7 +5,10 @@
 
 ## Contributors
 - Kevin Han
-- PERSON
+- Ben Isaac
+- Ana Ramirez
+- Clarissa Shieh
+- Kaitlyn Wang
 
 ## Dependencies
 - JDK 11
