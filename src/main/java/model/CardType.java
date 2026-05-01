@@ -1,5 +1,21 @@
 package model;
 
 public enum CardType {
-    DEFUSE
+    EXPLODING_KITTEN,
+    DEFUSE,
+    ATTACK,
+    SKIP,
+    FAVOR,
+    SHUFFLE,
+    ALTER_THE_FUTURE,
+    NOPE,
+    DRAW_FROM_THE_BOTTOM,
+    FERAL_CAT,
+    SEE_THE_FUTURE,
+    TARGETED_ATTACK,
+    TACOCAT,
+    HAIRY_POTATO_CAT,
+    RAINBOW_RALPHING_CAT,
+    BEARD_CAT,
+    CATTERMELON
 }
