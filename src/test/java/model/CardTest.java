@@ -25,4 +25,14 @@ public class CardTest {
         Card tacocatCard = new Card(CardType.TACOCAT);
         assertEquals(CardType.TACOCAT, tacocatCard.getType());
     }
+
+    @Test
+    void testCardEquality() {
+        Card beardCat1 = new Card(CardType.BEARD_CAT);
+        Card beardCat2 = new Card(CardType.BEARD_CAT);
+        Card explodingKitten = new Card(CardType.EXPLODING_KITTEN);
+
+        assertEquals(beardCat1, beardCat2);
+        assertNotEquals(beardCat1, explodingKitten);
+    }
 }
