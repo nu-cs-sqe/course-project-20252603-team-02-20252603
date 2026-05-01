@@ -21,6 +21,11 @@ public class Card {
         return type == card.type;
     }
 
+    @Override
+    public String toString() {
+        return type + " CARD";
+    }
+
     public CardType getType() {
         return type;
     }

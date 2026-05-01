@@ -35,4 +35,12 @@ public class CardTest {
         assertEquals(beardCat1, beardCat2);
         assertNotEquals(beardCat1, explodingKitten);
     }
+
+    @Test
+    void testCardToString() {
+        Card card = new Card(CardType.ALTER_THE_FUTURE);
+        String result = card.toString();
+
+        assertEquals("ALTER_THE_FUTURE CARD", result);
+    }
 }
