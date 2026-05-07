@@ -273,4 +273,19 @@ public class PlayerTest {
         assertEquals(1, player.getTurnsOwed());
     }
 
+    @Test
+    public void AddTurn_FromOne() {
+        Player player = new Player();
+        player.addTurn();
+        assertEquals(2, player.getTurnsOwed());
+    }
+
+    @Test
+    public void AddTurn_FromTwo() {
+        Player player = new Player();
+        player.addTurn();
+        player.addTurn();
+        assertEquals(3, player.getTurnsOwed());
+    }
+
 }

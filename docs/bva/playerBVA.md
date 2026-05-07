@@ -176,11 +176,11 @@
 
 ###  Step 4
 
-|              | System under test             | Expected output                       | Implemented? |
-|--------------|-------------------------------|---------------------------------------|--------------|
-| Test Case 27 | player's turnsOwed field is 0 | player's updated turnsOwed field is 1 | :x:          |
-| Test Case 28 | player's turnsOwed field is 1 | player's updated turnsOwed field is 2 | :x:          |
-| Test Case 29 | player's turnsOwed field is 2 | player's updated turnsOwed field is 2 | :x:          |
+|              | System under test             | Expected output                       | Implemented?       |
+|--------------|-------------------------------|---------------------------------------|--------------------|
+| Test Case 27 | player's turnsOwed field is 0 | player's updated turnsOwed field is 1 | :white_check_mark: |
+| Test Case 28 | player's turnsOwed field is 1 | player's updated turnsOwed field is 2 | :white_check_mark: |
+| Test Case 29 | player's turnsOwed field is 2 | player's updated turnsOwed field is 3 | :white_check_mark: |
 
 
 ## Method under test: `removeTurn()`
