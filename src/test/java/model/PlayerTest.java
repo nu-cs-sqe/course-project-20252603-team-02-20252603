@@ -136,4 +136,13 @@ public class PlayerTest {
         assertEquals("invalid card", e.getMessage());
     }
 
+    @Test
+    public void RemoveCard_OneCardHand() {
+        Player player = new Player();
+        Card defuse = new Card(CardType.DEFUSE);
+        player.addCard(defuse);
+        player.removeCard(defuse);
+        assertEquals(List.of(), player.getHand());
+    }
+
 }

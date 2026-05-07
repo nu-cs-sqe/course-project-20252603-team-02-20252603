@@ -126,14 +126,14 @@
 
 |              | System under test                                                         | Expected output                                           | Implemented? |
 |--------------|---------------------------------------------------------------------------|-----------------------------------------------------------|--------------|
-| Test Case 11 | player has [DEFUSE] hand, remove DEFUSE card                              | player's hand is empty                                    | :x:          |
-| Test Case 12 | player has [DEFUSE, EXPLODING_KITTEN] hand, remove EXPLODING_KITTENS card | player's hand is [DEFUSE]                                 | :x:          |
-| Test Case 13 | player has [ATTACK, ATTACK, SKIP] hand, remove ATTACK card                | player's hand is [ATTACK, SKIP]                           | :x:          |
-| Test Case 14 | player has [ATTACK, ATTACK, SKIP] hand, remove SKIP card                  | player's hand is [ATTACK, ATTACK]                         | :x:          |
-| Test Case 15 | player has empty hand, remove DEFUSE card                                 | IllegalStateException, "empty hand, cannot remove a card" | :x:          |
-| Test Case 16 | player has [DEFUSE, ATTACK] hand, remove SKIP card                        | IllegalArgumentException, "card not in hand"              | :x:          |
-| Test Case 17 | player has [DEFUSE, ATTACK] hand, remove null                             | IllegalArgumentException, "invalid card                   | :x:          |
-(test 13 vs 14: resultant hand has duplicates vs does not have duplicates after removeCard()))
+| Test Case 15 | player has [DEFUSE] hand, remove DEFUSE card                              | player's hand is empty                                    | :white_check_mark:         |
+| Test Case 16 | player has [DEFUSE, EXPLODING_KITTEN] hand, remove EXPLODING_KITTENS card | player's hand is [DEFUSE]                                 | :x:          |
+| Test Case 17 | player has [ATTACK, ATTACK, SKIP] hand, remove ATTACK card                | player's hand is [ATTACK, SKIP]                           | :x:          |
+| Test Case 18 | player has [ATTACK, ATTACK, SKIP] hand, remove SKIP card                  | player's hand is [ATTACK, ATTACK]                         | :x:          |
+| Test Case 19 | player has empty hand, remove DEFUSE card                                 | IllegalStateException, "empty hand, cannot remove a card" | :x:          |
+| Test Case 20 | player has [DEFUSE, ATTACK] hand, remove SKIP card                        | IllegalArgumentException, "card not in hand"              | :x:          |
+| Test Case 21 | player has [DEFUSE, ATTACK] hand, remove null                             | IllegalArgumentException, "invalid card                   | :x:          |
+(test 17 vs 18: resultant hand has duplicates vs does not have duplicates after removeCard()))
 
 
 ## Method under test: `hasDefuse()`
@@ -154,11 +154,11 @@
 
 |              | System under test                               | Expected output | Implemented? |
 |--------------|-------------------------------------------------|-----------------|--------------|
-| Test Case 16 | player has empty hand                           | false           | :x:          |
-| Test Case 17 | player has [DEFUSE] hand                        | true            | :x:          |
-| Test Case 18 | player has [ATTACK, DEFUSE] hand                | true            | :x:          |
-| Test Case 19 | player has [EXPLODING_KITTENS, SKIP, SKIP] hand | false           | :x:          |
-| Test Case 20 | player has [DEFUSE, SKIP, DEFUSE] hand          | true            | :x:          |
+| Test Case 22 | player has empty hand                           | false           | :x:          |
+| Test Case 23 | player has [DEFUSE] hand                        | true            | :x:          |
+| Test Case 24 | player has [ATTACK, DEFUSE] hand                | true            | :x:          |
+| Test Case 25 | player has [EXPLODING_KITTENS, SKIP, SKIP] hand | false           | :x:          |
+| Test Case 26 | player has [DEFUSE, SKIP, DEFUSE] hand          | true            | :x:          |
 
 ## Method under test: `addTurn()`
 
@@ -178,9 +178,9 @@
 
 |              | System under test             | Expected output                       | Implemented? |
 |--------------|-------------------------------|---------------------------------------|--------------|
-| Test Case 21 | player's turnsOwed field is 0 | player's updated turnsOwed field is 1 | :x:          |
-| Test Case 22 | player's turnsOwed field is 1 | player's updated turnsOwed field is 2 | :x:          |
-| Test Case 23 | player's turnsOwed field is 2 | player's updated turnsOwed field is 2 | :x:          |
+| Test Case 27 | player's turnsOwed field is 0 | player's updated turnsOwed field is 1 | :x:          |
+| Test Case 28 | player's turnsOwed field is 1 | player's updated turnsOwed field is 2 | :x:          |
+| Test Case 29 | player's turnsOwed field is 2 | player's updated turnsOwed field is 2 | :x:          |
 
 
 ## Method under test: `removeTurn()`
@@ -201,8 +201,8 @@
 
 |              | System under test             | Expected output                                        | Implemented? |
 |--------------|-------------------------------|--------------------------------------------------------|--------------|
-| Test Case 16 | player's turnsOwed field is 0 | IllegalStateException, "player has no turns to remove" | :x:          |
-| Test Case 17 | player's turnsOwed field is 1 | player's updated turnsOwed field is 0                  | :x:          |
-| Test Case 18 | player's turnsOwed field is 2 | player's updated turnsOwed field is 1                  | :x:          |
-| Test Case 19 | player's turnsOwed field is 4 | player's updated turnsOwed field is 3                  | :x:          |
+| Test Case 30 | player's turnsOwed field is 0 | IllegalStateException, "player has no turns to remove" | :x:          |
+| Test Case 31 | player's turnsOwed field is 1 | player's updated turnsOwed field is 0                  | :x:          |
+| Test Case 32 | player's turnsOwed field is 2 | player's updated turnsOwed field is 1                  | :x:          |
+| Test Case 33 | player's turnsOwed field is 4 | player's updated turnsOwed field is 3                  | :x:          |
 
