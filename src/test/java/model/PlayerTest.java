@@ -225,4 +225,10 @@ public class PlayerTest {
         assertEquals("invalid card", e.getMessage());
     }
 
+    @Test
+    public void HasDefuse_EmptyHand() {
+        Player player = new Player();
+        assertFalse(player.hasDefuse());
+    }
+
 }

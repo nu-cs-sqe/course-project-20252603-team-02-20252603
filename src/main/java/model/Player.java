@@ -43,4 +43,8 @@ public class Player {
         }
         hand.remove(card);
     }
+
+    public boolean hasDefuse() {
+        return false;
+    }
 }
