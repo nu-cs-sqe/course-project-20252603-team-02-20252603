@@ -17,10 +17,14 @@ public class Player {
     }
 
     public void die() {
-        this.alive = false;
+        alive = false;
     }
 
     public List<Card> getHand() {
-        return this.hand;
+        return hand;
+    }
+
+    public void addCard(Card card) {
+        hand.add(card);
     }
 }

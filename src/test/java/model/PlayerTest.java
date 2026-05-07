@@ -41,5 +41,13 @@ public class PlayerTest {
         assertEquals(List.of(), player.getHand());
     }
 
+    @Test
+    public void GetHand_OneCard() {
+        Player player = new Player();
+        Card defuse = new Card(CardType.DEFUSE);
+        player.addCard(defuse);
+        assertEquals(List.of(defuse), player.getHand());
+    }
+
 
 }
