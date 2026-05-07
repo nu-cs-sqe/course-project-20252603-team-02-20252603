@@ -131,8 +131,8 @@
 | Test Case 17 | player has [ATTACK, ATTACK, SKIP] hand, remove ATTACK card                | player's hand is [ATTACK, SKIP]                           | :white_check_mark: |
 | Test Case 18 | player has [ATTACK, ATTACK, SKIP] hand, remove SKIP card                  | player's hand is [ATTACK, ATTACK]                         | :white_check_mark: |
 | Test Case 19 | player has empty hand, remove DEFUSE card                                 | IllegalStateException, "empty hand, cannot remove a card" | :white_check_mark: |          |
-| Test Case 20 | player has [DEFUSE, ATTACK] hand, remove SKIP card                        | IllegalArgumentException, "card not in hand"              | :white_check_mark:                |
-| Test Case 21 | player has [DEFUSE, ATTACK] hand, remove null                             | IllegalArgumentException, "invalid card                   | :x:                |
+| Test Case 20 | player has [DEFUSE, ATTACK] hand, remove SKIP card                        | IllegalArgumentException, "card not in hand"              | :white_check_mark: |
+| Test Case 21 | player has [DEFUSE, ATTACK] hand, remove null                             | IllegalArgumentException, "invalid card                   | :white_check_mark: |
 (test 17 vs 18: resultant hand has duplicates vs does not have duplicates after removeCard()))
 
 

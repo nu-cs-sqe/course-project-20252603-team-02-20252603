@@ -212,4 +212,17 @@ public class PlayerTest {
         assertEquals("card not in hand", e.getMessage());
     }
 
+    @Test
+    public void RemoveCard_NullCard_ThrowException() {
+        Player player = new Player();
+        player.addCard(new Card(CardType.DEFUSE));
+        player.addCard(new Card(CardType.ATTACK));
+
+        IllegalArgumentException e = assertThrows(
+                IllegalArgumentException.class,
+                () -> player.removeCard(null)
+        );
+        assertEquals("invalid card", e.getMessage());
+    }
+
 }
