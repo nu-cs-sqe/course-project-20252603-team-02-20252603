@@ -199,12 +199,12 @@
 
 ###  Step 4
 
-|              | System under test             | Expected output                                        | Implemented? |
-|--------------|-------------------------------|--------------------------------------------------------|--------------|
-| Test Case 30 | player's turnsOwed field is 0 | IllegalStateException, "player has no turns to remove" | :white_check_mark:          |
-| Test Case 31 | player's turnsOwed field is 1 | player's updated turnsOwed field is 0                  | :x:          |
-| Test Case 32 | player's turnsOwed field is 2 | player's updated turnsOwed field is 1                  | :x:          |
-| Test Case 33 | player's turnsOwed field is 4 | player's updated turnsOwed field is 3                  | :x:          |
+|              | System under test             | Expected output                                        | Implemented?       |
+|--------------|-------------------------------|--------------------------------------------------------|--------------------|
+| Test Case 30 | player's turnsOwed field is 0 | IllegalStateException, "player has no turns to remove" | :white_check_mark: |
+| Test Case 31 | player's turnsOwed field is 1 | player's updated turnsOwed field is 0                  | :white_check_mark: |
+| Test Case 32 | player's turnsOwed field is 2 | player's updated turnsOwed field is 1                  | :white_check_mark: |
+| Test Case 33 | player's turnsOwed field is 4 | player's updated turnsOwed field is 3                  | :white_check_mark: |
 
 
 ## Method under test: `getTurnsOwed()`

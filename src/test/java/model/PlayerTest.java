@@ -300,4 +300,31 @@ public class PlayerTest {
         assertEquals("player has no turns to remove", e.getMessage());
     }
 
+    @Test
+    public void RemoveTurn_FromOne() {
+        Player player = new Player();
+        player.removeTurn();
+        assertEquals(0, player.getTurnsOwed());
+    }
+
+    @Test
+    public void RemoveTurn_FromTwo() {
+        Player player = new Player();
+        player.addTurn();
+
+        player.removeTurn();
+        assertEquals(1, player.getTurnsOwed());
+    }
+
+    @Test
+    public void RemoveTurn_FromFour() {
+        Player player = new Player();
+        player.addTurn();
+        player.addTurn();
+        player.addTurn();
+
+        player.removeTurn();
+        assertEquals(3, player.getTurnsOwed());
+    }
+
 }
