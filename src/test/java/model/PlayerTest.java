@@ -231,4 +231,11 @@ public class PlayerTest {
         assertFalse(player.hasDefuse());
     }
 
+    @Test
+    public void HasDefuse_OneDefuseInHand() {
+        Player player = new Player();
+        player.addCard(new Card(CardType.DEFUSE));
+        assertTrue(player.hasDefuse());
+    }
+
 }

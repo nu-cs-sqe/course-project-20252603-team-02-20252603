@@ -45,6 +45,6 @@ public class Player {
     }
 
     public boolean hasDefuse() {
-        return false;
+        return hand.stream().anyMatch(c -> c.getType() == CardType.DEFUSE);
     }
 }
