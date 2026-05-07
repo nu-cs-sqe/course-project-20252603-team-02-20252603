@@ -16,10 +16,10 @@
 
 ###  Step 4
 
-|             | System under test             | Expected output | Implemented? |
-|-------------|-------------------------------|-----------------|--------------|
-| Test Case 1 | player's alive field is true  | true            | :x:          |
-| Test Case 2 | player's alive field is false | false           | :x:          |
+|             | System under test             | Expected output | Implemented?       |
+|-------------|-------------------------------|-----------------|--------------------|
+| Test Case 1 | player's alive field is true  | true            | :white_check_mark: |
+| Test Case 2 | player's alive field is false | false           | :white_check_mark: |
 
 
 ## Method under test: `die()`
@@ -38,10 +38,10 @@
 
 ###  Step 4
 
-|             | System under test             | Expected output                                | Implemented? |
-|-------------|-------------------------------|------------------------------------------------|--------------|
-| Test Case 3 | player's alive field is true  | isAlive() returns false after die() call       | :x:          |
-| Test Case 4 | player's alive field is false | isAlive() still returns false after die() call | :x:          |
+|             | System under test             | Expected output                                | Implemented?       |
+|-------------|-------------------------------|------------------------------------------------|--------------------|
+| Test Case 3 | player's alive field is true  | isAlive() returns false after die() call       | :white_check_mark: |
+| Test Case 4 | player's alive field is false | isAlive() still returns false after die() call | :white_check_mark: |
 
 
 ## Method under test: `getHand()`
@@ -60,12 +60,12 @@
 
 ###  Step 4
 
-|             | System under test                           | Expected output                          | Implemented? |
-|-------------|---------------------------------------------|------------------------------------------|--------------|
-| Test Case 5 | player has empty hand                       | empty list returned                      | :x:          |
-| Test Case 6 | player's hand is [DEFUSE]                   | [DEFUSE] hand returned                   | :x:          |
-| Test Case 7 | player's hand is [DEFUSE, EXPLODING_KITTEN] | [DEFUSE, EXPLODING_KITTEN] hand returned | :x:          |
-| Test Case 8 | player's hand is [ATTACK, ATTACK]           | [ATTACK, ATTACK] hand returned           | :x:          |
+|             | System under test                           | Expected output                          | Implemented?       |
+|-------------|---------------------------------------------|------------------------------------------|--------------------|
+| Test Case 5 | player has empty hand                       | empty list returned                      | :white_check_mark: |
+| Test Case 6 | player's hand is [DEFUSE]                   | [DEFUSE] hand returned                   | :white_check_mark: |
+| Test Case 7 | player's hand is [DEFUSE, EXPLODING_KITTEN] | [DEFUSE, EXPLODING_KITTEN] hand returned | :white_check_mark: |
+| Test Case 8 | player's hand is [ATTACK, ATTACK]           | [ATTACK, ATTACK] hand returned           | :white_check_mark: |
 
 
 ## Method under test: `addCard()`
@@ -90,14 +90,14 @@
 
 ###  Step 4
 
-|              | System under test                                           | Expected output                                     | Implemented? |
-|--------------|-------------------------------------------------------------|-----------------------------------------------------|--------------|
-| Test Case 9  | player has empty hand, add DEFUSE card                      | player's hand is [DEFUSE]                           | :x:          |
-| Test Case 10 | player has [DEFUSE] hand, add SKIP card                     | player's hand is [DEFUSE, SKIP]                     | :x:          |
-| Test Case 11 | player has [DEFUSE, EXPLODING_KITTEN] hand, add ATTACK card | player's hand is [DEFUSE, EXPLODING_KITTEN, ATTACK] | :x:          |
-| Test Case 12 | player has [DEFUSE, EXPLODING_KITTEN] hand add DEFUSE card  | player's hand is [DEFUSE, EXPLODING_KITTEN, DEFUSE] | :x:          |
-| Test Case 13 | player has [ATTACK, ATTACK] hand, add DEFUSE card           | player's hand is [ATTACK, ATTACK, DEFUSE]           | :x:          |
-| Test Case 14 | player has [DEFUSE] hand, add null card                     | IllegalStateException, "invalid card"               | :x:          |
+|              | System under test                                           | Expected output                                     | Implemented?       |
+|--------------|-------------------------------------------------------------|-----------------------------------------------------|--------------------|
+| Test Case 9  | player has empty hand, add DEFUSE card                      | player's hand is [DEFUSE]                           | :white_check_mark: |
+| Test Case 10 | player has [DEFUSE] hand, add SKIP card                     | player's hand is [DEFUSE, SKIP]                     | :white_check_mark: |
+| Test Case 11 | player has [DEFUSE, EXPLODING_KITTEN] hand, add ATTACK card | player's hand is [DEFUSE, EXPLODING_KITTEN, ATTACK] | :white_check_mark: |
+| Test Case 12 | player has [DEFUSE, EXPLODING_KITTEN] hand add DEFUSE card  | player's hand is [DEFUSE, EXPLODING_KITTEN, DEFUSE] | :white_check_mark: |
+| Test Case 13 | player has [ATTACK, ATTACK] hand, add DEFUSE card           | player's hand is [ATTACK, ATTACK, DEFUSE]           | :white_check_mark: |
+| Test Case 14 | player has [DEFUSE] hand, add null card                     | IllegalArgumentException, "invalid card"            | :white_check_mark: |
 (test 12 vs 11: resultant vector has doesn't have duplicates vs does have duplicates after addCard())
 (test 14: might modify later on when we revise error handling)
 

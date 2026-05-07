@@ -123,5 +123,17 @@ public class PlayerTest {
         assertEquals(List.of(defuse1, exploding, defuse2), player.getHand());
     }
 
+    @Test
+    public void AddCard_NullCard_ThrowException() {
+        Player player = new Player();
+        Card defuse = new Card(CardType.DEFUSE);
+        player.addCard(defuse);
+
+        IllegalArgumentException e = assertThrows(
+                IllegalArgumentException.class,
+                () -> player.addCard(null)
+        );
+        assertEquals("invalid card", e.getMessage());
+    }
 
 }

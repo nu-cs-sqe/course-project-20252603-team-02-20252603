@@ -25,6 +25,9 @@ public class Player {
     }
 
     public void addCard(Card card) {
+        if (card == null) {
+            throw new IllegalArgumentException("invalid card");
+        }
         hand.add(card);
     }
 }
