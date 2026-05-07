@@ -32,6 +32,9 @@ public class Player {
     }
 
     public void removeCard(Card card) {
+        if (hand.isEmpty()) {
+            throw new IllegalStateException("empty hand, cannot remove a card");
+        }
         hand.remove(card);
     }
 }

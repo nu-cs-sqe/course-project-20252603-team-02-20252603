@@ -159,7 +159,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testRemoveCard_HandHasDuplicates() {
+    public void RemoveCard_HandHasDuplicates() {
         // [ATTACK, ATTACK, SKIP] remove ATTACK → [ATTACK, SKIP]
         Player player = new Player();
         Card attack1 = new Card(CardType.ATTACK);
@@ -185,6 +185,18 @@ public class PlayerTest {
         player.addCard(skip);
         player.removeCard(skip);
         assertEquals(List.of(attack1, attack2), player.getHand());
+    }
+
+    @Test
+    public void RemoveCard_EmptyHand_ThrowException() {
+        Player player = new Player();
+        Card defuse = new Card(CardType.DEFUSE);
+
+        IllegalStateException e = assertThrows(
+                IllegalStateException.class,
+                () -> player.removeCard(defuse)
+        );
+        assertEquals("empty hand, cannot remove a card", e.getMessage());
     }
 
 }
