@@ -49,5 +49,25 @@ public class PlayerTest {
         assertEquals(List.of(defuse), player.getHand());
     }
 
+    @Test
+    public void GetHand_MultipleCards() {
+        Player player = new Player();
+        Card defuse = new Card(CardType.DEFUSE);
+        Card explodingKitten = new Card(CardType.EXPLODING_KITTEN);
+        player.addCard(defuse);
+        player.addCard(explodingKitten);
+        assertEquals(List.of(defuse, explodingKitten), player.getHand());
+    }
+
+    @Test
+    public void GetHand_DuplicateCards() {
+        Player player = new Player();
+        Card attack1 = new Card(CardType.ATTACK);
+        Card attack2 = new Card(CardType.ATTACK);
+        player.addCard(attack1);
+        player.addCard(attack2);
+        assertEquals(List.of(attack1, attack2), player.getHand());
+    }
+
 
 }
