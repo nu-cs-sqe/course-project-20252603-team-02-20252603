@@ -288,4 +288,16 @@ public class PlayerTest {
         assertEquals(3, player.getTurnsOwed());
     }
 
+    @Test
+    public void RemoveTurn_FromZero_ThrowException() {
+        Player player = new Player();
+        player.removeTurn();
+
+        IllegalStateException e = assertThrows(
+                IllegalStateException.class,
+                player::removeTurn
+        );
+        assertEquals("player has no turns to remove", e.getMessage());
+    }
+
 }

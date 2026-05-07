@@ -55,6 +55,9 @@ public class Player {
     }
 
     public void removeTurn() {
+        if (turnsOwed == 0) {
+            throw new IllegalStateException("player has no turns to remove");
+        }
         turnsOwed--;
     }
 
