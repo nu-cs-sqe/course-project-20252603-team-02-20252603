@@ -327,4 +327,24 @@ public class PlayerTest {
         assertEquals(3, player.getTurnsOwed());
     }
 
+    @Test
+    public void GetTurnsOwed_ExpectZero() {
+        Player player = new Player();
+        player.removeTurn();
+        assertEquals(0, player.getTurnsOwed());
+    }
+
+    @Test
+    public void GetTurnsOwed_ExpectOne() {
+        Player player = new Player();
+        assertEquals(1, player.getTurnsOwed());
+    }
+
+    @Test
+    public void GetTurnsOwed_ExpectTwo() {
+        Player player = new Player();
+        player.addTurn();
+        assertEquals(2, player.getTurnsOwed());
+    }
+
 }

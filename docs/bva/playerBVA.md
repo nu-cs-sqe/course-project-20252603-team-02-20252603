@@ -223,9 +223,9 @@
 
 ###  Step 4
 
-|              | System under test             | Expected output | Implemented? |
-|--------------|-------------------------------|-----------------|--------------|
-| Test Case 34 | player's turnsOwed field is 0 | 0               | :x:          |
-| Test Case 35 | player's turnsOwed field is 1 | 1               | :x:          |
-| Test Case 36 | player's turnsOwed field is 2 | 2               | :x:          |
+|              | System under test             | Expected output | Implemented?       |
+|--------------|-------------------------------|-----------------|--------------------|
+| Test Case 34 | player's turnsOwed field is 0 | 0               | :white_check_mark: |
+| Test Case 35 | player's turnsOwed field is 1 | 1               | :white_check_mark: |
+| Test Case 36 | player's turnsOwed field is 2 | 2               | :white_check_mark: |
 
