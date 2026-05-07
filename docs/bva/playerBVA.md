@@ -152,13 +152,13 @@
 
 ###  Step 4
 
-|              | System under test                               | Expected output | Implemented? |
-|--------------|-------------------------------------------------|-----------------|--------------|
-| Test Case 22 | player has empty hand                           | false           | :x:          |
-| Test Case 23 | player has [DEFUSE] hand                        | true            | :x:          |
-| Test Case 24 | player has [ATTACK, DEFUSE] hand                | true            | :x:          |
-| Test Case 25 | player has [EXPLODING_KITTENS, SKIP, SKIP] hand | false           | :x:          |
-| Test Case 26 | player has [DEFUSE, SKIP, DEFUSE] hand          | true            | :x:          |
+|              | System under test                               | Expected output | Implemented?       |
+|--------------|-------------------------------------------------|-----------------|--------------------|
+| Test Case 22 | player has empty hand                           | false           | :white_check_mark: |
+| Test Case 23 | player has [DEFUSE] hand                        | true            | :white_check_mark: |
+| Test Case 24 | player has [ATTACK, DEFUSE] hand                | true            | :white_check_mark: |
+| Test Case 25 | player has [EXPLODING_KITTENS, SKIP, SKIP] hand | false           | :white_check_mark: |
+| Test Case 26 | player has [DEFUSE, SKIP, DEFUSE] hand          | true            | :white_check_mark: |
 
 ## Method under test: `addTurn()`
 

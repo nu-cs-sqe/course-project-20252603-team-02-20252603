@@ -226,16 +226,43 @@ public class PlayerTest {
     }
 
     @Test
-    public void HasDefuse_EmptyHand() {
+    public void HasDefuse_EmptyHand_ExpectFalse() {
         Player player = new Player();
         assertFalse(player.hasDefuse());
     }
 
     @Test
-    public void HasDefuse_OneDefuseInHand() {
+    public void HasDefuse_OneDefuseInHand_ExpectTrue() {
         Player player = new Player();
         player.addCard(new Card(CardType.DEFUSE));
         assertTrue(player.hasDefuse());
     }
+
+    @Test
+    public void HasDefuse_DefuseInMultipleCardsHand_ExpectTrue() {
+        Player player = new Player();
+        player.addCard(new Card(CardType.ATTACK));
+        player.addCard(new Card(CardType.DEFUSE));
+        assertTrue(player.hasDefuse());
+    }
+
+    @Test
+    public void HasDefuse_NoDefuseInMultipleCardsHand_ExpectFalse() {
+        Player player = new Player();
+        player.addCard(new Card(CardType.EXPLODING_KITTEN));
+        player.addCard(new Card(CardType.SKIP));
+        player.addCard(new Card(CardType.SKIP));
+        assertFalse(player.hasDefuse());
+    }
+
+    @Test
+    public void HasDefuse_MultipleDefuseCards() {
+        Player player = new Player();
+        player.addCard(new Card(CardType.DEFUSE));
+        player.addCard(new Card(CardType.SKIP));
+        player.addCard(new Card(CardType.DEFUSE));
+        assertTrue(player.hasDefuse());
+    }
+
 
 }
