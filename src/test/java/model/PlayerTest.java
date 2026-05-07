@@ -18,4 +18,21 @@ public class PlayerTest {
         player.die();
         assertFalse(player.isAlive());
     }
+
+    @Test
+    public void Die_OnAlivePlayer() {
+        Player player = new Player();
+        player.die();
+        assertFalse(player.isAlive());
+    }
+
+    @Test
+    public void Die_OnDeadPlayer() {
+        Player player = new Player();
+        player.die();
+        player.die();
+        assertFalse(player.isAlive());
+    }
+
+
 }
