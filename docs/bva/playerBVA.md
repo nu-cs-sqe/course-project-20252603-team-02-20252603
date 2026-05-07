@@ -127,9 +127,9 @@
 |              | System under test                                                         | Expected output                                           | Implemented? |
 |--------------|---------------------------------------------------------------------------|-----------------------------------------------------------|--------------|
 | Test Case 15 | player has [DEFUSE] hand, remove DEFUSE card                              | player's hand is empty                                    | :white_check_mark:         |
-| Test Case 16 | player has [DEFUSE, EXPLODING_KITTEN] hand, remove EXPLODING_KITTENS card | player's hand is [DEFUSE]                                 | :x:          |
-| Test Case 17 | player has [ATTACK, ATTACK, SKIP] hand, remove ATTACK card                | player's hand is [ATTACK, SKIP]                           | :x:          |
-| Test Case 18 | player has [ATTACK, ATTACK, SKIP] hand, remove SKIP card                  | player's hand is [ATTACK, ATTACK]                         | :x:          |
+| Test Case 16 | player has [DEFUSE, EXPLODING_KITTEN] hand, remove EXPLODING_KITTENS card | player's hand is [DEFUSE]                                 | :white_check_mark:          |
+| Test Case 17 | player has [ATTACK, ATTACK, SKIP] hand, remove ATTACK card                | player's hand is [ATTACK, SKIP]                           | :white_check_mark:          |
+| Test Case 18 | player has [ATTACK, ATTACK, SKIP] hand, remove SKIP card                  | player's hand is [ATTACK, ATTACK]                         | :white_check_mark:          |
 | Test Case 19 | player has empty hand, remove DEFUSE card                                 | IllegalStateException, "empty hand, cannot remove a card" | :x:          |
 | Test Case 20 | player has [DEFUSE, ATTACK] hand, remove SKIP card                        | IllegalArgumentException, "card not in hand"              | :x:          |
 | Test Case 21 | player has [DEFUSE, ATTACK] hand, remove null                             | IllegalArgumentException, "invalid card                   | :x:          |

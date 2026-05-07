@@ -141,8 +141,50 @@ public class PlayerTest {
         Player player = new Player();
         Card defuse = new Card(CardType.DEFUSE);
         player.addCard(defuse);
+
         player.removeCard(defuse);
         assertEquals(List.of(), player.getHand());
+    }
+
+    @Test
+    public void RemoveCard_MultipleCardHand() {
+        Player player = new Player();
+        Card defuse = new Card(CardType.DEFUSE);
+        Card exploding = new Card(CardType.EXPLODING_KITTEN);
+        player.addCard(defuse);
+        player.addCard(exploding);
+
+        player.removeCard(exploding);
+        assertEquals(List.of(defuse), player.getHand());
+    }
+
+    @Test
+    public void testRemoveCard_HandHasDuplicates() {
+        // [ATTACK, ATTACK, SKIP] remove ATTACK → [ATTACK, SKIP]
+        Player player = new Player();
+        Card attack1 = new Card(CardType.ATTACK);
+        Card attack2 = new Card(CardType.ATTACK);
+        Card skip = new Card(CardType.SKIP);
+        player.addCard(attack1);
+        player.addCard(attack2);
+        player.addCard(skip);
+
+        player.removeCard(attack1);
+        assertEquals(List.of(attack2, skip), player.getHand());
+    }
+
+    @Test
+    public void RemoveCard_ResultingHandHasDuplicates() {
+        // [ATTACK, ATTACK, SKIP] remove SKIP → [ATTACK, ATTACK]
+        Player player = new Player();
+        Card attack1 = new Card(CardType.ATTACK);
+        Card attack2 = new Card(CardType.ATTACK);
+        Card skip = new Card(CardType.SKIP);
+        player.addCard(attack1);
+        player.addCard(attack2);
+        player.addCard(skip);
+        player.removeCard(skip);
+        assertEquals(List.of(attack1, attack2), player.getHand());
     }
 
 }
