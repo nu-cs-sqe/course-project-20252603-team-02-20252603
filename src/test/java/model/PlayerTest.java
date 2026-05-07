@@ -264,5 +264,13 @@ public class PlayerTest {
         assertTrue(player.hasDefuse());
     }
 
+    @Test
+    public void AddTurn_FromZero() {
+        Player player = new Player();
+        // turnsOwed defaults to 1 at construction, must bring it down to 0 for this test
+        player.removeTurn();
+        player.addTurn();
+        assertEquals(1, player.getTurnsOwed());
+    }
 
 }

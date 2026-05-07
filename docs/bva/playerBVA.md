@@ -206,3 +206,26 @@
 | Test Case 32 | player's turnsOwed field is 2 | player's updated turnsOwed field is 1                  | :x:          |
 | Test Case 33 | player's turnsOwed field is 4 | player's updated turnsOwed field is 3                  | :x:          |
 
+
+## Method under test: `getTurnsOwed()`
+
+###  Step 1
+- **input**: player's state (turnsOwed field)
+- **output**: # of turns owed by player
+
+###  Step 2
+- **input**: count
+- **output**: count
+
+###  Step 3
+- **input**: 0, 1, >1
+- **output**: 0, 1, >1
+
+###  Step 4
+
+|              | System under test             | Expected output | Implemented? |
+|--------------|-------------------------------|-----------------|--------------|
+| Test Case 34 | player's turnsOwed field is 0 | 0               | :x:          |
+| Test Case 35 | player's turnsOwed field is 1 | 1               | :x:          |
+| Test Case 36 | player's turnsOwed field is 2 | 2               | :x:          |
+

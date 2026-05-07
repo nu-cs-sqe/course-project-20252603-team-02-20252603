@@ -6,10 +6,12 @@ import java.util.List;
 public class Player {
     private boolean alive;
     private List<Card> hand;
+    private int turnsOwed;
 
     public Player() {
         this.alive = true;
         this.hand = new ArrayList<>();
+        this.turnsOwed = 1;
     }
 
     public boolean isAlive() {
@@ -46,5 +48,17 @@ public class Player {
 
     public boolean hasDefuse() {
         return hand.stream().anyMatch(c -> c.getType() == CardType.DEFUSE);
+    }
+
+    public void addTurn() {
+        turnsOwed++;
+    }
+
+    public void removeTurn() {
+        turnsOwed--;
+    }
+
+    public int getTurnsOwed() {
+        return turnsOwed;
     }
 }
