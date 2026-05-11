@@ -75,6 +75,9 @@ public class Deck {
     }
 
     public void addToDrawPile(Card card, int position){
+        if (position < 0 || position > deck.size()) {
+            throw new IllegalArgumentException("invalid position");
+        }
         deck.add(position, card);
     }
 

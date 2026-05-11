@@ -50,7 +50,7 @@
   - **State of the system**: Draw pile has 0 cards; position = 0
   - **Expected output**: Draw pile has 1 card; that card is at the top and bottom; no exception thrown
 
-- **TC13: Add a card at an out-of-bounds position (above upper boundary)** ( :x: )
+- **TC13: Add a card at an out-of-bounds position (above upper boundary)** ( :white_check_mark: )
   - **State of the system**: Draw pile has 20 cards; position = 21
   - **Expected output**: Throws `IllegalArgumentException`
 

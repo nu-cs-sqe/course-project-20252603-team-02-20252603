@@ -204,5 +204,15 @@ public class DeckTests {
         assertEquals(card, deck.getDeck().get(0));
     }
 
+    @Test
+    public void AddToDrawPileOutOfBounds() {
+        Deck deck = new Deck(players, new Random(42));
+        Card card = new Card(CardType.EXPLODING_KITTEN);
+
+        int outOfBounds = deck.getDeck().size() + 1;
+
+        assertThrows(IllegalArgumentException.class, () -> deck.addToDrawPile(card, outOfBounds));
+    }
+
     /* Peek Top Cards Tests */
 }
