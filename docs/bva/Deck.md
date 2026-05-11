@@ -3,7 +3,7 @@
   - **State of the system**: 3 players; draw pile has 32 cards ((4×11) + 1 + 1 - (6-3) defuses already added, 7×3 cards dealt out, after Exploding Kittens inserted)
   - **Expected output**: Draw pile contains the same 32 cards in a different order (statistical check); size unchanged
 
-- **TC2: Shuffle a draw pile with exactly 1 card** ( :x: )
+- **TC2: Shuffle a draw pile with exactly 1 card** ( :white_check_mark: )
   - **State of the system**: Draw pile has exactly 1 card
   - **Expected output**: Draw pile still has 1 card; order trivially unchanged; no exception thrown
 

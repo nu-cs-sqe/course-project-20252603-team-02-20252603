@@ -46,6 +46,25 @@ public class DeckTests {
     }
 
     @Test
+    public void ShuffleSingleCard() {
+        Deck deck = new Deck(players, new Random(42));
+
+        // drain deck down to 1 card
+        while (deck.getDeck().size() > 1) {
+            deck.drawCard();
+        }
+
+        List<Card> before = new ArrayList<>(deck.getDeck());
+
+        deck.shuffle();
+
+        List<Card> after = deck.getDeck();
+
+        assertEquals(1, after.size());
+        assertEquals(before, after);
+    }
+
+    @Test
     public void DrawCardManyCards() {
         Deck deck = new Deck(players, new Random(42));
 
