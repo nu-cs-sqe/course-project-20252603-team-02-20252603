@@ -64,7 +64,10 @@ public class Deck {
     }
 
     public Card drawCard(){
-        return null;
+        if (deck.isEmpty()) {
+            throw new IllegalStateException("Draw pile is empty");
+        }
+        return deck.remove(0);
     }
 
     public void discardCard(Card card){

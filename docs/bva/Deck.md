@@ -12,7 +12,7 @@
   - **Expected output**: No exception thrown; draw pile remains empty
 
 ### Method under test: `drawCard()`
-- **TC4: Draw from a deck with many cards** ( :x: )
+- **TC4: Draw from a deck with many cards** ( :white_check_mark: )
   - **State of the system**: Draw pile has x cards
   - **Expected output**: Returns the top card; draw pile size decreases to x - 1
 
