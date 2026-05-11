@@ -16,7 +16,7 @@
   - **State of the system**: Draw pile has x cards
   - **Expected output**: Returns the top card; draw pile size decreases to x - 1
 
-- **TC5: Draw from a deck with exactly 1 card (lower boundary)** ( :x: )
+- **TC5: Draw from a deck with exactly 1 card (lower boundary)** ( :white_check_mark: )
   - **State of the system**: Draw pile has exactly 1 card
   - **Expected output**: Returns that card; draw pile size becomes 0
 
