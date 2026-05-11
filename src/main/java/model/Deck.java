@@ -78,18 +78,6 @@ public class Deck {
 
     }
 
-    public void removeAllExplodingKittens(){
-
-    }
-
-    public void addExplodingKittens(int count){
-
-    }
-
-    public void addDefuseCards(int count){
-
-    }
-
     public List<Card> peekTopCards(){
         return null;
     }
