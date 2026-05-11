@@ -38,7 +38,7 @@
   - **State of the system**: Draw pile has 20 cards; position = 0 (top)
   - **Expected output**: Card inserted at top; size becomes 21; card is drawn first on next drawCard()
 
-- **TC10: Add a card to the bottom of a non-empty draw pile (lower boundary position)** ( :x: )
+- **TC10: Add a card to the bottom of a non-empty draw pile (lower boundary position)** ( :white_check_mark: )
   - **State of the system**: Draw pile has 20 cards; position = 20 (bottom)
   - **Expected output**: Card inserted at bottom; size becomes 21; card is last in draw order
 

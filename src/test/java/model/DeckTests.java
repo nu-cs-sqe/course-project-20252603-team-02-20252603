@@ -158,5 +158,17 @@ public class DeckTests {
         assertEquals(card, deck.drawCard());
     }
 
+    @Test
+    public void AddToDrawPileBottom() {
+        Deck deck = new Deck(players, new Random(42));
+        Card card = new Card(CardType.EXPLODING_KITTEN);
+
+        int sizeBefore = deck.getDeck().size();
+        deck.addToDrawPile(card, sizeBefore);
+
+        assertEquals(sizeBefore + 1, deck.getDeck().size());
+        assertEquals(card, deck.getDeck().get(sizeBefore));
+    }
+
     /* Peek Top Cards Tests */
 }
