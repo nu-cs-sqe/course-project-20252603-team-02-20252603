@@ -237,5 +237,20 @@ public class DeckTests {
         assertEquals(sizeBefore, deck.getDeck().size()); // deck unchanged
     }
 
+    @Test
+    public void PeekTopCardsExactlyThree() {
+        Deck deck = new Deck(players, new Random(42));
 
+        while (deck.getDeck().size() > 3) {
+            deck.drawCard();
+        }
+
+        List<Card> top3 = deck.getDeck().subList(0, 3);
+
+        List<Card> peeked = deck.peekTopCards();
+
+        assertEquals(3, peeked.size());
+        assertEquals(top3, peeked);
+        assertEquals(3, deck.getDeck().size()); // deck unchanged
+    }
 }

@@ -63,7 +63,7 @@
   - **State of the system**: Draw pile has x cards
   - **Expected output**: Returns list of top 3 cards in order; draw pile unchanged
 
-- **TC16: Peek when draw pile has exactly 3 cards (boundary)** ( :x: )
+- **TC16: Peek when draw pile has exactly 3 cards (boundary)** ( :white_check_mark: )
   - **State of the system**: Draw pile has exactly 3 cards
   - **Expected output**: Returns all 3 cards in order; draw pile unchanged
 
