@@ -20,6 +20,7 @@ public class DeckTests {
         players.add(new Player());
     }
 
+    /* Shuffle Tests*/
     @Test
     public void ShuffleStandardDeck() {
         int numPlayers = players.size();
@@ -76,6 +77,7 @@ public class DeckTests {
         assertEquals(0, deck.getDeck().size());
     }
 
+    /* Draw Card Tests */
     @Test
     public void DrawCardManyCards() {
         Deck deck = new Deck(players, new Random(42));
@@ -113,5 +115,17 @@ public class DeckTests {
         }
 
         assertThrows(IllegalStateException.class, () -> deck.drawCard());
+    }
+
+    /* Discard Card Tests */
+    @Test
+    public void DiscardCardEmptyPile() {
+        Deck deck = new Deck(players, new Random(42));
+
+        Card drawn = deck.drawCard();
+        deck.discardCard(drawn);
+
+        assertEquals(1, deck.getDiscard().size());
+        assertEquals(drawn, deck.getDiscard().get(0));
     }
 }
