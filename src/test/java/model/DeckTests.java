@@ -253,4 +253,21 @@ public class DeckTests {
         assertEquals(top3, peeked);
         assertEquals(3, deck.getDeck().size()); // deck unchanged
     }
+
+    @Test
+    public void PeekTopCardsFewerThanThree() {
+        Deck deck = new Deck(players, new Random(42));
+
+        while (deck.getDeck().size() > 2) {
+            deck.drawCard();
+        }
+
+        List<Card> top2 = deck.getDeck().subList(0, 2);
+
+        List<Card> peeked = deck.peekTopCards();
+
+        assertEquals(2, peeked.size());
+        assertEquals(top2, peeked);
+        assertEquals(2, deck.getDeck().size()); // deck unchanged
+    }
 }

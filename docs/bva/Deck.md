@@ -67,7 +67,7 @@
   - **State of the system**: Draw pile has exactly 3 cards
   - **Expected output**: Returns all 3 cards in order; draw pile unchanged
 
-- **TC17: Peek when draw pile has fewer than 3 cards (below boundary)** ( :x: )
+- **TC17: Peek when draw pile has fewer than 3 cards (below boundary)** ( :white_check_mark: )
   - **State of the system**: Draw pile has exactly 2 cards
   - **Expected output**: Returns only the 2 available cards
 
