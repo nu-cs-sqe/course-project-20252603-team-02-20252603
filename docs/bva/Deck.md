@@ -34,7 +34,7 @@
   - **Expected output**: Card added to top; discard pile size becomes 11
 
 ### Method under test: `addToDrawPile()`
-- **TC9: Add a card to the top of a non-empty draw pile (upper boundary position)** ( :x: )
+- **TC9: Add a card to the top of a non-empty draw pile (upper boundary position)** ( :white_check_mark: )
   - **State of the system**: Draw pile has 20 cards; position = 0 (top)
   - **Expected output**: Card inserted at top; size becomes 21; card is drawn first on next drawCard()
 

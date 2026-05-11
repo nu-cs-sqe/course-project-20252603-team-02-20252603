@@ -75,7 +75,7 @@ public class Deck {
     }
 
     public void addToDrawPile(Card card, int position){
-
+        deck.add(position, card);
     }
 
     public List<Card> peekTopCards(){
