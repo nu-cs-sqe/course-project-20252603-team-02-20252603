@@ -63,6 +63,7 @@ public class Deck {
         Collections.shuffle(deck, random);
     }
 
+    /* Draw from draw pile */
     public Card drawCard(){
         if (deck.isEmpty()) {
             throw new IllegalStateException("Draw pile is empty");
@@ -70,19 +71,26 @@ public class Deck {
         return deck.remove(0);
     }
 
+    /* Add card to discard pile */
     public void discardCard(Card card) {
         discard.add(card);
     }
 
+    /* Add card back to draw pile */
     public void addToDrawPile(Card card, int position){
         if (position < 0 || position > deck.size()) {
-            throw new IllegalArgumentException("invalid position");
+            throw new IllegalArgumentException("Invalid position");
         }
         deck.add(position, card);
     }
 
+    /* Peek at top 3 cards */
     public List<Card> peekTopCards(){
-        return null;
+        if (deck.isEmpty()) {
+            throw new IllegalStateException("Draw pile is empty");
+        }
+        int count = Math.min(3, deck.size());
+        return new ArrayList<>(deck.subList(0, count));
     }
 
     /* Getters */

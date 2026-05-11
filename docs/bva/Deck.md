@@ -59,7 +59,7 @@
   - **Expected output**: Throws `IllegalArgumentException`
 
 ### Method under test: `peekTopCards()`
-- **TC15: Peek when draw pile has more than 3 cards** ( :x: )
+- **TC15: Peek when draw pile has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Draw pile has x cards
   - **Expected output**: Returns list of top 3 cards in order; draw pile unchanged
 
