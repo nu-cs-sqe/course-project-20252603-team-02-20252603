@@ -214,5 +214,13 @@ public class DeckTests {
         assertThrows(IllegalArgumentException.class, () -> deck.addToDrawPile(card, outOfBounds));
     }
 
+    @Test
+    public void AddToDrawPileNegativePosition() {
+        Deck deck = new Deck(players, new Random(42));
+        Card card = new Card(CardType.EXPLODING_KITTEN);
+
+        assertThrows(IllegalArgumentException.class, () -> deck.addToDrawPile(card, -1));
+    }
+
     /* Peek Top Cards Tests */
 }
