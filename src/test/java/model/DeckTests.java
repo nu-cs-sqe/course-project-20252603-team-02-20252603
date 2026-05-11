@@ -189,5 +189,20 @@ public class DeckTests {
         assertEquals(cardAfter, deck.getDeck().get(position + 1));
     }
 
+    @Test
+    public void testAddToDrawPileEmpty() {
+        Deck deck = new Deck(players, new Random(42));
+        Card card = new Card(CardType.EXPLODING_KITTEN);
+
+        while (!deck.getDeck().isEmpty()) {
+            deck.drawCard();
+        }
+
+        deck.addToDrawPile(card, 0);
+
+        assertEquals(1, deck.getDeck().size());
+        assertEquals(card, deck.getDeck().get(0));
+    }
+
     /* Peek Top Cards Tests */
 }

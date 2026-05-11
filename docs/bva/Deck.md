@@ -46,7 +46,7 @@
   - **State of the system**: Draw pile has 20 cards; position = 10
   - **Expected output**: Card inserted at index 10; size becomes 21; surrounding cards maintain relative order
 
-- **TC12: Add a card to an empty draw pile** ( :x: )
+- **TC12: Add a card to an empty draw pile** ( :white_check_mark: )
   - **State of the system**: Draw pile has 0 cards; position = 0
   - **Expected output**: Draw pile has 1 card; that card is at the top and bottom; no exception thrown
 
