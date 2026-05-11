@@ -44,4 +44,17 @@ public class DeckTests {
         // different order
         assertNotEquals(before, after);
     }
+
+    @Test
+    public void DrawCardManyCards() {
+        Deck deck = new Deck(players, new Random(42));
+
+        int sizeBefore = deck.getDeck().size();
+        Card topCard = deck.getDeck().get(0);
+
+        Card drawn = deck.drawCard();
+
+        assertEquals(topCard, drawn);
+        assertEquals(sizeBefore - 1, deck.getDeck().size());
+    }
 }
