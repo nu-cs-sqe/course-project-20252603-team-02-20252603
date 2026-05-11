@@ -128,4 +128,19 @@ public class DeckTests {
         assertEquals(1, deck.getDiscard().size());
         assertEquals(drawn, deck.getDiscard().get(0));
     }
+
+    @Test
+    public void DiscardCardNonEmptyPile() {
+        Deck deck = new Deck(players, new Random(42));
+
+        for (int i = 0; i < 10; i++) {
+            deck.discardCard(deck.drawCard());
+        }
+
+        Card drawn = deck.drawCard();
+        deck.discardCard(drawn);
+
+        assertEquals(11, deck.getDiscard().size());
+        assertEquals(drawn, deck.getDiscard().get(10));
+    }
 }

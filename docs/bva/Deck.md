@@ -29,7 +29,7 @@
   - **State of the system**: Discard pile is empty; a valid Card object is passed
   - **Expected output**: Card is added to top of discard pile; discard pile size becomes 1
 
-- **TC8: Discard when discard pile already has cards** ( :x: )
+- **TC8: Discard when discard pile already has cards** ( :white_check_mark: )
   - **State of the system**: Discard pile has 10 cards
   - **Expected output**: Card added to top; discard pile size becomes 11
 
