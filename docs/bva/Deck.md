@@ -7,7 +7,7 @@
   - **State of the system**: Draw pile has exactly 1 card
   - **Expected output**: Draw pile still has 1 card; order trivially unchanged; no exception thrown
 
-- **TC3: Shuffle an empty draw pile** ( :x: )
+- **TC3: Shuffle an empty draw pile** ( :white_check_mark: )
   - **State of the system**: Draw pile is empty (0 cards)
   - **Expected output**: No exception thrown; draw pile remains empty
 

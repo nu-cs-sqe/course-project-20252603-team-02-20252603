@@ -65,6 +65,18 @@ public class DeckTests {
     }
 
     @Test
+    public void ShuffleEmptyDeck() {
+        Deck deck = new Deck(players, new Random(42));
+
+        while (!deck.getDeck().isEmpty()) {
+            deck.drawCard();
+        }
+
+        assertDoesNotThrow(() -> deck.shuffle());
+        assertEquals(0, deck.getDeck().size());
+    }
+
+    @Test
     public void DrawCardManyCards() {
         Deck deck = new Deck(players, new Random(42));
 
