@@ -13,7 +13,7 @@
    Kaitlyn: BVA analysis and TDD of Player class
    Ben: BVA analysis and TDD of Game class
 
-# Week 5 (04/20/2026-04/26/2026) 
+# Week 5 (04/27/2026-05/03/2026) 
 **Planning and Progress Tracking**:
 1. [done]
    Group: discussed dependency design and hierarchy of the classes
@@ -26,7 +26,7 @@
 4. [not started]
    Group: review Kevin's TDD process and use of lecture concepts
    
-# Week 6 (04/27/2026-05/03/2026)
+# Week 6 (05/03/2026-05/10/2026)
 **Planning and Progress Tracking**:
 1. [done]:
    Kaitlyn: Implemented Player class and its BVA test cases. 
