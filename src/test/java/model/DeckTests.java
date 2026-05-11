@@ -223,4 +223,18 @@ public class DeckTests {
     }
 
     /* Peek Top Cards Tests */
+    @Test
+    public void PeekTopCardsMoreThanThree() {
+        Deck deck = new Deck(players, new Random(42));
+
+        int sizeBefore = deck.getDeck().size();
+        List<Card> top3 = deck.getDeck().subList(0, 3);
+
+        List<Card> peeked = deck.peekTopCards();
+
+        assertEquals(3, peeked.size());
+        assertEquals(top3, peeked);
+        assertEquals(sizeBefore, deck.getDeck().size()); // deck unchanged
+    }
+
 }

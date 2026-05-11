@@ -54,13 +54,13 @@
   - **State of the system**: Draw pile has 20 cards; position = 21
   - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC14: Add a card at a negative position (below lower boundary)** ( :x: )
+- **TC14: Add a card at a negative position (below lower boundary)** ( :white_check_mark: )
   - **State of the system**: Draw pile has 20 cards; position = -1
   - **Expected output**: Throws `IllegalArgumentException`
 
 ### Method under test: `peekTopCards()`
 - **TC15: Peek when draw pile has more than 3 cards** ( :x: )
-  - **State of the system**: Draw pile has 52 cards
+  - **State of the system**: Draw pile has x cards
   - **Expected output**: Returns list of top 3 cards in order; draw pile unchanged
 
 - **TC16: Peek when draw pile has exactly 3 cards (boundary)** ( :x: )
