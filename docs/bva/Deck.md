@@ -13,8 +13,8 @@
 
 ### Method under test: `drawCard()`
 - **TC4: Draw from a deck with many cards** ( :x: )
-  - **State of the system**: Draw pile has 52 cards
-  - **Expected output**: Returns the top card; draw pile size decreases to 51
+  - **State of the system**: Draw pile has x cards
+  - **Expected output**: Returns the top card; draw pile size decreases to x - 1
 
 - **TC5: Draw from a deck with exactly 1 card (lower boundary)** ( :x: )
   - **State of the system**: Draw pile has exactly 1 card
