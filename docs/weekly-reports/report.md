@@ -35,7 +35,7 @@
    
    Kevin: Implemented Cards class and its BVA test cases.
    
-   PR:https://github.com/nu-cs-sqe/course-project-20252603-team-02-20252603/pull/15/commits
+   PR:https://github.com/nu-cs-sqe/course-project-20252603-team-02-20252603/pull/15
 
    Clarissa: Implemented Deck class and its BVA test cases.
 
