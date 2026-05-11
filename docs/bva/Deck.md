@@ -20,7 +20,7 @@
   - **State of the system**: Draw pile has exactly 1 card
   - **Expected output**: Returns that card; draw pile size becomes 0
 
-- **TC6: Draw from an empty deck (below lower boundary)** ( :x: )
+- **TC6: Draw from an empty deck (below lower boundary)** ( :white_check_mark: )
   - **State of the system**: Draw pile has 0 cards
   - **Expected output**: Throws `IllegalStateException`
 
