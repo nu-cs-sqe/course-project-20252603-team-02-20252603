@@ -42,7 +42,7 @@
   - **State of the system**: Draw pile has 20 cards; position = 20 (bottom)
   - **Expected output**: Card inserted at bottom; size becomes 21; card is last in draw order
 
-- **TC11: Add a card to a middle position** ( :x: )
+- **TC11: Add a card to a middle position** ( :white_check_mark: )
   - **State of the system**: Draw pile has 20 cards; position = 10
   - **Expected output**: Card inserted at index 10; size becomes 21; surrounding cards maintain relative order
 

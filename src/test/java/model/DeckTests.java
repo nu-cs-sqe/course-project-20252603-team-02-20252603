@@ -170,5 +170,24 @@ public class DeckTests {
         assertEquals(card, deck.getDeck().get(sizeBefore));
     }
 
+    @Test
+    public void AddToDrawPileMiddle() {
+        Deck deck = new Deck(players, new Random(42));
+        Card card = new Card(CardType.EXPLODING_KITTEN);
+
+        int sizeBefore = deck.getDeck().size();
+        int position = sizeBefore / 2;
+
+        Card cardBefore = deck.getDeck().get(position - 1);
+        Card cardAfter = deck.getDeck().get(position);
+
+        deck.addToDrawPile(card, position);
+
+        assertEquals(sizeBefore + 1, deck.getDeck().size());
+        assertEquals(card, deck.getDeck().get(position));
+        assertEquals(cardBefore, deck.getDeck().get(position - 1));
+        assertEquals(cardAfter, deck.getDeck().get(position + 1));
+    }
+
     /* Peek Top Cards Tests */
 }
