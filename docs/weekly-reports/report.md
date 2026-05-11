@@ -40,6 +40,7 @@
    Clarissa: Implemented Deck class and its BVA test cases.
 
    PR:https://github.com/nu-cs-sqe/course-project-20252603-team-02-20252603/pull/23
+   
    Set up Group meeting on 5/13
 3. [not started]
    Group: Review Kaitlyn's, Kevin's, and Clarissa's PRs.
