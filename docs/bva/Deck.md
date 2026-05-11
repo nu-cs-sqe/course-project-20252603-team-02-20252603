@@ -25,7 +25,7 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `discardCard()`
-- **TC7: Discard a valid card to an empty discard pile** ( :x: )
+- **TC7: Discard a valid card to an empty discard pile** ( :white_check_mark: )
   - **State of the system**: Discard pile is empty; a valid Card object is passed
   - **Expected output**: Card is added to top of discard pile; discard pile size becomes 1
 

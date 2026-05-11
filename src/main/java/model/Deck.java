@@ -70,8 +70,8 @@ public class Deck {
         return deck.remove(0);
     }
 
-    public void discardCard(Card card){
-
+    public void discardCard(Card card) {
+        discard.add(card);
     }
 
     public void addToDrawPile(Card card, int position){
@@ -97,5 +97,9 @@ public class Deck {
     /* Getters */
     public List<Card> getDeck(){
         return new ArrayList<>(deck);
+    }
+
+    public List<Card> getDiscard() {
+        return new ArrayList<>(discard);
     }
 }
