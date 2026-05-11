@@ -270,4 +270,15 @@ public class DeckTests {
         assertEquals(top2, peeked);
         assertEquals(2, deck.getDeck().size()); // deck unchanged
     }
+
+    @Test
+    public void PeekTopCardsEmptyDeck() {
+        Deck deck = new Deck(players, new Random(42));
+
+        while (!deck.getDeck().isEmpty()) {
+            deck.drawCard();
+        }
+
+        assertThrows(IllegalStateException.class, () -> deck.peekTopCards());
+    }
 }

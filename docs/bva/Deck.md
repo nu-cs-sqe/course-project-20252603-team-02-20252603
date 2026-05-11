@@ -71,6 +71,6 @@
   - **State of the system**: Draw pile has exactly 2 cards
   - **Expected output**: Returns only the 2 available cards
 
-- **TC18: Peek from an empty draw pile** ( :x: )
+- **TC18: Peek from an empty draw pile** ( :white_check_mark: )
   - **State of the system**: Draw pile has 0 cards
   - **Expected output**: Throws `IllegalStateException`
