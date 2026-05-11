@@ -22,13 +22,20 @@ public class DeckTests {
 
     @Test
     public void ShuffleStandardDeck() {
+        int numPlayers = players.size();
+        int initialCards = (4 * 11) + 1 + 1; // 4 sets + extra nope + extra see the future
+        int defuseCards = 6 - numPlayers;
+        int dealtCards = 7 * numPlayers;
+        int explodingKittens = 4; // added at end of constructor
+        int expectedSize = initialCards + defuseCards - dealtCards + explodingKittens;
+
         Deck deck = new Deck(players, new Random(42));
         List<Card> before = new ArrayList<>(deck.getDeck()); // snapshot before
         deck.shuffle();
         List<Card> after = deck.getDeck();
 
         // same size
-        assertEquals(52, after.size());
+        assertEquals(expectedSize, after.size());
 
         // same cards (regardless of order)
         assertTrue(after.containsAll(before));
