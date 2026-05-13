@@ -32,25 +32,25 @@ public class CardTest {
         assertTrue(card1.equals(card2));
     }
 
-//    @ParameterizedTest
-//    @CsvSource({
-//            "DEFUSE, ATTACK",
-//            "ATTACK, SKIP",
-//            "SKIP, FAVOR",
-//            "FAVOR, SHUFFLE",
-//            "SHUFFLE, NOPE",
-//            "NOPE, SEE_THE_FUTURE",
-//            "SEE_THE_FUTURE, TACOCAT",
-//            "TACOCAT, HAIRY_POTATO_CAT",
-//            "HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT",
-//            "RAINBOW_RALPHING_CAT, BEARD_CAT",
-//            "BEARD_CAT, CATTERMELON",
-//            "CATTERMELON, DEFUSE"
-//    })
-//    void testEquals_DifferentCardTypes_ReturnsFalse(CardType type1, CardType type2) {
-//        Card card1 = new Card(type1);
-//        Card card2 = new Card(type2);
-//
-//        assertFalse(card1.equals(card2));
-//    }
+    @ParameterizedTest
+    @CsvSource({
+            "DEFUSE, ATTACK",
+            "ATTACK, SKIP",
+            "SKIP, FAVOR",
+            "FAVOR, SHUFFLE",
+            "SHUFFLE, NOPE",
+            "NOPE, SEE_THE_FUTURE",
+            "SEE_THE_FUTURE, TACOCAT",
+            "TACOCAT, HAIRY_POTATO_CAT",
+            "HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT",
+            "RAINBOW_RALPHING_CAT, BEARD_CAT",
+            "BEARD_CAT, CATTERMELON",
+            "CATTERMELON, DEFUSE"
+    })
+    void testEquals_DifferentCardTypes_ReturnsFalse(CardType type1, CardType type2) {
+        Card card1 = new Card(type1);
+        Card card2 = new Card(type2);
+
+        assertFalse(card1.equals(card2));
+    }
 }
