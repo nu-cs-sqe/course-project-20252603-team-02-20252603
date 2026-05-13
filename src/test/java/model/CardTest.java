@@ -14,4 +14,11 @@ public class CardTest {
 
         assertEquals(type, defuseCard.getType());
     }
+
+    @Test
+    void testInvalidCardCreation() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Card(null);
+        });
+    }
 }
