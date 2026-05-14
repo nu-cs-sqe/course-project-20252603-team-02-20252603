@@ -24,10 +24,10 @@ public class DeckTests {
     @Test
     public void ShuffleStandardDeck() {
         int numPlayers = players.size();
-        int initialCards = (4 * 11) + 1 + 1; // 4 sets + extra nope + extra see the future
+        int initialCards = (4 * 11) + (3 * 5) + (2 * 4) + 3; // 4 sets + 3 sets + 2 sets + singles
         int defuseCards = 6 - numPlayers;
         int dealtCards = 7 * numPlayers;
-        int explodingKittens = 4; // added at end of constructor
+        int explodingKittens = numPlayers - 1;
         int expectedSize = initialCards + defuseCards - dealtCards + explodingKittens;
 
         Deck deck = new Deck(players, new Random(42));

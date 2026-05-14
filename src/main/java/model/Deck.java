@@ -16,28 +16,44 @@ public class Deck {
         this.random = random;
 
         // set up deck
-        for (int i = 0; i < 4; i++){
-            deck.add(new Card(CardType.ATTACK));
+        for (int i = 0; i < 4; i++){ // 4 of each
             deck.add(new Card(CardType.FAVOR));
             deck.add(new Card(CardType.SHUFFLE));
             deck.add(new Card(CardType.NOPE));
-            deck.add(new Card(CardType.SKIP));
-            deck.add(new Card(CardType.SEE_THE_FUTURE));
             deck.add(new Card(CardType.BEARD_CAT));
             deck.add(new Card(CardType.CATTERMELON));
             deck.add(new Card(CardType.HAIRY_POTATO_CAT));
             deck.add(new Card(CardType.TACOCAT));
             deck.add(new Card(CardType.RAINBOW_RALPHING_CAT));
+            deck.add(new Card(CardType.DRAW_FROM_THE_BOTTOM));
+            deck.add(new Card(CardType.ALTER_THE_FUTURE));
+            deck.add(new Card(CardType.FERAL_CAT));
+
+        }
+        for (int i = 0; i < 3; i++){ // 3 of each
+            deck.add(new Card(CardType.ATTACK));
+            deck.add(new Card(CardType.TARGETED_ATTACK));
+            deck.add(new Card(CardType.SEE_THE_FUTURE));
+            deck.add(new Card(CardType.SWAP_TOP_AND_BOTTOM));
+            deck.add(new Card(CardType.NEKO));
+        }
+        for (int i = 0; i < 2; i++){ // 2 of each
+            deck.add(new Card(CardType.BUBONIC_PLAGUE));
+            deck.add(new Card(CardType.BLESSING));
+            deck.add(new Card(CardType.CURSE));
+            deck.add(new Card(CardType.NOSY));
         }
 
+        deck.add(new Card(CardType.SUPER_SKIP));
         deck.add(new Card(CardType.NOPE)); // 5th nope card
-        deck.add(new Card(CardType.SEE_THE_FUTURE)); // 5th see the future card
+        deck.add(new Card(CardType.SKIP)); // 5th skip card
 
         for (int i = 0; i < 6 - numPlayers; i++){ // extra defuse cards
             deck.add(new Card(CardType.DEFUSE));
         }
 
         // shuffle deck
+        shuffle();
 
         // deal hands of 7 cards to each player
         for (int i = 0; i < 7; i++){
@@ -53,7 +69,7 @@ public class Deck {
         }
 
         // put exploding kittens into deck
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < numPlayers - 1; i++){
             deck.add(new Card(CardType.EXPLODING_KITTEN));
         }
     }

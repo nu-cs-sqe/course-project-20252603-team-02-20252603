@@ -1,7 +1,7 @@
 ### Method under test: `shuffle()`
 - **TC1: Shuffle a standard populated draw pile** ( :white_check_mark: )
-  - **State of the system**: 3 players; draw pile has 32 cards ((4×11) + 1 + 1 - (6-3) defuses already added, 7×3 cards dealt out, after Exploding Kittens inserted)
-  - **Expected output**: Draw pile contains the same 32 cards in a different order (statistical check); size unchanged
+  - **State of the system**: 3 players; draw pile has 56 cards (75 total − 21 dealt out + 2 Exploding Kittens inserted)
+  - **Expected output**: Draw pile contains the same 56 cards in a different order (statistical check); size unchanged
 
 - **TC2: Shuffle a draw pile with exactly 1 card** ( :white_check_mark: )
   - **State of the system**: Draw pile has exactly 1 card
