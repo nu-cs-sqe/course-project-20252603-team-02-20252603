@@ -34,7 +34,7 @@ public class Deck {
             deck.add(new Card(CardType.ATTACK));
             deck.add(new Card(CardType.TARGETED_ATTACK));
             deck.add(new Card(CardType.SEE_THE_FUTURE));
-            deck.add(new Card(CardType.SWAP_TOP_AND_BOTTOM));
+            deck.add(new Card(CardType.SWAP_TOP_BOTTOM));
             deck.add(new Card(CardType.NEKO));
         }
         for (int i = 0; i < 2; i++){ // 2 of each
