@@ -168,21 +168,20 @@
 
 ###  Step 2
 - **input**: count
-- **output**: cases 
+- **output**: count
 
 ###  Step 3
-- **input**: -1, 0, 1, >1, 3 (one larger than the maximum possible value, which in this case is 2)
-- **output**: (case 1: IllegalStateException, "player shouldn't have negative turns owed", case 2: 1, 2)
+- **input**: 0, 1, >1, 3 (one more than maximum possible # of turns)
+- **output**: 1, 2
 
 ###  Step 4
 
-|                | System under test              | Expected output                                                    | Implemented?       |
-|----------------|--------------------------------|--------------------------------------------------------------------|--------------------|
-| Test Case 26.5 | player's turnsOwed field is -1 | IllegalStateException, "player shouldn't have negative turns owed" | :white_check_mark: |
-| Test Case 27   | player's turnsOwed field is 0  | player's updated turnsOwed field is 1                              | :white_check_mark: |
-| Test Case 28   | player's turnsOwed field is 1  | player's updated turnsOwed field is 2                              | :white_check_mark: |
-| Test Case 29   | player's turnsOwed field is 2  | player's updated turnsOwed field is still 2                        | :white_check_mark: |
-| Test Case 29.5 | player's turnsOwed field is 3  | player's updated turnsOwed field is 2                              | :white_check_mark: |
+|                | System under test             | Expected output                             | Implemented?       |
+|----------------|-------------------------------|---------------------------------------------|--------------------|
+| Test Case 27   | player's turnsOwed field is 0 | player's updated turnsOwed field is 1       | :white_check_mark: |
+| Test Case 28   | player's turnsOwed field is 1 | player's updated turnsOwed field is 2       | :white_check_mark: |
+| Test Case 29   | player's turnsOwed field is 2 | player's updated turnsOwed field is still 2 | :white_check_mark: |
+| Test Case 29.5 | player's turnsOwed field is 3 | player's updated turnsOwed field is 2       | :white_check_mark: |
 
 
 ## Method under test: `removeTurn()`
