@@ -195,8 +195,8 @@
 - **output**: cases (case 1: player's updated turnsOwed field | case 2: IllegalStateException, "player has no turns to remove")
 
 ###  Step 3
-- **input**: 0, 1, >1
-- **output**: 0, 1, >1
+- **input**: 0, 1, >1 (2 is max possible turnsOwed value)
+- **output**: 0, 1
 
 ###  Step 4
 
@@ -205,8 +205,6 @@
 | Test Case 30 | player's turnsOwed field is 0 | IllegalStateException, "player has no turns to remove" | :white_check_mark: |
 | Test Case 31 | player's turnsOwed field is 1 | player's updated turnsOwed field is 0                  | :white_check_mark: |
 | Test Case 32 | player's turnsOwed field is 2 | player's updated turnsOwed field is 1                  | :white_check_mark: |
-| Test Case 33 | player's turnsOwed field is 4 | player's updated turnsOwed field is 3                  | :white_check_mark: |
-
 
 ## Method under test: `getTurnsOwed()`
 
