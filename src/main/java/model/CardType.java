@@ -1,0 +1,27 @@
+package model;
+
+public enum CardType {
+    EXPLODING_KITTEN,
+    DEFUSE,
+    ATTACK,
+    SKIP,
+    FAVOR,
+    SHUFFLE,
+    NOPE,
+    SEE_THE_FUTURE,
+    TACOCAT,
+    HAIRY_POTATO_CAT,
+    RAINBOW_RALPHING_CAT,
+    BEARD_CAT,
+    CATTERMELON,
+    DRAW_FROM_BOTTOM,
+    ALTER_FUTURE,
+    FERAL_CAT,
+    TARGETED_ATTACK,
+    SWAP_TOP_BOTTOM,
+    NEKO,
+    BUBONIC_PLAGUE,
+    BLESSING,
+    CURSE,
+    NOSY
+}
