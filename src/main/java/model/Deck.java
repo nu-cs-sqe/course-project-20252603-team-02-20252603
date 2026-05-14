@@ -25,8 +25,8 @@ public class Deck {
             deck.add(new Card(CardType.HAIRY_POTATO_CAT));
             deck.add(new Card(CardType.TACOCAT));
             deck.add(new Card(CardType.RAINBOW_RALPHING_CAT));
-            deck.add(new Card(CardType.DRAW_FROM_THE_BOTTOM));
-            deck.add(new Card(CardType.ALTER_THE_FUTURE));
+            deck.add(new Card(CardType.DRAW_FROM_BOTTOM));
+            deck.add(new Card(CardType.ALTER_FUTURE));
             deck.add(new Card(CardType.FERAL_CAT));
 
         }
