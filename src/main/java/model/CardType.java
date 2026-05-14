@@ -23,5 +23,6 @@ public enum CardType {
     BUBONIC_PLAGUE,
     BLESSING,
     CURSE,
-    NOSY
+    NOSY,
+    SUPER_SKIP
 }
