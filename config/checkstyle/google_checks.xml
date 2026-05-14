@@ -1,0 +1,349 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<!--
+    Checkstyle configuration based on the Google Java Style Guide:
+    https://google.github.io/styleguide/javaguide.html
+
+    This file keeps the Google-style checks that are most relevant to our project:
+    - consistent indentation
+    - consistent naming conventions
+    - line length
+    - import rules
+    - brace rules
+    - whitespace rules
+    - simple control-flow/readability rules
+
+    Team addition:
+    - MagicNumber, because Clean Code discusses intention-revealing names
+      and avoiding unexplained numeric values.
+
+    Removed from the full official Google Checkstyle config:
+    - newer Java tokens that are not supported by our Checkstyle version
+    - record-specific rules
+    - text-block-specific rules
+    - Javadoc-specific formatting checks that are not central to our current style standard
+    - suppression filters we are not using right now
+-->
+
+<module name="Checker">
+
+    <property name="charset" value="UTF-8"/>
+    <property name="fileExtensions" value="java, properties, xml"/>
+
+    <!--
+        Source file basics:
+        Google style uses UTF-8 and does not use tab characters for indentation.
+    -->
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <!--
+        Google style uses a 100-character line limit.
+        Package/import lines and URLs are ignored.
+    -->
+    <module name="LineLength">
+        <property name="fileExtensions" value="java"/>
+        <property name="max" value="100"/>
+        <property name="ignorePattern"
+                  value="^package.*|^import.*|http://|https://|ftp://"/>
+    </module>
+
+    <module name="TreeWalker">
+
+        <!-- ========================================================= -->
+        <!-- Clean Code addition                                      -->
+        <!-- ========================================================= -->
+
+        <!--
+            MagicNumber:
+            Avoid unexplained numeric literals.
+            This supports Clean Code's idea of intention-revealing names.
+
+            Example:
+                Bad:  if (players > 5)
+                Good: if (players > MAX_PLAYERS)
+        -->
+        <module name="MagicNumber">
+            <property name="ignoreNumbers" value="-1, 0, 1, 2"/>
+            <property name="ignoreHashCodeMethod" value="true"/>
+            <property name="ignoreAnnotation" value="true"/>
+        </module>
+
+        <!-- ========================================================= -->
+        <!-- Source file structure                                    -->
+        <!-- ========================================================= -->
+
+        <!-- The public/top-level type should match the filename. -->
+        <module name="OuterTypeFilename"/>
+
+        <!-- Each source file should contain only one top-level class. -->
+        <module name="OneTopLevelClass"/>
+
+        <!--
+            Google style: no wildcard imports.
+            Example:
+                Bad:  import java.util.*;
+                Good: import java.util.List;
+        -->
+        <module name="AvoidStarImport"/>
+
+        <!--
+            Google style: package and import declarations are not line-wrapped.
+        -->
+        <module name="NoLineWrap">
+            <property name="tokens" value="PACKAGE_DEF, IMPORT, STATIC_IMPORT"/>
+        </module>
+
+        <!--
+            Google style: imports are sorted/grouped.
+            Static imports are separated from non-static imports.
+        -->
+        <module name="CustomImportOrder">
+            <property name="sortImportsInGroupAlphabetically" value="true"/>
+            <property name="separateLineBetweenGroups" value="true"/>
+            <property name="customImportOrderRules" value="STATIC###THIRD_PARTY_PACKAGE"/>
+        </module>
+
+        <!-- ========================================================= -->
+        <!-- Braces and blocks                                        -->
+        <!-- ========================================================= -->
+
+        <!--
+            Google style: braces are required for if/else/for/while/do,
+            even when the body has only one statement.
+        -->
+        <module name="NeedBraces">
+            <property name="tokens"
+                      value="LITERAL_DO, LITERAL_ELSE, LITERAL_FOR, LITERAL_IF, LITERAL_WHILE"/>
+        </module>
+
+        <!--
+            Google style: opening curly brace is usually at end of line.
+            Removed newer/unsupported tokens from the full Google config.
+        -->
+        <module name="LeftCurly">
+            <property name="tokens"
+                      value="CLASS_DEF, CTOR_DEF, METHOD_DEF, INTERFACE_DEF, ENUM_DEF,
+                     LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE,
+                     LITERAL_DO, LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY,
+                     LITERAL_SWITCH, LITERAL_SYNCHRONIZED, STATIC_INIT"/>
+        </module>
+        <!--
+            Google style: closing curly brace normally appears alone.
+            Removed unsupported tokens such as LITERAL_DEFAULT for this Checkstyle version.
+        -->
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+            <property name="tokens"
+                      value="CLASS_DEF, CTOR_DEF, METHOD_DEF, INTERFACE_DEF, ENUM_DEF,
+                             LITERAL_FOR, LITERAL_WHILE, LITERAL_SWITCH,
+                             LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY,
+                             STATIC_INIT, INSTANCE_INIT"/>
+        </module>
+
+        <!-- Empty blocks should not contain spaces like "{ }". -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\{[ ]+\}"/>
+            <property name="message"
+                      value="Empty blocks should have no spaces. Use '{}' instead of '{ }'."/>
+        </module>
+
+        <!-- ========================================================= -->
+        <!-- Whitespace and formatting                                -->
+        <!-- ========================================================= -->
+
+        <!-- Require whitespace after commas, semicolons, and type casts. -->
+        <module name="WhitespaceAfter">
+            <property name="tokens"
+                      value="COMMA, SEMI, TYPECAST"/>
+        </module>
+
+        <!-- Require whitespace around operators and many Java keywords. -->
+        <module name="WhitespaceAround">
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyLambdas" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+            <property name="allowEmptyLoops" value="true"/>
+            <property name="ignoreEnhancedForColon" value="false"/>
+            <property name="tokens"
+                      value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN,
+                             BXOR, BXOR_ASSIGN, COLON, DIV, DIV_ASSIGN, EQUAL, GE, GT,
+                             LAND, LE, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE,
+                             LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN,
+                             LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY,
+                             LITERAL_WHILE, LOR, LT, MINUS, MINUS_ASSIGN, MOD,
+                             MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION,
+                             SL, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN"/>
+        </module>
+
+        <!-- One statement per line improves readability. -->
+        <module name="OneStatementPerLine"/>
+
+        <!-- Do not declare multiple variables in one declaration. -->
+        <module name="MultipleVariableDeclarations"/>
+
+        <!-- Google style: array brackets are part of the type. -->
+        <module name="ArrayTypeStyle"/>
+
+        <!-- Use uppercase L for long literals, not lowercase l. -->
+        <module name="UpperEll"/>
+
+        <!-- Java modifiers should appear in a conventional order. -->
+        <module name="ModifierOrder"/>
+
+        <!--
+            EmptyLineSeparator:
+            Adds readable spacing between package/import/class/method/constructor sections.
+        -->
+        <module name="EmptyLineSeparator">
+            <property name="tokens"
+                      value="PACKAGE_DEF, IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF,
+                             ENUM_DEF, STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF,
+                             VARIABLE_DEF"/>
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="allowMultipleEmptyLines" value="false"/>
+        </module>
+
+        <!-- Spacing before method parameters. -->
+        <module name="MethodParamPad"/>
+
+        <!-- No extra whitespace before commas, semicolons, dots, etc. -->
+        <module name="NoWhitespaceBefore">
+            <property name="tokens"
+                      value="COMMA, SEMI, POST_INC, POST_DEC, DOT, METHOD_REF"/>
+            <property name="allowLineBreaks" value="true"/>
+        </module>
+
+        <!-- No spaces just inside parentheses. -->
+        <module name="ParenPad"/>
+
+        <!--
+            GenericWhitespace:
+            Checks spacing around generic type syntax.
+            Example:
+                Good: List<String>
+                Bad:  List < String >
+        -->
+        <module name="GenericWhitespace"/>
+
+        <!-- ========================================================= -->
+        <!-- Naming conventions                                       -->
+        <!-- ========================================================= -->
+
+        <!--
+            Package names should be lowercase.
+            Example: com.example.project
+        -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+        </module>
+
+        <!--
+            Type names should use UpperCamelCase / PascalCase.
+            Example: GameController, PlayerHand
+        -->
+        <module name="TypeName"/>
+
+        <!--
+            Method names should use lowerCamelCase.
+            Example: drawCard, getCurrentPlayer
+        -->
+        <module name="MethodName"/>
+
+        <!--
+            Field names should use lowerCamelCase unless they are constants.
+        -->
+        <module name="MemberName"/>
+
+        <!--
+            Parameter names should use lowerCamelCase.
+        -->
+        <module name="ParameterName"/>
+
+        <!--
+            Local variable names should use lowerCamelCase.
+        -->
+        <module name="LocalVariableName"/>
+
+        <!--
+            Constants should use UPPER_SNAKE_CASE.
+            Example: MAX_PLAYERS
+        -->
+        <module name="ConstantName"/>
+
+        <!--
+            Avoid confusing abbreviations in names.
+            This supports Clean Code's emphasis on readable names.
+        -->
+        <module name="AbbreviationAsWordInName">
+            <property name="ignoreFinal" value="false"/>
+            <property name="allowedAbbreviationLength" value="1"/>
+            <property name="tokens"
+                      value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, PARAMETER_DEF,
+                             VARIABLE_DEF, METHOD_DEF"/>
+        </module>
+
+        <!-- ========================================================= -->
+        <!-- Indentation                                              -->
+        <!-- ========================================================= -->
+
+        <!--
+            Google style uses 2-space indentation and +4 for continuation lines.
+        -->
+        <module name="Indentation">
+            <property name="basicOffset" value="2"/>
+            <property name="braceAdjustment" value="0"/>
+            <property name="caseIndent" value="2"/>
+            <property name="throwsIndent" value="4"/>
+            <property name="lineWrappingIndentation" value="4"/>
+            <property name="arrayInitIndent" value="2"/>
+        </module>
+
+        <!-- ========================================================= -->
+        <!-- Control flow and safety-related style                     -->
+        <!-- ========================================================= -->
+
+        <!-- Switch statements should have a default case. -->
+        <module name="MissingSwitchDefault"/>
+
+        <!-- Fall-through in switch statements should be explicit. -->
+        <module name="FallThrough"/>
+
+        <!--
+            Empty catch blocks should contain a comment explaining why
+            the exception is intentionally ignored.
+        -->
+        <module name="EmptyCatchBlock">
+            <property name="commentFormat" value="\w+"/>
+        </module>
+
+        <!--
+            Do not define finalizers.
+            Google style says finalizers should not be used.
+        -->
+        <module name="NoFinalizer"/>
+
+        <!-- ========================================================= -->
+        <!-- Comments                                                 -->
+        <!-- ========================================================= -->
+
+        <!-- Comments should match the surrounding indentation. -->
+        <module name="CommentsIndentation">
+            <property name="tokens" value="SINGLE_LINE_COMMENT, BLOCK_COMMENT_BEGIN"/>
+        </module>
+
+        <!-- TODO comments should follow a consistent format. -->
+        <module name="TodoComment">
+            <property name="format" value="^[ \t]*(?!TODO:)(?i:TODO)\b:?"/>
+            <message key="todo.match"
+                     value="''TODO:'' must be written in all caps and followed by a colon."/>
+        </module>
+
+
+    </module>
+</module>
