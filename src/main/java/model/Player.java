@@ -51,7 +51,9 @@ public class Player {
     }
 
     public void addTurn() {
-        turnsOwed++;
+        if (turnsOwed < 2) {
+            turnsOwed++;
+        }
     }
 
     public void removeTurn() {

@@ -281,11 +281,20 @@ public class PlayerTest {
     }
 
     @Test
-    public void AddTurn_FromTwo() {
+    public void AddTurn_FromTwo_NoChange() {
         Player player = new Player();
         player.addTurn();
         player.addTurn();
-        assertEquals(3, player.getTurnsOwed());
+        assertEquals(2, player.getTurnsOwed());
+    }
+
+    @Test
+    public void AddTurn_FromThree_StayAtTwo() {
+        Player player = new Player();
+        player.addTurn();
+        player.addTurn();
+        player.addTurn();
+        assertEquals(2, player.getTurnsOwed());
     }
 
     @Test
@@ -314,17 +323,6 @@ public class PlayerTest {
 
         player.removeTurn();
         assertEquals(1, player.getTurnsOwed());
-    }
-
-    @Test
-    public void RemoveTurn_FromFour() {
-        Player player = new Player();
-        player.addTurn();
-        player.addTurn();
-        player.addTurn();
-
-        player.removeTurn();
-        assertEquals(3, player.getTurnsOwed());
     }
 
     @Test
