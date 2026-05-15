@@ -23,4 +23,30 @@ public class GameTest {
     assertEquals(0, game.getCurrentPlayerIndex());
     assertFalse(game.isGameOver());
   }
+
+  @Test
+  public void startGameLowerBoundaryPlayerCount() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+
+    game.startGame();
+
+    assertTrue(game.isGameLaunched());
+    assertEquals(3, game.getPlayers().size());
+    assertNotNull(game.getDeck());
+    assertEquals(0, game.getCurrentPlayerIndex());
+    assertFalse(game.isGameOver());
+  }
+
+  @Test
+  public void startGameUpperBoundaryPlayerCount() {
+    Game game = new Game(5, new Random(RANDOM_SEED));
+
+    game.startGame();
+
+    assertTrue(game.isGameLaunched());
+    assertEquals(5, game.getPlayers().size());
+    assertNotNull(game.getDeck());
+    assertEquals(0, game.getCurrentPlayerIndex());
+    assertFalse(game.isGameOver());
+  }
 }
