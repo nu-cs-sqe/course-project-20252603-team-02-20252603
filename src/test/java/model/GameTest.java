@@ -3,6 +3,7 @@ package model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -48,5 +49,19 @@ public class GameTest {
     assertNotNull(game.getDeck());
     assertEquals(0, game.getCurrentPlayerIndex());
     assertFalse(game.isGameOver());
+  }
+
+  @Test
+  public void startGameTooFewPlayersThrowException() {
+    Game game = new Game(2, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalArgumentException.class, () -> game.startGame());
+  }
+
+  @Test
+  public void startGameTooManyPlayersThrowException() {
+    Game game = new Game(6, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalArgumentException.class, () -> game.startGame());
   }
 }

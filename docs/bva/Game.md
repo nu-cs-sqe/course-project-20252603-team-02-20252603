@@ -14,11 +14,11 @@
   - **State of the system**: Game has 5 players
   - **Expected output**: Game starts successfully
 
-- **TC4: Start game with too few players** (not implemented)
+- **TC4: Start game with too few players** ( :white_check_mark: )
   - **State of the system**: Game has 2 players
   - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC5: Start game with too many players** (not implemented)
+- **TC5: Start game with too many players** ( :white_check_mark: )
   - **State of the system**: Game has 6 players
   - **Expected output**: Throws `IllegalArgumentException`
 
