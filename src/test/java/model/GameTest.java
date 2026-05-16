@@ -128,4 +128,12 @@ public class GameTest {
 
     assertThrows(IllegalStateException.class, () -> game.initializeTurnOrder());
   }
+
+  @Test
+  public void getCurrentPlayerFirstPlayer() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertEquals(game.getPlayers().get(0), game.getCurrentPlayer());
+  }
 }

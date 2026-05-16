@@ -50,6 +50,10 @@ public class Game {
     currentPlayerIndex = 0;
   }
 
+  public Player getCurrentPlayer() {
+    return players.get(currentPlayerIndex);
+  }
+
   public List<Player> getPlayers() {
     return new ArrayList<>(players);
   }

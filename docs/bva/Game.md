@@ -57,162 +57,158 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `getCurrentPlayer()`
-- **TC14: Get first current player** (not implemented)
+- **TC14: Get first current player** ( :white_check_mark: )
   - **State of the system**: Current player index is 0
   - **Expected output**: Returns player at index 0
 
-- **TC15: Get middle current player** (not implemented)
-  - **State of the system**: Current player index is 1 in a 3-player game
-  - **Expected output**: Returns player at index 1
-
-- **TC16: Get last current player** (not implemented)
+- **TC15: Get last current player** (not implemented)
   - **State of the system**: Current player index is 2 in a 3-player game
   - **Expected output**: Returns player at index 2
 
-- **TC17: Get current player when index is out of bounds** (not implemented)
+- **TC16: Get current player when index is out of bounds** (not implemented)
   - **State of the system**: Current player index is outside the player list
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `runGame()`
-- **TC18: Run game while game is not over** (not implemented)
+- **TC17: Run game while game is not over** (not implemented)
   - **State of the system**: Game is launched and more than 1 player is alive
   - **Expected output**: Game handles turns until the game is over
 
-- **TC19: Run game when game is already over** (not implemented)
+- **TC18: Run game when game is already over** (not implemented)
   - **State of the system**: Game is over before `runGame()` is called
   - **Expected output**: No turns are handled and winner can be declared
 
-- **TC20: Run game before startGame** (not implemented)
+- **TC19: Run game before startGame** (not implemented)
   - **State of the system**: Game has not launched
   - **Expected output**: Throws `IllegalStateException`
 
-- **TC21: Run game when game becomes over during a turn** (not implemented)
+- **TC20: Run game when game becomes over during a turn** (not implemented)
   - **State of the system**: Game is running and a turn eliminates a player so only 1 player remains
   - **Expected output**: Game stops running and winner can be declared
 
 ### Method under test: `handleTurn()`
-- **TC22: Handle normal current player turn** (not implemented)
+- **TC21: Handle normal current player turn** (not implemented)
   - **State of the system**: Current player is alive and game is not over
   - **Expected output**: Current player may play, then draws if still required
 
-- **TC23: Handle turn for player owing 2 turns** (not implemented)
+- **TC22: Handle turn for player owing 2 turns** (not implemented)
   - **State of the system**: Current player is alive and has `turnsOwed = 2`
   - **Expected output**: One turn is handled and current player still owes 1 turn
 
-- **TC24: Handle turn for player owing 0 turns** (not implemented)
+- **TC23: Handle turn for player owing 0 turns** (not implemented)
   - **State of the system**: Current player is alive and has `turnsOwed = 0`
   - **Expected output**: Game moves to next active player
 
-- **TC25: Handle turn for eliminated current player** (not implemented)
+- **TC24: Handle turn for eliminated current player** (not implemented)
   - **State of the system**: Current player is not alive
   - **Expected output**: Game moves to next active player
 
 ### Method under test: `getNextActivePlayer()`
-- **TC26: Next player is active** (not implemented)
+- **TC25: Next player is active** (not implemented)
   - **State of the system**: 3 players; current player is player 0; player 1 is alive
   - **Expected output**: Returns player 1
 
-- **TC27: Current player is dead** (not implemented)
+- **TC26: Current player is dead** (not implemented)
   - **State of the system**: 3 players; current player is player 0 and is dead; player 1 is alive
   - **Expected output**: Returns player 1
 
-- **TC28: Next player is eliminated** (not implemented)
+- **TC27: Next player is eliminated** (not implemented)
   - **State of the system**: 3 players; current player is player 0; player 1 is dead; player 2 is alive
   - **Expected output**: Returns player 2
 
-- **TC29: Multiple dead players in a row** (not implemented)
+- **TC28: Multiple dead players in a row** (not implemented)
   - **State of the system**: 5 players; players 1 and 2 are dead; current player is player 0; player 3 is alive
   - **Expected output**: Returns player 3
 
-- **TC30: Wrap around to first player** (not implemented)
+- **TC29: Wrap around to first player** (not implemented)
   - **State of the system**: 3 players; current player is player 2; player 0 is alive
   - **Expected output**: Returns player 0
 
-- **TC31: Only one alive player left** (not implemented)
+- **TC30: Only one alive player left** (not implemented)
   - **State of the system**: Only current player is alive
   - **Expected output**: Game is over and no next player is returned
 
 ### Method under test: `moveToNextPlayer()`
-- **TC32: Move to next player normally** (not implemented)
+- **TC31: Move to next player normally** (not implemented)
   - **State of the system**: 3 alive players; current player index is 0
   - **Expected output**: Current player index becomes 1
 
-- **TC33: Move from last player to first player** (not implemented)
+- **TC32: Move from last player to first player** (not implemented)
   - **State of the system**: 3 alive players; current player index is 2
   - **Expected output**: Current player index becomes 0
 
-- **TC34: Move past eliminated player** (not implemented)
+- **TC33: Move past eliminated player** (not implemented)
   - **State of the system**: Player 1 is dead; current player index is 0
   - **Expected output**: Current player index becomes 2
 
-- **TC35: Move when next player has zero turns owed** (not implemented)
+- **TC34: Move when next player has zero turns owed** (not implemented)
   - **State of the system**: Next active player has `turnsOwed = 0`
   - **Expected output**: Next active player is set up to owe 1 turn
 
 ### Method under test: `completeOneTurn()`
-- **TC36: Complete one owed turn** (not implemented)
+- **TC35: Complete one owed turn** (not implemented)
   - **State of the system**: Current player has `turnsOwed = 1`
   - **Expected output**: Current player's `turnsOwed` becomes 0 and game moves to next player
 
-- **TC37: Complete one of two owed turns** (not implemented)
+- **TC36: Complete one of two owed turns** (not implemented)
   - **State of the system**: Current player has `turnsOwed = 2`
   - **Expected output**: Current player's `turnsOwed` becomes 1 and current player does not change
 
-- **TC38: Complete turn when zero turns are owed** (not implemented)
+- **TC37: Complete turn when zero turns are owed** (not implemented)
   - **State of the system**: Current player has `turnsOwed = 0`
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `drawCard()`
-- **TC39: Draw normal card for current player** (not implemented)
+- **TC38: Draw normal card for current player** (not implemented)
   - **State of the system**: Top card is not `EXPLODING_KITTEN`; current player owes 1 turn
   - **Expected output**: Current player receives 1 card and one turn is completed
 
-- **TC40: Draw last card from deck** (not implemented)
+- **TC39: Draw last card from deck** (not implemented)
   - **State of the system**: Draw pile has exactly 1 card
   - **Expected output**: Current player receives that card and draw pile becomes empty
 
-- **TC41: Draw from empty deck** (not implemented)
+- **TC40: Draw from empty deck** (not implemented)
   - **State of the system**: Draw pile has 0 cards
   - **Expected output**: Throws `IllegalStateException`
 
-- **TC42: Draw Exploding Kitten with Defuse** (not implemented)
+- **TC41: Draw Exploding Kitten with Defuse** (not implemented)
   - **State of the system**: Current player draws `EXPLODING_KITTEN` and has a `DEFUSE`
   - **Expected output**: Defuse is used, player stays alive, and Exploding Kitten returns to draw pile
 
-- **TC43: Draw Exploding Kitten without Defuse** (not implemented)
+- **TC42: Draw Exploding Kitten without Defuse** (not implemented)
   - **State of the system**: Current player draws `EXPLODING_KITTEN` and has no `DEFUSE`
   - **Expected output**: Current player dies and game checks for winner
 
 ### Method under test: `playCard()`
-- **TC44: Player plays a playable card** (not implemented)
+- **TC43: Player plays a playable card** (not implemented)
   - **State of the system**: Game is started, game is not over, and current player has a playable card
   - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues
 
-- **TC45: Player tries to play a card not in hand** (not implemented)
+- **TC44: Player tries to play a card not in hand** (not implemented)
   - **State of the system**: Selected card is not in current player's hand
   - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC46: Player tries to play a non-playable card** (not implemented)
+- **TC45: Player tries to play a non-playable card** (not implemented)
   - **State of the system**: Selected card is not playable as an action card
   - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC47: Player tries to play before game starts** (not implemented)
+- **TC46: Player tries to play before game starts** (not implemented)
   - **State of the system**: Game has not launched
   - **Expected output**: Throws `IllegalStateException`
 
-- **TC48: Player tries to play after game is over** (not implemented)
+- **TC47: Player tries to play after game is over** (not implemented)
   - **State of the system**: Game is over
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `checkWinner()`
-- **TC49: More than one player alive** (not implemented)
+- **TC48: More than one player alive** (not implemented)
   - **State of the system**: 2 or more players are alive
   - **Expected output**: Game is not over
 
-- **TC50: Exactly one player alive** (not implemented)
+- **TC49: Exactly one player alive** (not implemented)
   - **State of the system**: 1 player is alive
   - **Expected output**: Game is over and that player is the winner
 
-- **TC51: No players alive** (not implemented)
+- **TC50: No players alive** (not implemented)
   - **State of the system**: 0 players are alive
   - **Expected output**: Throws `IllegalStateException`
