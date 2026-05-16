@@ -312,4 +312,16 @@ public class GameTest {
     assertEquals(0, firstPlayer.getTurnsOwed());
     assertEquals(1, game.getCurrentPlayerIndex());
   }
+
+  @Test
+  public void completeOneTurnOneOfTwoOwedTurns() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    game.getCurrentPlayer().addTurn();
+
+    game.completeOneTurn();
+
+    assertEquals(1, game.getCurrentPlayer().getTurnsOwed());
+    assertEquals(0, game.getCurrentPlayerIndex());
+  }
 }

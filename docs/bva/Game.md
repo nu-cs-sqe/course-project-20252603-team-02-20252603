@@ -150,7 +150,7 @@
   - **State of the system**: Current player has `turnsOwed = 1`
   - **Expected output**: Current player's `turnsOwed` becomes 0 and game moves to next player
 
-- **TC36: Complete one of two owed turns** (not implemented)
+- **TC36: Complete one of two owed turns** ( :white_check_mark: )
   - **State of the system**: Current player has `turnsOwed = 2`
   - **Expected output**: Current player's `turnsOwed` becomes 1 and current player does not change
 
