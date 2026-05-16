@@ -48,7 +48,7 @@
   - **State of the system**: Game has 3 players
   - **Expected output**: Current player index is 0 and turn order is clockwise
 
-- **TC12: Initialize turn order for 5 players** (not implemented)
+- **TC12: Initialize turn order for 5 players** ( :white_check_mark: )
   - **State of the system**: Game has 5 players
   - **Expected output**: Current player index is 0 and all players are in turn order
 

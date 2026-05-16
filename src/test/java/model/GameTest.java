@@ -111,4 +111,14 @@ public class GameTest {
     assertEquals(0, game.getCurrentPlayerIndex());
     assertEquals(3, game.getPlayers().size());
   }
+
+  @Test
+  public void initializeTurnOrderFivePlayers() {
+    Game game = new Game(5, new Random(RANDOM_SEED));
+
+    game.startGame();
+
+    assertEquals(0, game.getCurrentPlayerIndex());
+    assertEquals(5, game.getPlayers().size());
+  }
 }
