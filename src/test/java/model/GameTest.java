@@ -300,4 +300,16 @@ public class GameTest {
     assertEquals(1, game.getCurrentPlayerIndex());
     assertEquals(1, game.getCurrentPlayer().getTurnsOwed());
   }
+
+  @Test
+  public void completeOneTurnOneOwedTurn() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
+
+    game.completeOneTurn();
+
+    assertEquals(0, firstPlayer.getTurnsOwed());
+    assertEquals(1, game.getCurrentPlayerIndex());
+  }
 }

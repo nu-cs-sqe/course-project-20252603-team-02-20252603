@@ -67,6 +67,11 @@ public class Game {
       return;
     }
 
+    completeOneTurn();
+  }
+
+  public void completeOneTurn() {
+    Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeTurn();
     if (currentPlayer.getTurnsOwed() == 0) {
       moveToNextPlayer();

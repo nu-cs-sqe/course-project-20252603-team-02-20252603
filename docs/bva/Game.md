@@ -146,7 +146,7 @@
   - **Expected output**: Next active player is set up to owe 1 turn
 
 ### Method under test: `completeOneTurn()`
-- **TC35: Complete one owed turn** (not implemented)
+- **TC35: Complete one owed turn** ( :white_check_mark: )
   - **State of the system**: Current player has `turnsOwed = 1`
   - **Expected output**: Current player's `turnsOwed` becomes 0 and game moves to next player
 
