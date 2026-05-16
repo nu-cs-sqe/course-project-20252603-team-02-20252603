@@ -136,4 +136,21 @@ public class GameTest {
 
     assertEquals(game.getPlayers().get(0), game.getCurrentPlayer());
   }
+
+  @Test
+  public void runGameBeforeStartGameThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () -> game.runGame());
+  }
+
+  @Test
+  public void handleTurnNormalCurrentPlayerTurn() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+
+    game.handleTurn();
+
+    assertEquals(0, game.getCurrentPlayer().getTurnsOwed());
+  }
 }

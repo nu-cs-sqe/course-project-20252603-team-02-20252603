@@ -54,6 +54,16 @@ public class Game {
     return players.get(currentPlayerIndex);
   }
 
+  public void runGame() {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+  }
+
+  public void handleTurn() {
+    getCurrentPlayer().removeTurn();
+  }
+
   public List<Player> getPlayers() {
     return new ArrayList<>(players);
   }

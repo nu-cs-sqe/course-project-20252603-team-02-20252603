@@ -78,7 +78,7 @@
   - **State of the system**: Game is over before `runGame()` is called
   - **Expected output**: No turns are handled and winner can be declared
 
-- **TC19: Run game before startGame** (not implemented)
+- **TC19: Run game before startGame** ( :white_check_mark: )
   - **State of the system**: Game has not launched
   - **Expected output**: Throws `IllegalStateException`
 
@@ -87,7 +87,7 @@
   - **Expected output**: Game stops running and winner can be declared
 
 ### Method under test: `handleTurn()`
-- **TC21: Handle normal current player turn** (not implemented)
+- **TC21: Handle normal current player turn** ( :white_check_mark: )
   - **State of the system**: Current player is alive and game is not over
   - **Expected output**: Current player may play, then draws if still required
 
