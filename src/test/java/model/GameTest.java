@@ -64,4 +64,12 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.startGame());
   }
+
+  @Test
+  public void startGameTwiceThrowException() {
+    Game game = new Game(4, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalStateException.class, () -> game.startGame());
+  }
 }

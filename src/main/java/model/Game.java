@@ -21,6 +21,9 @@ public class Game {
   }
 
   public void startGame() {
+    if (gameLaunched) {
+      throw new IllegalStateException("game already started");
+    }
     validatePlayerCount();
 
     players = new ArrayList<>();

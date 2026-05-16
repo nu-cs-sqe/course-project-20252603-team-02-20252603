@@ -2,15 +2,15 @@
 
 
 ### Method under test: `startGame()`
-- **TC1: Start game with valid player count** (not implemented)
+- **TC1: Start game with valid player count** (:white_check_mark:)
   - **State of the system**: Game has 4 players and has not launched yet
   - **Expected output**: Game is launched, players are created, deck is created, turn order is initialized
 
-- **TC2: Start game with lower boundary player count** (not implemented)
+- **TC2: Start game with lower boundary player count** (:white_check_mark:)
   - **State of the system**: Game has 3 players
   - **Expected output**: Game starts successfully
 
-- **TC3: Start game with upper boundary player count** (not implemented)
+- **TC3: Start game with upper boundary player count** (:white_check_mark:)
   - **State of the system**: Game has 5 players
   - **Expected output**: Game starts successfully
 
@@ -22,7 +22,7 @@
   - **State of the system**: Game has 6 players
   - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC6: Start game twice** (not implemented)
+- **TC6: Start game twice** ( :white_check_mark: )
   - **State of the system**: Game has already launched
   - **Expected output**: Throws `IllegalStateException`
 
