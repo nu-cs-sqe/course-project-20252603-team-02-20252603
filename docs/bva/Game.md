@@ -61,7 +61,7 @@
   - **State of the system**: Current player index is 0
   - **Expected output**: Returns player at index 0
 
-- **TC15: Get last current player** (not implemented)
+- **TC15: Get last current player** ( :white_check_mark: )
   - **State of the system**: Current player index is 2 in a 3-player game
   - **Expected output**: Returns player at index 2
 

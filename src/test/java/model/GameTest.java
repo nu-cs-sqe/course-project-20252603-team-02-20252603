@@ -140,6 +140,17 @@ public class GameTest {
   }
 
   @Test
+  public void getCurrentPlayerLastPlayer() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    game.moveToNextPlayer();
+    game.moveToNextPlayer();
+
+    assertEquals(players.get(2), game.getCurrentPlayer());
+  }
+
+  @Test
   public void runGameBeforeStartGameThrowException() {
     Game game = new Game(3, new Random(RANDOM_SEED));
 
