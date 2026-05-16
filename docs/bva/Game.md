@@ -52,7 +52,7 @@
   - **State of the system**: Game has 5 players
   - **Expected output**: Current player index is 0 and all players are in turn order
 
-- **TC13: Initialize turn order before players exist** (not implemented)
+- **TC13: Initialize turn order before players exist** ( :white_check_mark: )
   - **State of the system**: Player list is empty
   - **Expected output**: Throws `IllegalStateException`
 

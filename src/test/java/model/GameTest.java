@@ -121,4 +121,11 @@ public class GameTest {
     assertEquals(0, game.getCurrentPlayerIndex());
     assertEquals(5, game.getPlayers().size());
   }
+
+  @Test
+  public void initializeTurnOrderBeforePlayersExistThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () -> game.initializeTurnOrder());
+  }
 }
