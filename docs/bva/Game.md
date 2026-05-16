@@ -129,11 +129,11 @@
   - **Expected output**: Game is over and no next player is returned
 
 ### Method under test: `moveToNextPlayer()`
-- **TC31: Move to next player normally** (not implemented)
+- **TC31: Move to next player normally** ( :white_check_mark: )
   - **State of the system**: 3 alive players; current player index is 0
   - **Expected output**: Current player index becomes 1
 
-- **TC32: Move from last player to first player** (not implemented)
+- **TC32: Move from last player to first player** ( :white_check_mark: )
   - **State of the system**: 3 alive players; current player index is 2
   - **Expected output**: Current player index becomes 0
 

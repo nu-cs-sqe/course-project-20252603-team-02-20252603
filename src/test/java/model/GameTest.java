@@ -253,4 +253,26 @@ public class GameTest {
     assertNull(game.getNextActivePlayer());
     assertTrue(game.isGameOver());
   }
+
+  @Test
+  public void moveToNextPlayerNormally() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+
+    game.moveToNextPlayer();
+
+    assertEquals(1, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void moveToNextPlayerFromLastPlayerToFirstPlayer() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    game.moveToNextPlayer();
+    game.moveToNextPlayer();
+
+    game.moveToNextPlayer();
+
+    assertEquals(0, game.getCurrentPlayerIndex());
+  }
 }
