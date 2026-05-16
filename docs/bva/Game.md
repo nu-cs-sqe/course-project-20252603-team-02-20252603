@@ -108,7 +108,7 @@
   - **State of the system**: 3 players; current player is player 0; player 1 is alive
   - **Expected output**: Returns player 1
 
-- **TC26: Current player is dead** (not implemented)
+- **TC26: Current player is dead** ( :white_check_mark: )
   - **State of the system**: 3 players; current player is player 0 and is dead; player 1 is alive
   - **Expected output**: Returns player 1
 
@@ -116,15 +116,15 @@
   - **State of the system**: 3 players; current player is player 0; player 1 is dead; player 2 is alive
   - **Expected output**: Returns player 2
 
-- **TC28: Multiple dead players in a row** (not implemented)
+- **TC28: Multiple dead players in a row** ( :white_check_mark: )
   - **State of the system**: 5 players; players 1 and 2 are dead; current player is player 0; player 3 is alive
   - **Expected output**: Returns player 3
 
-- **TC29: Wrap around to first player** (not implemented)
+- **TC29: Wrap around to first player** ( :white_check_mark: )
   - **State of the system**: 3 players; current player is player 2; player 0 is alive
   - **Expected output**: Returns player 0
 
-- **TC30: Only one alive player left** (not implemented)
+- **TC30: Only one alive player left** ( :white_check_mark: )
   - **State of the system**: Only current player is alive
   - **Expected output**: Game is over and no next player is returned
 

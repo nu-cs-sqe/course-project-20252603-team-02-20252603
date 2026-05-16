@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -200,6 +201,16 @@ public class GameTest {
   }
 
   @Test
+  public void getNextActivePlayerCurrentPlayerIsDead() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(0).die();
+
+    assertEquals(players.get(1), game.getNextActivePlayer());
+  }
+
+  @Test
   public void getNextActivePlayerNextPlayerIsEliminated() {
     Game game = new Game(3, new Random(RANDOM_SEED));
     game.startGame();
@@ -207,5 +218,39 @@ public class GameTest {
     players.get(1).die();
 
     assertEquals(players.get(2), game.getNextActivePlayer());
+  }
+
+  @Test
+  public void getNextActivePlayerMultipleDeadPlayersInRow() {
+    Game game = new Game(5, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).die();
+    players.get(2).die();
+
+    assertEquals(players.get(3), game.getNextActivePlayer());
+  }
+
+  @Test
+  public void getNextActivePlayerWrapAroundToFirstPlayer() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    game.moveToNextPlayer();
+    game.moveToNextPlayer();
+
+    assertEquals(players.get(0), game.getNextActivePlayer());
+  }
+
+  @Test
+  public void getNextActivePlayerOnlyOneAlivePlayerLeft() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).die();
+    players.get(2).die();
+
+    assertNull(game.getNextActivePlayer());
+    assertTrue(game.isGameOver());
   }
 }

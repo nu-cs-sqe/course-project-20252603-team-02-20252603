@@ -80,6 +80,7 @@ public class Game {
         return player;
       }
     }
+    gameOver = true;
     return null;
   }
 
