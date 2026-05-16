@@ -58,6 +58,9 @@ public class Game {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
+    if (!gameOver) {
+      handleTurn();
+    }
   }
 
   public void handleTurn() {

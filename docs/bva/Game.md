@@ -70,7 +70,7 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `runGame()`
-- **TC17: Run game while game is not over** (not implemented)
+- **TC17: Run game while game is not over** ( :white_check_mark: )
   - **State of the system**: Game is launched and more than 1 player is alive
   - **Expected output**: Game handles turns until the game is over
 

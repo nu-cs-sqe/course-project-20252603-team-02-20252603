@@ -171,6 +171,19 @@ public class GameTest {
   }
 
   @Test
+  public void runGameWhileGameIsNotOver() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
+
+    game.runGame();
+
+    assertEquals(0, firstPlayer.getTurnsOwed());
+    assertEquals(1, game.getCurrentPlayerIndex());
+    assertFalse(game.isGameOver());
+  }
+
+  @Test
   public void handleTurnNormalCurrentPlayerTurn() {
     Game game = new Game(3, new Random(RANDOM_SEED));
     game.startGame();
