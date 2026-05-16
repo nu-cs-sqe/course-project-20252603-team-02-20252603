@@ -287,4 +287,17 @@ public class GameTest {
 
     assertEquals(2, game.getCurrentPlayerIndex());
   }
+
+  @Test
+  public void moveToNextPlayerWhenNextPlayerHasZeroTurnsOwed() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).removeTurn();
+
+    game.moveToNextPlayer();
+
+    assertEquals(1, game.getCurrentPlayerIndex());
+    assertEquals(1, game.getCurrentPlayer().getTurnsOwed());
+  }
 }

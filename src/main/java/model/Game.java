@@ -88,6 +88,9 @@ public class Game {
     do {
       currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     } while (!getCurrentPlayer().isAlive());
+    if (getCurrentPlayer().getTurnsOwed() == 0) {
+      getCurrentPlayer().addTurn();
+    }
   }
 
   public List<Player> getPlayers() {

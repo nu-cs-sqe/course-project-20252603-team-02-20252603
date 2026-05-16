@@ -141,7 +141,7 @@
   - **State of the system**: Player 1 is dead; current player index is 0
   - **Expected output**: Current player index becomes 2
 
-- **TC34: Move when next player has zero turns owed** (not implemented)
+- **TC34: Move when next player has zero turns owed** ( :white_check_mark: )
   - **State of the system**: Next active player has `turnsOwed = 0`
   - **Expected output**: Next active player is set up to owe 1 turn
 
