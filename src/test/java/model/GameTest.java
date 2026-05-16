@@ -1,5 +1,6 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -71,5 +72,19 @@ public class GameTest {
     game.startGame();
 
     assertThrows(IllegalStateException.class, () -> game.startGame());
+  }
+
+  @Test
+  public void validatePlayerCountThreePlayers() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+
+    assertDoesNotThrow(() -> game.validatePlayerCount());
+  }
+
+  @Test
+  public void validatePlayerCountFivePlayers() {
+    Game game = new Game(5, new Random(RANDOM_SEED));
+
+    assertDoesNotThrow(() -> game.validatePlayerCount());
   }
 }

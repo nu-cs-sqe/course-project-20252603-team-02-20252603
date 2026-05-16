@@ -27,11 +27,11 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `validatePlayerCount()`
-- **TC7: Validate 3 players** (not implemented)
+- **TC7: Validate 3 players** ( :white_check_mark: )
   - **State of the system**: Player count is 3
   - **Expected output**: No exception thrown
 
-- **TC8: Validate 5 players** (not implemented)
+- **TC8: Validate 5 players** ( :white_check_mark: )
   - **State of the system**: Player count is 5
   - **Expected output**: No exception thrown
 
