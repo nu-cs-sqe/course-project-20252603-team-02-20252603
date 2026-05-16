@@ -126,6 +126,8 @@ public class Game {
     }
     if (alivePlayers > 1) {
       gameOver = false;
+    } else if (alivePlayers == 1) {
+      gameOver = true;
     }
   }
 

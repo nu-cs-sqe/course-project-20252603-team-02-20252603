@@ -205,7 +205,7 @@
   - **State of the system**: 2 or more players are alive
   - **Expected output**: Game is not over
 
-- **TC49: Exactly one player alive** (not implemented)
+- **TC49: Exactly one player alive** ( :white_check_mark: )
   - **State of the system**: 1 player is alive
   - **Expected output**: Game is over and that player is the winner
 

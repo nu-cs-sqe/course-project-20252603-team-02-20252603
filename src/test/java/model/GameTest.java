@@ -478,6 +478,19 @@ public class GameTest {
     assertFalse(game.isGameOver());
   }
 
+  @Test
+  public void checkWinnerExactlyOnePlayerAlive() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).die();
+    players.get(2).die();
+
+    game.checkWinner();
+
+    assertTrue(game.isGameOver());
+  }
+
   private int countCards(Player player, CardType cardType) {
     int count = 0;
     for (Card card : player.getHand()) {
