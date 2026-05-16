@@ -209,6 +209,6 @@
   - **State of the system**: 1 player is alive
   - **Expected output**: Game is over and that player is the winner
 
-- **TC50: No players alive** (not implemented)
+- **TC50: No players alive** ( :white_check_mark: )
   - **State of the system**: 0 players are alive
   - **Expected output**: Throws `IllegalStateException`

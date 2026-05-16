@@ -128,6 +128,8 @@ public class Game {
       gameOver = false;
     } else if (alivePlayers == 1) {
       gameOver = true;
+    } else {
+      throw new IllegalStateException("no players alive");
     }
   }
 

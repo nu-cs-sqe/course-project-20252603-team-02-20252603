@@ -491,6 +491,18 @@ public class GameTest {
     assertTrue(game.isGameOver());
   }
 
+  @Test
+  public void checkWinnerNoPlayersAliveThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(0).die();
+    players.get(1).die();
+    players.get(2).die();
+
+    assertThrows(IllegalStateException.class, () -> game.checkWinner());
+  }
+
   private int countCards(Player player, CardType cardType) {
     int count = 0;
     for (Card card : player.getHand()) {
