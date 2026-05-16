@@ -397,6 +397,22 @@ public class GameTest {
     assertEquals(explodingKitten, game.getDeck().getDeck().get(0));
   }
 
+  @Test
+  public void drawCardExplodingKittenWithoutDefuse() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
+    while (firstPlayer.hasDefuse()) {
+      firstPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+    game.getDeck().addToDrawPile(new Card(CardType.EXPLODING_KITTEN), 0);
+
+    game.drawCard();
+
+    assertFalse(firstPlayer.isAlive());
+    assertFalse(game.isGameOver());
+  }
+
   private int countCards(Player player, CardType cardType) {
     int count = 0;
     for (Card card : player.getHand()) {

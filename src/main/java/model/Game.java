@@ -89,6 +89,11 @@ public class Game {
       completeOneTurn();
       return;
     }
+    if (card.getType() == CardType.EXPLODING_KITTEN) {
+      currentPlayer.die();
+      getNextActivePlayer();
+      return;
+    }
     currentPlayer.addCard(card);
     completeOneTurn();
   }
