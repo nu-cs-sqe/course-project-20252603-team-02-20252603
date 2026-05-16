@@ -188,15 +188,15 @@
   - **State of the system**: Selected card is not in current player's hand
   - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC45: Player tries to play a non-playable card** (not implemented)
+- **TC45: Player tries to play a non-playable card** ( :white_check_mark: )
   - **State of the system**: Selected card is not playable as an action card
   - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC46: Player tries to play before game starts** (not implemented)
+- **TC46: Player tries to play before game starts** ( :white_check_mark: )
   - **State of the system**: Game has not launched
   - **Expected output**: Throws `IllegalStateException`
 
-- **TC47: Player tries to play after game is over** (not implemented)
+- **TC47: Player tries to play after game is over** ( :white_check_mark: )
   - **State of the system**: Game is over
   - **Expected output**: Throws `IllegalStateException`
 

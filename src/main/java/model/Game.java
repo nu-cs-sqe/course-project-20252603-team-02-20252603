@@ -99,9 +99,22 @@ public class Game {
   }
 
   public void playCard(Card card) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
+  }
+
+  private boolean isPlayableCard(Card card) {
+    return card != null && card.getType() == CardType.SKIP;
   }
 
   public Player getNextActivePlayer() {

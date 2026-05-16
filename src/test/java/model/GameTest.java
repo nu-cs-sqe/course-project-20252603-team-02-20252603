@@ -439,6 +439,35 @@ public class GameTest {
     assertThrows(IllegalArgumentException.class, () -> game.playCard(new Card(CardType.SKIP)));
   }
 
+  @Test
+  public void playCardNonPlayableCardThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Card defuse = new Card(CardType.DEFUSE);
+    game.getCurrentPlayer().addCard(defuse);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(defuse));
+  }
+
+  @Test
+  public void playCardBeforeGameStartsThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () -> game.playCard(new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardAfterGameIsOverThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).die();
+    players.get(2).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () -> game.playCard(new Card(CardType.SKIP)));
+  }
+
   private int countCards(Player player, CardType cardType) {
     int count = 0;
     for (Card card : player.getHand()) {
