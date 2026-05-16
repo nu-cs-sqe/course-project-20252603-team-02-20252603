@@ -87,4 +87,18 @@ public class GameTest {
 
     assertDoesNotThrow(() -> game.validatePlayerCount());
   }
+
+  @Test
+  public void validatePlayerCountTooFewPlayersThrowException() {
+    Game game = new Game(2, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalArgumentException.class, () -> game.validatePlayerCount());
+  }
+
+  @Test
+  public void validatePlayerCountTooManyPlayersThrowException() {
+    Game game = new Game(6, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalArgumentException.class, () -> game.validatePlayerCount());
+  }
 }

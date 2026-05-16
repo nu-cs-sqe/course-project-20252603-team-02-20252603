@@ -35,11 +35,11 @@
   - **State of the system**: Player count is 5
   - **Expected output**: No exception thrown
 
-- **TC9: Validate too few players** (not implemented)
+- **TC9: Validate too few players** ( :white_check_mark: )
   - **State of the system**: Player count is 2
   - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC10: Validate too many players** (not implemented)
+- **TC10: Validate too many players** ( :white_check_mark: )
   - **State of the system**: Player count is 6
   - **Expected output**: Throws `IllegalArgumentException`
 
