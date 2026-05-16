@@ -431,6 +431,14 @@ public class GameTest {
     assertEquals(skip, game.getDeck().getDiscard().get(discardSizeBefore));
   }
 
+  @Test
+  public void playCardCardNotInHandThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(new Card(CardType.SKIP)));
+  }
+
   private int countCards(Player player, CardType cardType) {
     int count = 0;
     for (Card card : player.getHand()) {

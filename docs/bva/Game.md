@@ -184,7 +184,7 @@
   - **State of the system**: Game is started, game is not over, and current player has a playable card
   - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues
 
-- **TC44: Player tries to play a card not in hand** (not implemented)
+- **TC44: Player tries to play a card not in hand** ( :white_check_mark: )
   - **State of the system**: Selected card is not in current player's hand
   - **Expected output**: Throws `IllegalArgumentException`
 
