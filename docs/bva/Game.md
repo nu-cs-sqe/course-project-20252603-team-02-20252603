@@ -154,7 +154,7 @@
   - **State of the system**: Current player has `turnsOwed = 2`
   - **Expected output**: Current player's `turnsOwed` becomes 1 and current player does not change
 
-- **TC37: Complete turn when zero turns are owed** (not implemented)
+- **TC37: Complete turn when zero turns are owed** ( :white_check_mark: )
   - **State of the system**: Current player has `turnsOwed = 0`
   - **Expected output**: Throws `IllegalStateException`
 

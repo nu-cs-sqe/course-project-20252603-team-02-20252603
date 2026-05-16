@@ -324,4 +324,13 @@ public class GameTest {
     assertEquals(1, game.getCurrentPlayer().getTurnsOwed());
     assertEquals(0, game.getCurrentPlayerIndex());
   }
+
+  @Test
+  public void completeOneTurnWhenZeroTurnsAreOwedThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    game.getCurrentPlayer().removeTurn();
+
+    assertThrows(IllegalStateException.class, () -> game.completeOneTurn());
+  }
 }
