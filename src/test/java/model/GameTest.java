@@ -333,4 +333,20 @@ public class GameTest {
 
     assertThrows(IllegalStateException.class, () -> game.completeOneTurn());
   }
+
+  @Test
+  public void drawCardNormalCardForCurrentPlayer() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
+    int handSizeBefore = firstPlayer.getHand().size();
+    int deckSizeBefore = game.getDeck().getDeck().size();
+
+    game.drawCard();
+
+    assertEquals(handSizeBefore + 1, firstPlayer.getHand().size());
+    assertEquals(deckSizeBefore - 1, game.getDeck().getDeck().size());
+    assertEquals(0, firstPlayer.getTurnsOwed());
+    assertEquals(1, game.getCurrentPlayerIndex());
+  }
 }

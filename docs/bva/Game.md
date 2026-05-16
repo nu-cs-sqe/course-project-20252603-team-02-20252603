@@ -159,7 +159,7 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `drawCard()`
-- **TC38: Draw normal card for current player** (not implemented)
+- **TC38: Draw normal card for current player** ( :white_check_mark: )
   - **State of the system**: Top card is not `EXPLODING_KITTEN`; current player owes 1 turn
   - **Expected output**: Current player receives 1 card and one turn is completed
 
