@@ -413,6 +413,24 @@ public class GameTest {
     assertFalse(game.isGameOver());
   }
 
+  @Test
+  public void playCardPlayableCard() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(skip);
+    int handSizeBefore = currentPlayer.getHand().size();
+    int discardSizeBefore = game.getDeck().getDiscard().size();
+
+    game.playCard(skip);
+
+    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
+    assertFalse(currentPlayer.getHand().contains(skip));
+    assertEquals(discardSizeBefore + 1, game.getDeck().getDiscard().size());
+    assertEquals(skip, game.getDeck().getDiscard().get(discardSizeBefore));
+  }
+
   private int countCards(Player player, CardType cardType) {
     int count = 0;
     for (Card card : player.getHand()) {

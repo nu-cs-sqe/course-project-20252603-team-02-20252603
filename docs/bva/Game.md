@@ -180,7 +180,7 @@
   - **Expected output**: Current player dies and game checks for winner
 
 ### Method under test: `playCard()`
-- **TC43: Player plays a playable card** (not implemented)
+- **TC43: Player plays a playable card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a playable card
   - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues
 

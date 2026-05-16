@@ -98,6 +98,12 @@ public class Game {
     completeOneTurn();
   }
 
+  public void playCard(Card card) {
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+  }
+
   public Player getNextActivePlayer() {
     for (int i = 1; i < players.size(); i++) {
       Player player = players.get((currentPlayerIndex + i) % players.size());
