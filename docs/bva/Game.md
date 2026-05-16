@@ -137,7 +137,7 @@
   - **State of the system**: 3 alive players; current player index is 2
   - **Expected output**: Current player index becomes 0
 
-- **TC33: Move past eliminated player** (not implemented)
+- **TC33: Move past eliminated player** ( :white_check_mark: )
   - **State of the system**: Player 1 is dead; current player index is 0
   - **Expected output**: Current player index becomes 2
 

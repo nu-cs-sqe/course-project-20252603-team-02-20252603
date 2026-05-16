@@ -275,4 +275,16 @@ public class GameTest {
 
     assertEquals(0, game.getCurrentPlayerIndex());
   }
+
+  @Test
+  public void moveToNextPlayerPastEliminatedPlayer() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).die();
+
+    game.moveToNextPlayer();
+
+    assertEquals(2, game.getCurrentPlayerIndex());
+  }
 }

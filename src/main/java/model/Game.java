@@ -85,7 +85,9 @@ public class Game {
   }
 
   public void moveToNextPlayer() {
-    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    do {
+      currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    } while (!getCurrentPlayer().isAlive());
   }
 
   public List<Player> getPlayers() {
