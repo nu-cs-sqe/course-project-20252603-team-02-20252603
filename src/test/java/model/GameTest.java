@@ -349,4 +349,31 @@ public class GameTest {
     assertEquals(0, firstPlayer.getTurnsOwed());
     assertEquals(1, game.getCurrentPlayerIndex());
   }
+
+  @Test
+  public void drawCardLastCardFromDeck() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
+    int handSizeBefore = firstPlayer.getHand().size();
+    while (game.getDeck().getDeck().size() > 1) {
+      game.getDeck().drawCard();
+    }
+
+    game.drawCard();
+
+    assertEquals(handSizeBefore + 1, firstPlayer.getHand().size());
+    assertEquals(0, game.getDeck().getDeck().size());
+  }
+
+  @Test
+  public void drawCardFromEmptyDeckThrowException() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    while (!game.getDeck().getDeck().isEmpty()) {
+      game.getDeck().drawCard();
+    }
+
+    assertThrows(IllegalStateException.class, () -> game.drawCard());
+  }
 }

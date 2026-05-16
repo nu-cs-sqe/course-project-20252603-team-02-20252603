@@ -163,11 +163,11 @@
   - **State of the system**: Top card is not `EXPLODING_KITTEN`; current player owes 1 turn
   - **Expected output**: Current player receives 1 card and one turn is completed
 
-- **TC39: Draw last card from deck** (not implemented)
+- **TC39: Draw last card from deck** ( :white_check_mark: )
   - **State of the system**: Draw pile has exactly 1 card
   - **Expected output**: Current player receives that card and draw pile becomes empty
 
-- **TC40: Draw from empty deck** (not implemented)
+- **TC40: Draw from empty deck** ( :white_check_mark: )
   - **State of the system**: Draw pile has 0 cards
   - **Expected output**: Throws `IllegalStateException`
 
