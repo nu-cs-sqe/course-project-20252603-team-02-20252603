@@ -59,7 +59,7 @@ public class Game {
       throw new IllegalStateException("game has not started");
     }
     if (!gameOver) {
-      handleTurn();
+      drawCard();
     }
   }
 
@@ -94,7 +94,7 @@ public class Game {
     }
     if (card.getType() == CardType.EXPLODING_KITTEN) {
       currentPlayer.die();
-      getNextActivePlayer();
+      checkWinner();
       return;
     }
     currentPlayer.addCard(card);

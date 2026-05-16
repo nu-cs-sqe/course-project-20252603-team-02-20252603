@@ -175,12 +175,32 @@ public class GameTest {
     Game game = new Game(3, new Random(RANDOM_SEED));
     game.startGame();
     Player firstPlayer = game.getCurrentPlayer();
+    int handSizeBefore = firstPlayer.getHand().size();
 
     game.runGame();
 
+    assertEquals(handSizeBefore + 1, firstPlayer.getHand().size());
     assertEquals(0, firstPlayer.getTurnsOwed());
     assertEquals(1, game.getCurrentPlayerIndex());
     assertFalse(game.isGameOver());
+  }
+
+  @Test
+  public void runGameWhenGameBecomesOverDuringTurn() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
+    List<Player> players = game.getPlayers();
+    while (firstPlayer.hasDefuse()) {
+      firstPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+    players.get(2).die();
+    game.getDeck().addToDrawPile(new Card(CardType.EXPLODING_KITTEN), 0);
+
+    game.runGame();
+
+    assertFalse(firstPlayer.isAlive());
+    assertTrue(game.isGameOver());
   }
 
   @Test

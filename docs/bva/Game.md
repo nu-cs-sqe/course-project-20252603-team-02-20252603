@@ -82,7 +82,7 @@
   - **State of the system**: Game has not launched
   - **Expected output**: Throws `IllegalStateException`
 
-- **TC20: Run game when game becomes over during a turn** (not implemented)
+- **TC20: Run game when game becomes over during a turn** ( :white_check_mark: )
   - **State of the system**: Game is running and a turn eliminates a player so only 1 player remains
   - **Expected output**: Game stops running and winner can be declared
 
