@@ -74,7 +74,7 @@
   - **State of the system**: Game is launched and more than 1 player is alive
   - **Expected output**: Game handles turns until the game is over
 
-- **TC18: Run game when game is already over** (not implemented)
+- **TC18: Run game when game is already over** ( :white_check_mark: )
   - **State of the system**: Game is over before `runGame()` is called
   - **Expected output**: No turns are handled and winner can be declared
 

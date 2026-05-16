@@ -158,6 +158,19 @@ public class GameTest {
   }
 
   @Test
+  public void runGameWhenGameIsAlreadyOver() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).die();
+    players.get(2).die();
+    game.checkWinner();
+
+    assertDoesNotThrow(() -> game.runGame());
+    assertTrue(game.isGameOver());
+  }
+
+  @Test
   public void handleTurnNormalCurrentPlayerTurn() {
     Game game = new Game(3, new Random(RANDOM_SEED));
     game.startGame();
