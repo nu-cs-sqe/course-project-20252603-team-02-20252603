@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 public class Game {
+  private static final int MIN_PLAYERS = 3;
+  private static final int MAX_PLAYERS = 5;
+
   private final int numberOfPlayers;
   private final Random random;
   private List<Player> players;
@@ -38,7 +41,7 @@ public class Game {
   }
 
   public void validatePlayerCount() {
-    if (numberOfPlayers < 3 || numberOfPlayers > 5) {
+    if (numberOfPlayers < MIN_PLAYERS || numberOfPlayers > MAX_PLAYERS) {
       throw new IllegalArgumentException("invalid player count");
     }
   }
@@ -160,8 +163,20 @@ public class Game {
     return new ArrayList<>(players);
   }
 
-  public Deck getDeck() {
-    return deck;
+  public List<Card> getDrawPile() {
+    return deck.getDeck();
+  }
+
+  public List<Card> getDiscardPile() {
+    return deck.getDiscard();
+  }
+
+  public void addToDrawPile(Card card, int position) {
+    deck.addToDrawPile(card, position);
+  }
+
+  public Card drawFromDeck() {
+    return deck.drawCard();
   }
 
   public boolean isGameLaunched() {
