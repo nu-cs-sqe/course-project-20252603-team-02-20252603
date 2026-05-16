@@ -171,7 +171,7 @@
   - **State of the system**: Draw pile has 0 cards
   - **Expected output**: Throws `IllegalStateException`
 
-- **TC41: Draw Exploding Kitten with Defuse** (not implemented)
+- **TC41: Draw Exploding Kitten with Defuse** ( :white_check_mark: )
   - **State of the system**: Current player draws `EXPLODING_KITTEN` and has a `DEFUSE`
   - **Expected output**: Defuse is used, player stays alive, and Exploding Kitten returns to draw pile
 

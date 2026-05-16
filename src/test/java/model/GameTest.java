@@ -356,9 +356,10 @@ public class GameTest {
     game.startGame();
     Player firstPlayer = game.getCurrentPlayer();
     int handSizeBefore = firstPlayer.getHand().size();
-    while (game.getDeck().getDeck().size() > 1) {
+    while (!game.getDeck().getDeck().isEmpty()) {
       game.getDeck().drawCard();
     }
+    game.getDeck().addToDrawPile(new Card(CardType.SKIP), 0);
 
     game.drawCard();
 
@@ -375,5 +376,34 @@ public class GameTest {
     }
 
     assertThrows(IllegalStateException.class, () -> game.drawCard());
+  }
+
+  @Test
+  public void drawCardExplodingKittenWithDefuse() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
+    Card explodingKitten = new Card(CardType.EXPLODING_KITTEN);
+    int defuseCountBefore = countCards(firstPlayer, CardType.DEFUSE);
+    game.getDeck().addToDrawPile(explodingKitten, 0);
+    int deckSizeBefore = game.getDeck().getDeck().size();
+
+    game.drawCard();
+
+    assertTrue(firstPlayer.isAlive());
+    assertEquals(defuseCountBefore - 1, countCards(firstPlayer, CardType.DEFUSE));
+    assertFalse(firstPlayer.getHand().contains(explodingKitten));
+    assertEquals(deckSizeBefore, game.getDeck().getDeck().size());
+    assertEquals(explodingKitten, game.getDeck().getDeck().get(0));
+  }
+
+  private int countCards(Player player, CardType cardType) {
+    int count = 0;
+    for (Card card : player.getHand()) {
+      if (card.getType() == cardType) {
+        count++;
+      }
+    }
+    return count;
   }
 }

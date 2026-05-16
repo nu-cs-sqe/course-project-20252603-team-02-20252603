@@ -81,6 +81,14 @@ public class Game {
   public void drawCard() {
     Player currentPlayer = getCurrentPlayer();
     Card card = deck.drawCard();
+    if (card.getType() == CardType.EXPLODING_KITTEN && currentPlayer.hasDefuse()) {
+      Card defuse = new Card(CardType.DEFUSE);
+      currentPlayer.removeCard(defuse);
+      deck.discardCard(defuse);
+      deck.addToDrawPile(card, 0);
+      completeOneTurn();
+      return;
+    }
     currentPlayer.addCard(card);
     completeOneTurn();
   }
