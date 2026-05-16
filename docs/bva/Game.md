@@ -201,7 +201,7 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `checkWinner()`
-- **TC48: More than one player alive** (not implemented)
+- **TC48: More than one player alive** ( :white_check_mark: )
   - **State of the system**: 2 or more players are alive
   - **Expected output**: Game is not over
 

@@ -117,6 +117,18 @@ public class Game {
     return card != null && card.getType() == CardType.SKIP;
   }
 
+  public void checkWinner() {
+    int alivePlayers = 0;
+    for (Player player : players) {
+      if (player.isAlive()) {
+        alivePlayers++;
+      }
+    }
+    if (alivePlayers > 1) {
+      gameOver = false;
+    }
+  }
+
   public Player getNextActivePlayer() {
     for (int i = 1; i < players.size(); i++) {
       Player player = players.get((currentPlayerIndex + i) % players.size());

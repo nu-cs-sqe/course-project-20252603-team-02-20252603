@@ -468,6 +468,16 @@ public class GameTest {
     assertThrows(IllegalStateException.class, () -> game.playCard(new Card(CardType.SKIP)));
   }
 
+  @Test
+  public void checkWinnerMoreThanOnePlayerAlive() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+
+    game.checkWinner();
+
+    assertFalse(game.isGameOver());
+  }
+
   private int countCards(Player player, CardType cardType) {
     int count = 0;
     for (Card card : player.getHand()) {
