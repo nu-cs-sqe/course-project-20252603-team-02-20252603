@@ -101,4 +101,14 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.validatePlayerCount());
   }
+
+  @Test
+  public void initializeTurnOrderThreePlayers() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+
+    game.startGame();
+
+    assertEquals(0, game.getCurrentPlayerIndex());
+    assertEquals(3, game.getPlayers().size());
+  }
 }

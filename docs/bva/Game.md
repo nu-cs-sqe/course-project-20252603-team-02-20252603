@@ -44,7 +44,7 @@
   - **Expected output**: Throws `IllegalArgumentException`
 
 ### Method under test: `initializeTurnOrder()`
-- **TC11: Initialize turn order for 3 players** (not implemented)
+- **TC11: Initialize turn order for 3 players** ( :white_check_mark: )
   - **State of the system**: Game has 3 players
   - **Expected output**: Current player index is 0 and turn order is clockwise
 
