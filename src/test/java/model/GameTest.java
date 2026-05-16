@@ -148,9 +148,44 @@ public class GameTest {
   public void handleTurnNormalCurrentPlayerTurn() {
     Game game = new Game(3, new Random(RANDOM_SEED));
     game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
 
     game.handleTurn();
 
-    assertEquals(0, game.getCurrentPlayer().getTurnsOwed());
+    assertEquals(0, firstPlayer.getTurnsOwed());
+    assertEquals(1, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void handleTurnPlayerOwingTwoTurns() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    game.getCurrentPlayer().addTurn();
+
+    game.handleTurn();
+
+    assertEquals(1, game.getCurrentPlayer().getTurnsOwed());
+  }
+
+  @Test
+  public void handleTurnPlayerOwingZeroTurns() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    game.getCurrentPlayer().removeTurn();
+
+    game.handleTurn();
+
+    assertEquals(1, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void handleTurnEliminatedCurrentPlayer() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    game.getCurrentPlayer().die();
+
+    game.handleTurn();
+
+    assertEquals(1, game.getCurrentPlayerIndex());
   }
 }

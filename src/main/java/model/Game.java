@@ -61,7 +61,20 @@ public class Game {
   }
 
   public void handleTurn() {
-    getCurrentPlayer().removeTurn();
+    Player currentPlayer = getCurrentPlayer();
+    if (!currentPlayer.isAlive() || currentPlayer.getTurnsOwed() == 0) {
+      moveToNextPlayer();
+      return;
+    }
+
+    currentPlayer.removeTurn();
+    if (currentPlayer.getTurnsOwed() == 0) {
+      moveToNextPlayer();
+    }
+  }
+
+  public void moveToNextPlayer() {
+    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
   }
 
   public List<Player> getPlayers() {

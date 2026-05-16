@@ -91,15 +91,15 @@
   - **State of the system**: Current player is alive and game is not over
   - **Expected output**: Current player may play, then draws if still required
 
-- **TC22: Handle turn for player owing 2 turns** (not implemented)
+- **TC22: Handle turn for player owing 2 turns** ( :white_check_mark: )
   - **State of the system**: Current player is alive and has `turnsOwed = 2`
   - **Expected output**: One turn is handled and current player still owes 1 turn
 
-- **TC23: Handle turn for player owing 0 turns** (not implemented)
+- **TC23: Handle turn for player owing 0 turns** ( :white_check_mark: )
   - **State of the system**: Current player is alive and has `turnsOwed = 0`
   - **Expected output**: Game moves to next active player
 
-- **TC24: Handle turn for eliminated current player** (not implemented)
+- **TC24: Handle turn for eliminated current player** ( :white_check_mark: )
   - **State of the system**: Current player is not alive
   - **Expected output**: Game moves to next active player
 
