@@ -104,7 +104,7 @@
   - **Expected output**: Game moves to next active player
 
 ### Method under test: `getNextActivePlayer()`
-- **TC25: Next player is active** (not implemented)
+- **TC25: Next player is active** ( :white_check_mark: )
   - **State of the system**: 3 players; current player is player 0; player 1 is alive
   - **Expected output**: Returns player 1
 
@@ -112,7 +112,7 @@
   - **State of the system**: 3 players; current player is player 0 and is dead; player 1 is alive
   - **Expected output**: Returns player 1
 
-- **TC27: Next player is eliminated** (not implemented)
+- **TC27: Next player is eliminated** ( :white_check_mark: )
   - **State of the system**: 3 players; current player is player 0; player 1 is dead; player 2 is alive
   - **Expected output**: Returns player 2
 

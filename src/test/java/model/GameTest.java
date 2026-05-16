@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
@@ -187,5 +188,24 @@ public class GameTest {
     game.handleTurn();
 
     assertEquals(1, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void getNextActivePlayerNextPlayerIsActive() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+
+    assertEquals(players.get(1), game.getNextActivePlayer());
+  }
+
+  @Test
+  public void getNextActivePlayerNextPlayerIsEliminated() {
+    Game game = new Game(3, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).die();
+
+    assertEquals(players.get(2), game.getNextActivePlayer());
   }
 }

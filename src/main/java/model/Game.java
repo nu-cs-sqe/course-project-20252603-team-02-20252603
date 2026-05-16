@@ -73,6 +73,16 @@ public class Game {
     }
   }
 
+  public Player getNextActivePlayer() {
+    for (int i = 1; i < players.size(); i++) {
+      Player player = players.get((currentPlayerIndex + i) % players.size());
+      if (player.isAlive()) {
+        return player;
+      }
+    }
+    return null;
+  }
+
   public void moveToNextPlayer() {
     currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
   }
