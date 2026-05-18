@@ -1,5 +1,16 @@
 plugins {
     id("java")
+    id("checkstyle")
+    id("com.github.spotbugs") version "6.0.26"
+}
+
+spotbugs {
+    toolVersion.set("4.9.7")
+}
+
+checkstyle {
+    toolVersion = "10.12.5"
+    configFile = file("config/checkstyle/google_checks.xml")
 }
 
 group = "nu.csse.sqe"

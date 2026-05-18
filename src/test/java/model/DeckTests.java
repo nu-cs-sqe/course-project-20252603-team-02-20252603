@@ -1,284 +1,303 @@
 package model;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DeckTests {
-    private List<Player> players;
+  private List<Player> players;
+  private static final int RANDOM_SEED = 42;
+  private static final int STANDARD_CARD_COUNT = 4;
+  private static final int STANDARD_CARD_TYPES = 11;
+  private static final int SPECIAL_CARD_TYPES = 5;
+  private static final int SPECIAL_CARD_COUNT = 3;
+  private static final int CAT_CARD_COUNT = 2;
+  private static final int CAT_CARD_TYPES = 4;
+  private static final int SEE_THE_FUTURE_CARD_COUNT = 3;
+  private static final int DEFUSE_CARD_COUNT = 6;
+  private static final int STARTING_HAND_SIZE = 7;
+  private static final int INITIAL_DISCARD_COUNT = 10;
+  private static final int PEEK_CARD_COUNT = 3;
 
-    @BeforeEach
-    public void setUp() {
-        players = new ArrayList<>();
-        players.add(new Player());
-        players.add(new Player());
-        players.add(new Player());
+  @BeforeEach
+  public void setUp() {
+    players = new ArrayList<>();
+    players.add(new Player());
+    players.add(new Player());
+    players.add(new Player());
+  }
+
+  /* Shuffle Tests*/
+  @Test
+  public void shuffleStandardDeck() {
+    int numPlayers = players.size();
+    // 4 sets + 3 sets + 2 sets + singles
+    int initialCards = (STANDARD_CARD_COUNT * STANDARD_CARD_TYPES)
+        + (SPECIAL_CARD_COUNT * SPECIAL_CARD_TYPES)
+        + (CAT_CARD_COUNT * CAT_CARD_TYPES)
+        + SEE_THE_FUTURE_CARD_COUNT;
+    int defuseCards = DEFUSE_CARD_COUNT - numPlayers;
+    int dealtCards = STARTING_HAND_SIZE * numPlayers;
+    int explodingKittens = numPlayers - 1;
+    int expectedSize = initialCards + defuseCards - dealtCards + explodingKittens;
+
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    List<Card> before = new ArrayList<>(deck.getDeck()); // snapshot before
+    deck.shuffle();
+    List<Card> after = deck.getDeck();
+
+    // same size
+    assertEquals(expectedSize, after.size());
+
+    // same cards (regardless of order)
+    assertTrue(after.containsAll(before));
+    assertTrue(before.containsAll(after));
+
+    // different order
+    assertNotEquals(before, after);
+  }
+
+  @Test
+  public void shuffleSingleCard() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    // drain deck down to 1 card
+    while (deck.getDeck().size() > 1) {
+      deck.drawCard();
     }
 
-    /* Shuffle Tests*/
-    @Test
-    public void ShuffleStandardDeck() {
-        int numPlayers = players.size();
-        int initialCards = (4 * 11) + (3 * 5) + (2 * 4) + 3; // 4 sets + 3 sets + 2 sets + singles
-        int defuseCards = 6 - numPlayers;
-        int dealtCards = 7 * numPlayers;
-        int explodingKittens = numPlayers - 1;
-        int expectedSize = initialCards + defuseCards - dealtCards + explodingKittens;
+    List<Card> before = new ArrayList<>(deck.getDeck());
 
-        Deck deck = new Deck(players, new Random(42));
-        List<Card> before = new ArrayList<>(deck.getDeck()); // snapshot before
-        deck.shuffle();
-        List<Card> after = deck.getDeck();
+    deck.shuffle();
 
-        // same size
-        assertEquals(expectedSize, after.size());
+    List<Card> after = deck.getDeck();
 
-        // same cards (regardless of order)
-        assertTrue(after.containsAll(before));
-        assertTrue(before.containsAll(after));
+    assertEquals(1, after.size());
+    assertEquals(before, after);
+  }
 
-        // different order
-        assertNotEquals(before, after);
+  @Test
+  public void shuffleEmptyDeck() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (!deck.getDeck().isEmpty()) {
+      deck.drawCard();
     }
 
-    @Test
-    public void ShuffleSingleCard() {
-        Deck deck = new Deck(players, new Random(42));
+    assertDoesNotThrow(() -> deck.shuffle());
+    assertEquals(0, deck.getDeck().size());
+  }
 
-        // drain deck down to 1 card
-        while (deck.getDeck().size() > 1) {
-            deck.drawCard();
-        }
+  /* Draw Card Tests */
+  @Test
+  public void drawCardManyCards() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
 
-        List<Card> before = new ArrayList<>(deck.getDeck());
+    int sizeBefore = deck.getDeck().size();
+    Card topCard = deck.getDeck().get(0);
 
-        deck.shuffle();
+    Card drawn = deck.drawCard();
 
-        List<Card> after = deck.getDeck();
+    assertEquals(topCard, drawn);
+    assertEquals(sizeBefore - 1, deck.getDeck().size());
+  }
 
-        assertEquals(1, after.size());
-        assertEquals(before, after);
+  @Test
+  public void drawCardOneCard() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (deck.getDeck().size() > 1) {
+      deck.drawCard();
     }
 
-    @Test
-    public void ShuffleEmptyDeck() {
-        Deck deck = new Deck(players, new Random(42));
+    Card topCard = deck.getDeck().get(0);
+    Card drawn = deck.drawCard();
 
-        while (!deck.getDeck().isEmpty()) {
-            deck.drawCard();
-        }
+    assertEquals(topCard, drawn);
+    assertEquals(0, deck.getDeck().size());
+  }
 
-        assertDoesNotThrow(() -> deck.shuffle());
-        assertEquals(0, deck.getDeck().size());
+  @Test
+  public void drawCardEmptyDeck() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (!deck.getDeck().isEmpty()) {
+      deck.drawCard();
     }
 
-    /* Draw Card Tests */
-    @Test
-    public void DrawCardManyCards() {
-        Deck deck = new Deck(players, new Random(42));
+    assertThrows(IllegalStateException.class, () -> deck.drawCard());
+  }
 
-        int sizeBefore = deck.getDeck().size();
-        Card topCard = deck.getDeck().get(0);
+  /* Discard Card Tests */
+  @Test
+  public void discardCardEmptyPile() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
 
-        Card drawn = deck.drawCard();
+    Card drawn = deck.drawCard();
+    deck.discardCard(drawn);
 
-        assertEquals(topCard, drawn);
-        assertEquals(sizeBefore - 1, deck.getDeck().size());
+    assertEquals(1, deck.getDiscard().size());
+    assertEquals(drawn, deck.getDiscard().get(0));
+  }
+
+  @Test
+  public void discardCardNonEmptyPile() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    for (int i = 0; i < INITIAL_DISCARD_COUNT; i++) {
+      deck.discardCard(deck.drawCard());
     }
 
-    @Test
-    public void DrawCardOneCard() {
-        Deck deck = new Deck(players, new Random(42));
+    Card drawn = deck.drawCard();
+    deck.discardCard(drawn);
 
-        while (deck.getDeck().size() > 1) {
-            deck.drawCard();
-        }
+    assertEquals(INITIAL_DISCARD_COUNT + 1, deck.getDiscard().size());
+    assertEquals(drawn, deck.getDiscard().get(INITIAL_DISCARD_COUNT));
+  }
 
-        Card topCard = deck.getDeck().get(0);
-        Card drawn = deck.drawCard();
+  /* Add to Draw Pile Tests */
+  @Test
+  public void addToDrawPileTop() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card card = new Card(CardType.EXPLODING_KITTEN);
 
-        assertEquals(topCard, drawn);
-        assertEquals(0, deck.getDeck().size());
+    int sizeBefore = deck.getDeck().size();
+    deck.addToDrawPile(card, 0);
+
+    assertEquals(sizeBefore + 1, deck.getDeck().size());
+    assertEquals(card, deck.getDeck().get(0));
+    assertEquals(card, deck.drawCard());
+  }
+
+  @Test
+  public void addToDrawPileBottom() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card card = new Card(CardType.EXPLODING_KITTEN);
+
+    int sizeBefore = deck.getDeck().size();
+    deck.addToDrawPile(card, sizeBefore);
+
+    assertEquals(sizeBefore + 1, deck.getDeck().size());
+    assertEquals(card, deck.getDeck().get(sizeBefore));
+  }
+
+  @Test
+  public void addToDrawPileMiddle() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card card = new Card(CardType.EXPLODING_KITTEN);
+
+    int sizeBefore = deck.getDeck().size();
+    int position = sizeBefore / 2;
+
+    Card cardBefore = deck.getDeck().get(position - 1);
+    Card cardAfter = deck.getDeck().get(position);
+
+    deck.addToDrawPile(card, position);
+
+    assertEquals(sizeBefore + 1, deck.getDeck().size());
+    assertEquals(card, deck.getDeck().get(position));
+    assertEquals(cardBefore, deck.getDeck().get(position - 1));
+    assertEquals(cardAfter, deck.getDeck().get(position + 1));
+  }
+
+  @Test
+  public void testAddToDrawPileEmpty() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card card = new Card(CardType.EXPLODING_KITTEN);
+
+    while (!deck.getDeck().isEmpty()) {
+      deck.drawCard();
     }
 
-    @Test
-    public void DrawCardEmptyDeck() {
-        Deck deck = new Deck(players, new Random(42));
+    deck.addToDrawPile(card, 0);
 
-        while (!deck.getDeck().isEmpty()) {
-            deck.drawCard();
-        }
+    assertEquals(1, deck.getDeck().size());
+    assertEquals(card, deck.getDeck().get(0));
+  }
 
-        assertThrows(IllegalStateException.class, () -> deck.drawCard());
+  @Test
+  public void addToDrawPileOutOfBounds() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card card = new Card(CardType.EXPLODING_KITTEN);
+
+    int outOfBounds = deck.getDeck().size() + 1;
+
+    assertThrows(IllegalArgumentException.class, () -> deck.addToDrawPile(card, outOfBounds));
+  }
+
+  @Test
+  public void addToDrawPileNegativePosition() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card card = new Card(CardType.EXPLODING_KITTEN);
+
+    assertThrows(IllegalArgumentException.class, () -> deck.addToDrawPile(card, -1));
+  }
+
+  /* Peek Top Cards Tests */
+  @Test
+  public void peekTopCardsMoreThanThree() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    int sizeBefore = deck.getDeck().size();
+    List<Card> top3 = deck.getDeck().subList(0, PEEK_CARD_COUNT);
+
+    List<Card> peeked = deck.peekTopCards();
+
+    assertEquals(PEEK_CARD_COUNT, peeked.size());
+    assertEquals(top3, peeked);
+    assertEquals(sizeBefore, deck.getDeck().size()); // deck unchanged
+  }
+
+  @Test
+  public void peekTopCardsExactlyThree() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (deck.getDeck().size() > PEEK_CARD_COUNT) {
+      deck.drawCard();
     }
 
-    /* Discard Card Tests */
-    @Test
-    public void DiscardCardEmptyPile() {
-        Deck deck = new Deck(players, new Random(42));
+    List<Card> top3 = deck.getDeck().subList(0, PEEK_CARD_COUNT);
 
-        Card drawn = deck.drawCard();
-        deck.discardCard(drawn);
+    List<Card> peeked = deck.peekTopCards();
 
-        assertEquals(1, deck.getDiscard().size());
-        assertEquals(drawn, deck.getDiscard().get(0));
+    assertEquals(PEEK_CARD_COUNT, peeked.size());
+    assertEquals(top3, peeked);
+    assertEquals(PEEK_CARD_COUNT, deck.getDeck().size()); // deck unchanged
+  }
+
+  @Test
+  public void peekTopCardsFewerThanThree() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (deck.getDeck().size() > 2) {
+      deck.drawCard();
     }
 
-    @Test
-    public void DiscardCardNonEmptyPile() {
-        Deck deck = new Deck(players, new Random(42));
+    List<Card> top2 = deck.getDeck().subList(0, 2);
 
-        for (int i = 0; i < 10; i++) {
-            deck.discardCard(deck.drawCard());
-        }
+    List<Card> peeked = deck.peekTopCards();
 
-        Card drawn = deck.drawCard();
-        deck.discardCard(drawn);
+    assertEquals(2, peeked.size());
+    assertEquals(top2, peeked);
+    assertEquals(2, deck.getDeck().size()); // deck unchanged
+  }
 
-        assertEquals(11, deck.getDiscard().size());
-        assertEquals(drawn, deck.getDiscard().get(10));
+  @Test
+  public void peekTopCardsEmptyDeck() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (!deck.getDeck().isEmpty()) {
+      deck.drawCard();
     }
 
-    /* Add to Draw Pile Tests */
-    @Test
-    public void AddToDrawPileTop() {
-        Deck deck = new Deck(players, new Random(42));
-        Card card = new Card(CardType.EXPLODING_KITTEN);
-
-        int sizeBefore = deck.getDeck().size();
-        deck.addToDrawPile(card, 0);
-
-        assertEquals(sizeBefore + 1, deck.getDeck().size());
-        assertEquals(card, deck.getDeck().get(0));
-        assertEquals(card, deck.drawCard());
-    }
-
-    @Test
-    public void AddToDrawPileBottom() {
-        Deck deck = new Deck(players, new Random(42));
-        Card card = new Card(CardType.EXPLODING_KITTEN);
-
-        int sizeBefore = deck.getDeck().size();
-        deck.addToDrawPile(card, sizeBefore);
-
-        assertEquals(sizeBefore + 1, deck.getDeck().size());
-        assertEquals(card, deck.getDeck().get(sizeBefore));
-    }
-
-    @Test
-    public void AddToDrawPileMiddle() {
-        Deck deck = new Deck(players, new Random(42));
-        Card card = new Card(CardType.EXPLODING_KITTEN);
-
-        int sizeBefore = deck.getDeck().size();
-        int position = sizeBefore / 2;
-
-        Card cardBefore = deck.getDeck().get(position - 1);
-        Card cardAfter = deck.getDeck().get(position);
-
-        deck.addToDrawPile(card, position);
-
-        assertEquals(sizeBefore + 1, deck.getDeck().size());
-        assertEquals(card, deck.getDeck().get(position));
-        assertEquals(cardBefore, deck.getDeck().get(position - 1));
-        assertEquals(cardAfter, deck.getDeck().get(position + 1));
-    }
-
-    @Test
-    public void testAddToDrawPileEmpty() {
-        Deck deck = new Deck(players, new Random(42));
-        Card card = new Card(CardType.EXPLODING_KITTEN);
-
-        while (!deck.getDeck().isEmpty()) {
-            deck.drawCard();
-        }
-
-        deck.addToDrawPile(card, 0);
-
-        assertEquals(1, deck.getDeck().size());
-        assertEquals(card, deck.getDeck().get(0));
-    }
-
-    @Test
-    public void AddToDrawPileOutOfBounds() {
-        Deck deck = new Deck(players, new Random(42));
-        Card card = new Card(CardType.EXPLODING_KITTEN);
-
-        int outOfBounds = deck.getDeck().size() + 1;
-
-        assertThrows(IllegalArgumentException.class, () -> deck.addToDrawPile(card, outOfBounds));
-    }
-
-    @Test
-    public void AddToDrawPileNegativePosition() {
-        Deck deck = new Deck(players, new Random(42));
-        Card card = new Card(CardType.EXPLODING_KITTEN);
-
-        assertThrows(IllegalArgumentException.class, () -> deck.addToDrawPile(card, -1));
-    }
-
-    /* Peek Top Cards Tests */
-    @Test
-    public void PeekTopCardsMoreThanThree() {
-        Deck deck = new Deck(players, new Random(42));
-
-        int sizeBefore = deck.getDeck().size();
-        List<Card> top3 = deck.getDeck().subList(0, 3);
-
-        List<Card> peeked = deck.peekTopCards();
-
-        assertEquals(3, peeked.size());
-        assertEquals(top3, peeked);
-        assertEquals(sizeBefore, deck.getDeck().size()); // deck unchanged
-    }
-
-    @Test
-    public void PeekTopCardsExactlyThree() {
-        Deck deck = new Deck(players, new Random(42));
-
-        while (deck.getDeck().size() > 3) {
-            deck.drawCard();
-        }
-
-        List<Card> top3 = deck.getDeck().subList(0, 3);
-
-        List<Card> peeked = deck.peekTopCards();
-
-        assertEquals(3, peeked.size());
-        assertEquals(top3, peeked);
-        assertEquals(3, deck.getDeck().size()); // deck unchanged
-    }
-
-    @Test
-    public void PeekTopCardsFewerThanThree() {
-        Deck deck = new Deck(players, new Random(42));
-
-        while (deck.getDeck().size() > 2) {
-            deck.drawCard();
-        }
-
-        List<Card> top2 = deck.getDeck().subList(0, 2);
-
-        List<Card> peeked = deck.peekTopCards();
-
-        assertEquals(2, peeked.size());
-        assertEquals(top2, peeked);
-        assertEquals(2, deck.getDeck().size()); // deck unchanged
-    }
-
-    @Test
-    public void PeekTopCardsEmptyDeck() {
-        Deck deck = new Deck(players, new Random(42));
-
-        while (!deck.getDeck().isEmpty()) {
-            deck.drawCard();
-        }
-
-        assertThrows(IllegalStateException.class, () -> deck.peekTopCards());
-    }
+    assertThrows(IllegalStateException.class, () -> deck.peekTopCards());
+  }
 }
