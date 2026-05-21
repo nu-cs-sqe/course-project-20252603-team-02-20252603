@@ -76,7 +76,7 @@
 
 # Week 8 (05/18/2026-05/24/2026)
 1. [done]
-
+   Ben + Ana: Game class and linters reviewed and merged (https://github.com/nu-cs-sqe/course-project-20252603-team-02-20252603/pull/46, https://github.com/nu-cs-sqe/course-project-20252603-team-02-20252603/pull/36)
 2. [not started]
 
 3. [in progress]
