@@ -124,6 +124,16 @@ public class GameTest {
   }
 
   @Test
+  public void initializeTurnOrderFourPlayers() {
+    Game game = new Game(VALID_PLAYER_COUNT, new Random(RANDOM_SEED));
+
+    game.startGame();
+
+    assertEquals(FIRST_PLAYER_INDEX, game.getCurrentPlayerIndex());
+    assertEquals(VALID_PLAYER_COUNT, game.getPlayers().size());
+  }
+
+  @Test
   public void initializeTurnOrderFivePlayers() {
     Game game = new Game(MAX_PLAYERS, new Random(RANDOM_SEED));
 
