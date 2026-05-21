@@ -69,6 +69,10 @@
   - **State of the system**: Current player index is 2 in a 3-player game
   - **Expected output**: Returns player at index 2
 
+- **TC16: Get current player when index is out of bounds** ( :white_check_mark: )
+  - **State of the system**: Current player index is outside the player list
+  - **Expected output**: Throws `IllegalStateException`
+
 ### Method under test: `runGame()`
 - **TC17: Run game while game is not over** ( :white_check_mark: )
   - **State of the system**: Game is launched and more than 1 player is alive

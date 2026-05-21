@@ -54,6 +54,9 @@ public class Game {
   }
 
   public Player getCurrentPlayer() {
+    if (currentPlayerIndex < 0 || currentPlayerIndex >= players.size()) {
+      throw new IllegalStateException("current player index out of bounds");
+    }
     return players.get(currentPlayerIndex);
   }
 

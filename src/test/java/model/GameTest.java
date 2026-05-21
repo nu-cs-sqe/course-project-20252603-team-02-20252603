@@ -170,6 +170,13 @@ public class GameTest {
   }
 
   @Test
+  public void getCurrentPlayerIndexOutOfBoundsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () -> game.getCurrentPlayer());
+  }
+
+  @Test
   public void runGameBeforeStartGameThrowException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
@@ -361,7 +368,7 @@ public class GameTest {
 
     game.moveToNextPlayer();
 
-    assertEquals(TOO_FEW_PLAYERS, game.getCurrentPlayerIndex());
+    assertEquals(THIRD_PLAYER_INDEX, game.getCurrentPlayerIndex());
   }
 
   @Test
