@@ -69,6 +69,10 @@
 4. [not started]
    Group: Begin individual card implementation work for the next milestone.
    Group: Decide whether the UI will use terminal commands or a GUI.
+   Group: Set up the code coverage tool: Jacoco.
+   Group: Set up the mutation testing tool: Pitest.
+   Group: Discuss and document locale plan.
+   Group: Discuss and document integration plan.
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
