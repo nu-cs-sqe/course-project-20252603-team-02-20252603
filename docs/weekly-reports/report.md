@@ -74,6 +74,13 @@
    Group: Discuss and document locale plan.
    Group: Discuss and document integration plan.
 
+# Week 8 (05/18/2026-05/24/2026)
+1. [done]
+
+2. [not started]
+
+3. [in progress]
+
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
 1. [done] Person: Task (Links to PR)
