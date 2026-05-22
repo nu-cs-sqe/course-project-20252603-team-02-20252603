@@ -216,3 +216,24 @@
 - **TC50: No players alive** ( :white_check_mark: )
   - **State of the system**: 0 players are alive
   - **Expected output**: Throws `IllegalStateException`
+
+### Method under test: `playSeeTheFuture()`
+- **TC#51: Deck has 0 cards**
+  - **State of the system**: Game is running, current player has See the Future, deck is empty
+  - **Expected output**: Card removed from hand, discarded, empty list returned
+
+- **TC#52: Deck has 1 card**
+  - **State of the system**: Game is running, current player has See the Future, deck has 1 card
+  - **Expected output**: Card removed from hand, discarded, list of 1 card returned
+
+- **TC#53: Deck has 2 cards**
+  - **State of the system**: Game is running, current player has See the Future, deck has 2 cards
+  - **Expected output**: Card removed from hand, discarded, list of 2 cards returned
+
+- **TC#54: Deck has exactly 3 cards**
+  - **State of the system**: Game is running, current player has See the Future, deck has exactly 3 cards
+  - **Expected output**: Card removed from hand, discarded, list of 3 cards returned
+
+- **TC#55: Deck has more than 3 cards**
+  - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
+  - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
