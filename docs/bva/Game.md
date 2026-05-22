@@ -220,7 +220,7 @@
 ### Method under test: `playSeeTheFuture()`
 - **TC#51: Deck has 0 cards**
   - **State of the system**: Game is running, current player has See the Future, deck is empty
-  - **Expected output**: Card removed from hand, discarded, empty list returned
+  - **Expected output**: Card removed from hand, discarded, throws `IllegalStateException`
 
 - **TC#52: Deck has 1 card**
   - **State of the system**: Game is running, current player has See the Future, deck has 1 card
