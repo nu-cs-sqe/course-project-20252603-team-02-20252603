@@ -597,6 +597,21 @@ public class GameTest {
   }
 
   @Test
+  void seeTheFutureEmptyDeck() {
+    Game game = new Game(3, new Random(42));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
+
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(new Card(CardType.SEE_THE_FUTURE)));
+  }
+
+  @Test
   void seeTheFutureMoreThanThreeCards() {
     Game game = new Game(3, new Random(42));
     game.startGame();
