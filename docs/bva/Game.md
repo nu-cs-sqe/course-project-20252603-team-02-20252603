@@ -217,7 +217,6 @@
   - **State of the system**: 0 players are alive
   - **Expected output**: Throws `IllegalStateException`
 
-
 ### Method under test: `playAttack()`
 - **TC#55: Attack, more than one other player alive**
   - **State of the system**: Game is running, current player has Attack card, 2+ other players alive
@@ -230,7 +229,3 @@
 - **TC#57: Attack, current player owes 1 turn**
   - **State of the system**: Game is running, current player has Attack card, current player owes 1 turn
   - **Expected output**: Turn moves to next player, next player owes 2 turns, empty list returned
-
-- **TC#58: Attack, current player owes 2 turns (chained attack)**
-  - **State of the system**: Game is running, current player has Attack card, current player owes 2 turns from a previous attack
-  - **Expected output**: Turn moves to next player, next player owes 3 turns, empty list returned
