@@ -5,6 +5,8 @@ plugins {
     id("java")
     id("checkstyle")
     id("com.github.spotbugs") version "6.0.26"
+    jacoco
+    id("info.solidsoft.pitest") version "1.15.0"
 }
 
 spotbugs {
@@ -14,6 +16,36 @@ spotbugs {
 checkstyle {
     toolVersion = "10.12.5"
     configFile = file("config/checkstyle/google_checks.xml")
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir("reports/jacoco")
+    }
+    dependsOn(tasks.test)
+}
+
+tasks.build {
+    dependsOn("pitest")
+}
+
+pitest {
+    targetClasses = setOf("model.*")
+    targetTests = setOf("model.*")
+    junit5PluginVersion = "1.2.1"
+    pitestVersion = "1.15.0"
+
+    threads = 4
+    outputFormats = setOf("HTML")
+    timestampedReports = false
+    testSourceSets.set(listOf(sourceSets.test.get()))
+    mainSourceSets.set(listOf(sourceSets.main.get()))
+    jvmArgs.set(listOf("-Xmx1024m"))
+    useClasspathFile.set(true)
+    fileExtensionsToFilter.addAll("xml")
+    exportLineCoverage = true
 }
 
 group = "nu.csse.sqe"
@@ -26,6 +58,7 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.easymock:easymock:3.1")
 }
 
 java {
@@ -40,4 +73,6 @@ tasks.compileJava {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+    finalizedBy(tasks.pitest)
 }
