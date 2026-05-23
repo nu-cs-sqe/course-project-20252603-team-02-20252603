@@ -595,4 +595,24 @@ public class GameTest {
     }
     return count;
   }
+
+  @Test
+  void seeTheFutureMoreThanThreeCards() {
+    Game game = new Game(3, new Random(42));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
+
+    List<Card> drawPile = game.getDrawPile();
+    Card expectedFirst = drawPile.get(0);
+    Card expectedSecond = drawPile.get(1);
+    Card expectedThird = drawPile.get(2);
+
+    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+
+    assertEquals(3, result.size());
+    assertEquals(expectedFirst, result.get(0));
+    assertEquals(expectedSecond, result.get(1));
+    assertEquals(expectedThird, result.get(2));
+  }
 }

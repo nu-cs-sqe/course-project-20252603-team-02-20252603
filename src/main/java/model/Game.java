@@ -1,8 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
   private static final int MIN_PLAYERS = 3;
@@ -107,7 +105,7 @@ public class Game {
     completeOneTurn();
   }
 
-  public void playCard(Card card) {
+  public List<Card> playCard(Card card) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -120,10 +118,15 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
+
+    if(card.getType() == CardType.SEE_THE_FUTURE) {
+      return playSeeTheFuture();
+    }
+    return Collections.emptyList();
   }
 
   private boolean isPlayableCard(Card card) {
-    return card != null && card.getType() == CardType.SKIP;
+    return card != null && card.getType() != CardType.EXPLODING_KITTEN && card.getType() != CardType.DEFUSE;
   }
 
   public void checkWinner() {
@@ -192,5 +195,9 @@ public class Game {
 
   public int getCurrentPlayerIndex() {
     return currentPlayerIndex;
+  }
+
+  public List<Card> playSeeTheFuture(){
+    return deck.peekTopCards();
   }
 }
