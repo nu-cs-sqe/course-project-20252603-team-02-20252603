@@ -226,14 +226,10 @@
   - **State of the system**: Game is running, current player has See the Future, deck has 1 card
   - **Expected output**: Card removed from hand, discarded, list of 1 card returned
 
-- **TC#53: Deck has 2 cards**
-  - **State of the system**: Game is running, current player has See the Future, deck has 2 cards
-  - **Expected output**: Card removed from hand, discarded, list of 2 cards returned
-
-- **TC#54: Deck has exactly 3 cards** ( :white_check_mark: )
+- **TC#53: Deck has exactly 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has exactly 3 cards
   - **Expected output**: Card removed from hand, discarded, list of 3 cards returned
 
-- **TC#55: Deck has more than 3 cards** ( :white_check_mark: )
+- **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
