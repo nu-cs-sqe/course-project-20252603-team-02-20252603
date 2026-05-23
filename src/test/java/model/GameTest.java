@@ -598,7 +598,7 @@ public class GameTest {
 
   @Test
   void seeTheFutureEmptyDeck() {
-    Game game = new Game(3, new Random(42));
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
@@ -613,7 +613,7 @@ public class GameTest {
 
   @Test
   void seeTheFutureOneCard() {
-    Game game = new Game(3, new Random(42));
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
@@ -633,7 +633,7 @@ public class GameTest {
 
   @Test
   void seeTheFutureMoreThanThreeCards() {
-    Game game = new Game(3, new Random(42));
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
@@ -653,7 +653,7 @@ public class GameTest {
 
   @Test
   void seeTheFutureExactlyThreeCards() {
-    Game game = new Game(3, new Random(42));
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));

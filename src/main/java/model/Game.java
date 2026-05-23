@@ -1,6 +1,9 @@
 package model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class Game {
   private static final int MIN_PLAYERS = 3;
