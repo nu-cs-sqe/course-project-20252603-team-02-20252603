@@ -218,11 +218,11 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `playSeeTheFuture()`
-- **TC#51: Deck has 0 cards** 
+- **TC#51: Deck has 0 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck is empty
   - **Expected output**: Card removed from hand, discarded, throws `IllegalStateException`
 
-- **TC#52: Deck has 1 card**
+- **TC#52: Deck has 1 card** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has 1 card
   - **Expected output**: Card removed from hand, discarded, list of 1 card returned
 

@@ -612,6 +612,26 @@ public class GameTest {
   }
 
   @Test
+  void seeTheFutureOneCard() {
+    Game game = new Game(3, new Random(42));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
+
+    while (game.getDrawPile().size() > 1) {
+      game.drawFromDeck();
+    }
+
+    List<Card> drawPile = game.getDrawPile();
+    Card expectedFirst = drawPile.get(0);
+
+    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+
+    assertEquals(1, result.size());
+    assertEquals(expectedFirst, result.get(0));
+  }
+
+  @Test
   void seeTheFutureMoreThanThreeCards() {
     Game game = new Game(3, new Random(42));
     game.startGame();
