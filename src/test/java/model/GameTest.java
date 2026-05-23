@@ -23,6 +23,7 @@ public class GameTest {
   private static final int SECOND_PLAYER_INDEX = 1;
   private static final int THIRD_PLAYER_INDEX = 2;
   private static final int FOURTH_PLAYER_INDEX = 3;
+  private static final int NUM_CARDS_PEEKED = 3;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -645,7 +646,7 @@ public class GameTest {
 
     List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
 
-    assertEquals(3, result.size());
+    assertEquals(NUM_CARDS_PEEKED, result.size());
     assertEquals(expectedFirst, result.get(0));
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
@@ -658,7 +659,7 @@ public class GameTest {
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
 
-    while (game.getDrawPile().size() > 3) {
+    while (game.getDrawPile().size() > NUM_CARDS_PEEKED) {
       game.drawFromDeck();
     }
 
@@ -669,7 +670,7 @@ public class GameTest {
 
     List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
 
-    assertEquals(3, result.size());
+    assertEquals(NUM_CARDS_PEEKED, result.size());
     assertEquals(expectedFirst, result.get(0));
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));

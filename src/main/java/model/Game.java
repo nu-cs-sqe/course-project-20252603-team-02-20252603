@@ -122,14 +122,16 @@ public class Game {
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
-    if(card.getType() == CardType.SEE_THE_FUTURE) {
+    if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
     return Collections.emptyList();
   }
 
   private boolean isPlayableCard(Card card) {
-    return card != null && card.getType() != CardType.EXPLODING_KITTEN && card.getType() != CardType.DEFUSE;
+    return card != null &&
+            card.getType() != CardType.EXPLODING_KITTEN &&
+            card.getType() != CardType.DEFUSE;
   }
 
   public void checkWinner() {
