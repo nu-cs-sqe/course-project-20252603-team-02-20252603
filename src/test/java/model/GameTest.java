@@ -667,4 +667,15 @@ public class GameTest {
     assertThrows(IllegalArgumentException.class, () ->
             game.playCard(new Card(CardType.TARGETED_ATTACK), deadPlayer));
   }
+
+  @Test
+  void targetedAttackTargetIsCurrentPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(new Card(CardType.TARGETED_ATTACK), currentPlayer));
+  }
 }
