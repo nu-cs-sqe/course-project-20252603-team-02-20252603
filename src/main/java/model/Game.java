@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -107,7 +108,7 @@ public class Game {
     completeOneTurn();
   }
 
-  public void playCard(Card card) {
+  public List<Card> playCard(Card card) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -120,10 +121,35 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
+
+    return Collections.emptyList();
+  }
+
+  public List<Card> playCard(Card card, Player target) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+
+    if (card.getType() == CardType.TARGETED_ATTACK) {
+      playTargetedAttack(target);
+      return Collections.emptyList();
+    }
+    return Collections.emptyList();
   }
 
   private boolean isPlayableCard(Card card) {
-    return card != null && card.getType() == CardType.SKIP;
+    return card != null &&
+            card.getType() != CardType.EXPLODING_KITTEN &&
+            card.getType() != CardType.DEFUSE;
   }
 
   public void checkWinner() {
@@ -192,5 +218,10 @@ public class Game {
 
   public int getCurrentPlayerIndex() {
     return currentPlayerIndex;
+  }
+
+  public void playTargetedAttack(Player target) {
+    currentPlayerIndex = players.indexOf(target);
+    getCurrentPlayer().addTurn();
   }
 }

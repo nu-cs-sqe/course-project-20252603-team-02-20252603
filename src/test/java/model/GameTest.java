@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ public class GameTest {
   private static final int SECOND_PLAYER_INDEX = 1;
   private static final int THIRD_PLAYER_INDEX = 2;
   private static final int FOURTH_PLAYER_INDEX = 3;
+  private static final int TURNS_OWED = 2;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -594,5 +596,22 @@ public class GameTest {
       }
     }
     return count;
+  }
+
+  @Test
+  void targetedAttackTargetIsNextPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player target = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
   }
 }
