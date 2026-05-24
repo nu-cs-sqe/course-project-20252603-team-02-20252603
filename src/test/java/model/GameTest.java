@@ -661,4 +661,31 @@ public class GameTest {
     // other player lost one card
     assertEquals(otherHandSizeBefore - 1, otherPlayer.getHand().size());
   }
+
+  @Test
+  void bubonicPlagueAllOtherPlayersHaveNoCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    int currentIndex = game.getCurrentPlayerIndex();
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    // drain all other players' hands
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      if (i != currentIndex) {
+        Player player = game.getPlayers().get(i);
+        List<Card> hand = new ArrayList<>(player.getHand());
+        for (Card card : hand) {
+          player.removeCard(card);
+        }
+      }
+    }
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    // draw pile size unchanged (no cards moved)
+    assertEquals(drawPileSizeBefore, game.getDrawPile().size());
+  }
 }
