@@ -595,6 +595,7 @@ public class GameTest {
     }
     return count;
   }
+
   @Test
   public void playSkipCardNotInHandThrowException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
@@ -607,7 +608,6 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.playCard(skip));
   }
-
 
   @Test
   public void playSkipCardAppearsInDiscardPile() {
@@ -634,6 +634,7 @@ public class GameTest {
     assertTrue(game.getDiscardPile().contains(skip));
     assertFalse(currentPlayer.getHand().contains(new Card(CardType.SKIP)));
   }
+
   @Test
   public void playSkipWithOneTurnOwed() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
