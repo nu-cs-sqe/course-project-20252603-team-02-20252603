@@ -614,4 +614,22 @@ public class GameTest {
     assertEquals(TURNS_OWED, target.getTurnsOwed());
     assertEquals(Collections.emptyList(), result);
   }
+
+  @Test
+  void targetedAttackTargetIsNotNextPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    // target player 2 spots ahead
+    int targetIndex = (game.getCurrentPlayerIndex() + 2) % game.getPlayers().size();
+    Player target = game.getPlayers().get(targetIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(targetIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
 }
