@@ -218,7 +218,7 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `playBubonicPlague()`
-- **TC#: All other players have cards**
+- **TC#: All other players have cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have at least 1 card in hand
   - **Expected output**: Card removed from hand, discarded, one random card removed from each other player's hand and added to draw pile, draw pile shuffled, empty list returned
 

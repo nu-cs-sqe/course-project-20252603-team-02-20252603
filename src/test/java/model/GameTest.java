@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
@@ -594,5 +595,39 @@ public class GameTest {
       }
     }
     return count;
+  }
+
+  @Test
+  void bubonicPlagueAllOtherPlayersHaveCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    List<Player> players = game.getPlayers();
+    int currentIndex = game.getCurrentPlayerIndex();
+
+    List<Integer> otherHandSizesBefore = new ArrayList<>();
+    for (int i = 0; i < players.size(); i++) {
+      if (i != currentIndex) {
+        otherHandSizesBefore.add(players.get(i).getHand().size());
+      }
+    }
+    int currentHandSizeBefore = currentPlayer.getHand().size();
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    // current player hand unchanged (minus the played card)
+    assertEquals(currentHandSizeBefore - 1, game.getCurrentPlayer().getHand().size());
+
+    // each other player lost exactly one card
+    int otherIndex = 0;
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      if (i != currentIndex) {
+        assertEquals(otherHandSizesBefore.get(otherIndex) - 1,
+                game.getPlayers().get(i).getHand().size());
+        otherIndex++;
+      }
+    }
   }
 }
