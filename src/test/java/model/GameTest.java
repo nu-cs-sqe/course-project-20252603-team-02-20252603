@@ -25,6 +25,7 @@ public class GameTest {
   private static final int THIRD_PLAYER_INDEX = 2;
   private static final int FOURTH_PLAYER_INDEX = 3;
   private static final int TURNS_OWED = 2;
+  private static final int NUM_OTHER_PLAYERS = 2;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -614,5 +615,27 @@ public class GameTest {
       assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
       assertEquals(Collections.emptyList(), result);
   }
+
+    @Test
+    void attackExactlyOneOtherPlayerAlive() {
+        Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+        game.startGame();
+
+        // kill all players except current and next
+        List<Player> players = game.getPlayers();
+        players.get(NUM_OTHER_PLAYERS).die();
+
+        Player currentPlayer = game.getCurrentPlayer();
+        currentPlayer.addCard(new Card(CardType.ATTACK));
+
+        int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+        Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
+
+        List<Card> result = game.playCard(new Card(CardType.ATTACK));
+
+        assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+        assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
+        assertEquals(Collections.emptyList(), result);
+    }
 
 }
