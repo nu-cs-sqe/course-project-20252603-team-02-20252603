@@ -226,7 +226,7 @@
   - **State of the system**: Game is running, current player has Bubonic Plague card, one other player has no cards in hand
   - **Expected output**: Card removed from hand, discarded, player with no cards is skipped, one random card removed from each other player with cards, draw pile shuffled, empty list returned
 
-- **TC#: All other players have no cards**
+- **TC#: All other players have no cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have empty hands
   - **Expected output**: Card removed from hand, discarded, no cards moved to draw pile, draw pile shuffled, empty list returned
 

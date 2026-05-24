@@ -688,4 +688,25 @@ public class GameTest {
     // draw pile size unchanged (no cards moved)
     assertEquals(drawPileSizeBefore, game.getDrawPile().size());
   }
+
+  @Test
+  void bubonicPlagueExactlyOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    int currentIndex = game.getCurrentPlayerIndex();
+    int alivePlayerIndex = (currentIndex + 1) % game.getPlayers().size();
+    int deadPlayerIndex = (currentIndex + 2) % game.getPlayers().size();
+
+    Player alivePlayer = game.getPlayers().get(alivePlayerIndex);
+    game.getPlayers().get(deadPlayerIndex).die();
+
+    int aliveHandSizeBefore = alivePlayer.getHand().size();
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    assertEquals(aliveHandSizeBefore - 1, alivePlayer.getHand().size());
+  }
 }
