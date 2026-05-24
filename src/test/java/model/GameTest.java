@@ -595,4 +595,16 @@ public class GameTest {
     }
     return count;
   }
+  @Test
+  public void playSkipCardNotInHandThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().contains(new Card(CardType.SKIP))) {
+      currentPlayer.removeCard(new Card(CardType.SKIP));
+    }
+    Card skip = new Card(CardType.SKIP);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(skip));
+  }
 }

@@ -230,7 +230,7 @@
 
 ### Method under test: `playSkipCard()`
 
-- **TC51: Player plays Skip but does not have one in hand** 
+- **TC51: Player plays Skip but does not have one in hand** ( :white_check_mark: )
     - **State of the system**:  Game is started, current player does not have a `SKIP` card
     - **Expected output**:Throws `IllegalArgumentException`
 
