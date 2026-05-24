@@ -632,4 +632,25 @@ public class GameTest {
     assertEquals(TURNS_OWED, target.getTurnsOwed());
     assertEquals(Collections.emptyList(), result);
   }
+
+  @Test
+  void targetedAttackOnlyOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    List<Player> players = game.getPlayers();
+    players.get(THIRD_PLAYER_INDEX).die();
+
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player target = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
 }
