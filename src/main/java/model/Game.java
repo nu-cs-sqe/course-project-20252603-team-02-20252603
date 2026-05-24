@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -107,7 +108,7 @@ public class Game {
     completeOneTurn();
   }
 
-  public void playCard(Card card) {
+  public List<Card> playCard(Card card) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -120,10 +121,18 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
+
+    if (card.getType() == CardType.ATTACK) {
+      playAttack();
+      return Collections.emptyList();
+    }
+    return Collections.emptyList();
   }
 
   private boolean isPlayableCard(Card card) {
-    return card != null && card.getType() == CardType.SKIP;
+    return card != null &&
+            card.getType() != CardType.EXPLODING_KITTEN &&
+            card.getType() != CardType.DEFUSE;
   }
 
   public void checkWinner() {
@@ -192,5 +201,10 @@ public class Game {
 
   public int getCurrentPlayerIndex() {
     return currentPlayerIndex;
+  }
+
+  public void playAttack() {
+    moveToNextPlayer();
+    getCurrentPlayer().addTurn();
   }
 }
