@@ -26,6 +26,7 @@ public class GameTest {
   private static final int FOURTH_PLAYER_INDEX = 3;
   private static final int TURNS_OWED = 2;
   private static final int NUM_OTHER_PLAYERS = 2;
+  private static final int EXISTING_TURNS = 1;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -638,4 +639,22 @@ public class GameTest {
         assertEquals(Collections.emptyList(), result);
     }
 
+    @Test
+    void attackCurrentPlayerOwesOneTurn() {
+        Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+        game.startGame();
+        Player currentPlayer = game.getCurrentPlayer();
+        currentPlayer.addCard(new Card(CardType.ATTACK));
+
+        assertEquals(EXISTING_TURNS, currentPlayer.getTurnsOwed());
+
+        int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+        Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
+
+        List<Card> result = game.playCard(new Card(CardType.ATTACK));
+
+        assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+        assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
+        assertEquals(Collections.emptyList(), result);
+    }
 }
