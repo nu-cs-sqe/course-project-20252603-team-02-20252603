@@ -131,85 +131,83 @@ public class Game {
 
   }
 
+  private boolean isPlayableCard(Card card) {
+    return card != null &&
+        card.getType() != CardType.EXPLODING_KITTEN &&
+        card.getType() != CardType.DEFUSE;
+  }
 
-
-private boolean isPlayableCard(Card card) {
-  return card != null &&
-      card.getType() != CardType.EXPLODING_KITTEN &&
-      card.getType() != CardType.DEFUSE;
-}
-
-public void checkWinner() {
-  int alivePlayers = 0;
-  for (Player player : players) {
-    if (player.isAlive()) {
-      alivePlayers++;
+  public void checkWinner() {
+    int alivePlayers = 0;
+    for (Player player : players) {
+      if (player.isAlive()) {
+        alivePlayers++;
+      }
+    }
+    if (alivePlayers > 1) {
+      gameOver = false;
+    } else if (alivePlayers == 1) {
+      gameOver = true;
+    } else {
+      throw new IllegalStateException("no players alive");
     }
   }
-  if (alivePlayers > 1) {
-    gameOver = false;
-  } else if (alivePlayers == 1) {
+
+  public Player getNextActivePlayer() {
+    for (int i = 1; i < players.size(); i++) {
+      Player player = players.get((currentPlayerIndex + i) % players.size());
+      if (player.isAlive()) {
+        return player;
+      }
+    }
     gameOver = true;
-  } else {
-    throw new IllegalStateException("no players alive");
+    return null;
   }
-}
 
-public Player getNextActivePlayer() {
-  for (int i = 1; i < players.size(); i++) {
-    Player player = players.get((currentPlayerIndex + i) % players.size());
-    if (player.isAlive()) {
-      return player;
+  public void moveToNextPlayer() {
+    do {
+      currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    } while (!getCurrentPlayer().isAlive());
+    if (getCurrentPlayer().getTurnsOwed() == 0) {
+      getCurrentPlayer().addTurn();
     }
   }
-  gameOver = true;
-  return null;
-}
 
-public void moveToNextPlayer() {
-  do {
-    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-  } while (!getCurrentPlayer().isAlive());
-  if (getCurrentPlayer().getTurnsOwed() == 0) {
-    getCurrentPlayer().addTurn();
+  private void playSkip() {
+    completeOneTurn();
   }
-}
 
-private void playSkip() {
-  completeOneTurn();
-}
+  public List<Player> getPlayers() {
+    return new ArrayList<>(players);
+  }
 
-public List<Player> getPlayers() {
-  return new ArrayList<>(players);
-}
+  public List<Card> getDrawPile() {
+    return deck.getDeck();
+  }
 
-public List<Card> getDrawPile() {
-  return deck.getDeck();
-}
+  public List<Card> getDiscardPile() {
+    return deck.getDiscard();
+  }
 
-public List<Card> getDiscardPile() {
-  return deck.getDiscard();
-}
+  public void addToDrawPile(Card card, int position) {
+    deck.addToDrawPile(card, position);
+  }
 
-public void addToDrawPile(Card card, int position) {
-  deck.addToDrawPile(card, position);
-}
+  public Card drawFromDeck() {
+    return deck.drawCard();
+  }
 
-public Card drawFromDeck() {
-  return deck.drawCard();
-}
+  public boolean isGameLaunched() {
+    return gameLaunched;
+  }
 
-public boolean isGameLaunched() {
-  return gameLaunched;
-}
+  public boolean isGameOver() {
+    return gameOver;
+  }
 
-public boolean isGameOver() {
-  return gameOver;
-}
-
-public int getCurrentPlayerIndex() {
-  return currentPlayerIndex;
-}
+  public int getCurrentPlayerIndex() {
+    return currentPlayerIndex;
+  }
 }
 
 
