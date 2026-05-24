@@ -221,9 +221,15 @@ public class Game {
   }
 
   public void playTargetedAttack(Player target) {
-    if (target == null) throw new IllegalArgumentException("target cannot be null");
-    if (target == getCurrentPlayer()) throw new IllegalArgumentException("cannot target yourself");
-    if (!target.isAlive()) throw new IllegalArgumentException("target is not alive");
+    if (target == null) {
+      throw new IllegalArgumentException("target cannot be null");
+    }
+    if (target == getCurrentPlayer()) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (!target.isAlive()) {
+      throw new IllegalArgumentException("target is not alive");
+    }
 
     currentPlayerIndex = players.indexOf(target);
     getCurrentPlayer().addTurn();
