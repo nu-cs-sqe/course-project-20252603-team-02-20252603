@@ -634,6 +634,21 @@ public class GameTest {
     assertTrue(game.getDiscardPile().contains(skip));
     assertFalse(currentPlayer.getHand().contains(new Card(CardType.SKIP)));
   }
+  @Test
+  public void playSkipWithOneTurnOwed() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().contains(new Card(CardType.SKIP))) {
+      currentPlayer.removeCard(new Card(CardType.SKIP));
+    }
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(skip);
 
-  
+    game.playCard(skip);
+
+    assertEquals(0, currentPlayer.getTurnsOwed());
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
+
 }

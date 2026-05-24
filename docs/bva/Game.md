@@ -239,7 +239,7 @@
     - **State of the system**: Game is started, current player plays a `SKIP` card
     - **Expected output**: `SKIP` card is present in discard pile
 
-- **TC53: Player plays Skip card and owes 1 turns** 
+- **TC53: Player plays Skip card and owes 1 turns** ( :white_check_mark: )
     - **State of the system**: Game is started, game is not over, current player has a Skip card, turnsOwed = 1
     - **Expected output**: turnsOwed decreases to 1, card removed from hand, card added to discard pile, turn does not
       move to next player
