@@ -24,6 +24,7 @@ public class GameTest {
   private static final int SECOND_PLAYER_INDEX = 1;
   private static final int THIRD_PLAYER_INDEX = 2;
   private static final int FOURTH_PLAYER_INDEX = 3;
+  private static final int EMPTY_HAND_SIZE = 0;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -629,5 +630,35 @@ public class GameTest {
         otherIndex++;
       }
     }
+  }
+
+  @Test
+  void bubonicPlagueOneOtherPlayerHasNoCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    int currentIndex = game.getCurrentPlayerIndex();
+    int emptyPlayerIndex = (currentIndex + 1) % game.getPlayers().size();
+    int otherPlayerIndex = (currentIndex + 2) % game.getPlayers().size();
+
+    Player emptyPlayer = game.getPlayers().get(emptyPlayerIndex);
+    Player otherPlayer = game.getPlayers().get(otherPlayerIndex);
+
+    // drain one player's hand
+    List<Card> hand = new ArrayList<>(emptyPlayer.getHand());
+    for (Card card : hand) {
+      emptyPlayer.removeCard(card);
+    }
+
+    int otherHandSizeBefore = otherPlayer.getHand().size();
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    // empty player still has no cards
+    assertEquals(EMPTY_HAND_SIZE, emptyPlayer.getHand().size());
+    // other player lost one card
+    assertEquals(otherHandSizeBefore - 1, otherPlayer.getHand().size());
   }
 }
