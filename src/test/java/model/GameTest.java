@@ -682,4 +682,23 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.playCard(superSkip));
   }
+
+  @Test
+  public void playSuperSkipCardAppearsInDiscardPile() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().contains(new Card(CardType.SUPER_SKIP))) {
+      currentPlayer.removeCard(new Card(CardType.SUPER_SKIP));
+    }
+    Card superSkip = new Card(CardType.SUPER_SKIP);
+    currentPlayer.addCard(superSkip);
+
+    assertFalse(game.getDiscardPile().contains(new Card(CardType.SUPER_SKIP)));
+
+    game.playCard(superSkip);
+
+    assertTrue(game.getDiscardPile().contains(superSkip));
+    assertFalse(currentPlayer.getHand().contains(new Card(CardType.SUPER_SKIP)));
+  }
 }
