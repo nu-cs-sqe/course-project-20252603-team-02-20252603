@@ -25,7 +25,6 @@ public class GameTest {
   private static final int THIRD_PLAYER_INDEX = 2;
   private static final int FOURTH_PLAYER_INDEX = 3;
   private static final int TURNS_OWED = 2;
-  private static final int NUM_OTHER_PLAYERS = 2;
   private static final int EXISTING_TURNS = 1;
 
   @Test
@@ -624,7 +623,7 @@ public class GameTest {
 
     // kill all players except current and next
     List<Player> players = game.getPlayers();
-    players.get(NUM_OTHER_PLAYERS).die();
+    players.get(THIRD_PLAYER_INDEX).die();
 
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.ATTACK));
