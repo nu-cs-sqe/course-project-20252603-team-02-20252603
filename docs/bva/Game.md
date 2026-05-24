@@ -248,3 +248,23 @@
     - **State of the system**: Game is started, game is not over, current player has a Skip card, turnsOwed = 2
         - **Expected output**:  turnsOwed decreases to 1, card removed from hand, card added to discard pile, player
           remains current player (still has 1 turn left)
+
+### Method under test: `playSuperSkipCard()`
+
+- **TC55: Player plays `Super Skip` but does not have one in hand**
+    - **State of the system**: Game is started, current player does not have a Super Skip card
+    - **Expected output**: Throws `IllegalArgumentException`
+- **TC56: Super Skip card appears in discard pile after play**
+    - **State of the system**: Game is started, current player plays a Super Skip card
+    - **Expected output**: Super Skip card is present in discard pile
+
+- **TC57: Player plays `Super Skip` card with turnsOwed = 1 (not targetted)**
+    - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 1
+    - **Expected output**: turnsOwed decreases by 1 to 0, turn moves to next player
+
+- **TC58:  Player plays` Super Skip` with turnsOwed = 2 (targeted)**
+    - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 2
+    - **Expected output**:  turnsOwed decreases by 2 to 0, turn moves to next player
+
+
+
