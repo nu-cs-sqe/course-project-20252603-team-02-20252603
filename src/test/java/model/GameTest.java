@@ -602,59 +602,59 @@ public class GameTest {
 
   @Test
   void attackMoreThanOneOtherPlayerAlive() {
-      Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-      game.startGame();
-      Player currentPlayer = game.getCurrentPlayer();
-      currentPlayer.addCard(new Card(CardType.ATTACK));
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.ATTACK));
 
-      int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
-      Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-      List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.playCard(new Card(CardType.ATTACK));
 
-      assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
-      assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
-      assertEquals(Collections.emptyList(), result);
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
   }
 
-    @Test
-    void attackExactlyOneOtherPlayerAlive() {
-        Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-        game.startGame();
+  @Test
+  void attackExactlyOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
 
-        // kill all players except current and next
-        List<Player> players = game.getPlayers();
-        players.get(NUM_OTHER_PLAYERS).die();
+    // kill all players except current and next
+    List<Player> players = game.getPlayers();
+    players.get(NUM_OTHER_PLAYERS).die();
 
-        Player currentPlayer = game.getCurrentPlayer();
-        currentPlayer.addCard(new Card(CardType.ATTACK));
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.ATTACK));
 
-        int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
-        Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-        List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.playCard(new Card(CardType.ATTACK));
 
-        assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
-        assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
-        assertEquals(Collections.emptyList(), result);
-    }
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
 
-    @Test
-    void attackCurrentPlayerOwesOneTurn() {
-        Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-        game.startGame();
-        Player currentPlayer = game.getCurrentPlayer();
-        currentPlayer.addCard(new Card(CardType.ATTACK));
+  @Test
+  void attackCurrentPlayerOwesOneTurn() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.ATTACK));
 
-        assertEquals(EXISTING_TURNS, currentPlayer.getTurnsOwed());
+    assertEquals(EXISTING_TURNS, currentPlayer.getTurnsOwed());
 
-        int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
-        Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-        List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.playCard(new Card(CardType.ATTACK));
 
-        assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
-        assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
-        assertEquals(Collections.emptyList(), result);
-    }
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
 }
