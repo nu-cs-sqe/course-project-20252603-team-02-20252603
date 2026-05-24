@@ -709,4 +709,19 @@ public class GameTest {
 
     assertEquals(aliveHandSizeBefore - 1, alivePlayer.getHand().size());
   }
+
+  @Test
+  void bubonicPlagueCurrentPlayerNotAffected() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    int currentHandSizeBefore = currentPlayer.getHand().size();
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    // minus 1 for the played card itself, no additional cards removed
+    assertEquals(currentHandSizeBefore - 1, game.getCurrentPlayer().getHand().size());
+  }
 }
