@@ -251,9 +251,10 @@
 
 ### Method under test: `playSuperSkipCard()`
 
-- **TC55: Player plays `Super Skip` but does not have one in hand**
+- **TC55: Player plays `Super Skip` but does not have one in hand** ( :white_check_mark: )
     - **State of the system**: Game is started, current player does not have a Super Skip card
     - **Expected output**: Throws `IllegalArgumentException`
+
 - **TC56: Super Skip card appears in discard pile after play**
     - **State of the system**: Game is started, current player plays a Super Skip card
     - **Expected output**: Super Skip card is present in discard pile

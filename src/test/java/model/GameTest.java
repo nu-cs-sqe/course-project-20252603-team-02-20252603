@@ -670,4 +670,16 @@ public class GameTest {
     assertEquals(FIRST_PLAYER_INDEX, game.getCurrentPlayerIndex());
   }
 
+  @Test
+  public void playSuperSkipCardNotInHandThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().contains(new Card(CardType.SUPER_SKIP))) {
+      currentPlayer.removeCard(new Card(CardType.SUPER_SKIP));
+    }
+    Card superSkip = new Card(CardType.SUPER_SKIP);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(superSkip));
+  }
 }
