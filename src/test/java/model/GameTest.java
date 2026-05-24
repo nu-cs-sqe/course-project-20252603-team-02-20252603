@@ -653,4 +653,18 @@ public class GameTest {
     assertEquals(TURNS_OWED, target.getTurnsOwed());
     assertEquals(Collections.emptyList(), result);
   }
+
+  @Test
+  void targetedAttackTargetIsDeadPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    Player deadPlayer = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    deadPlayer.die();
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(new Card(CardType.TARGETED_ATTACK), deadPlayer));
+  }
 }
