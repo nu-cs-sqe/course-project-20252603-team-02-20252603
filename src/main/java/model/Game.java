@@ -203,7 +203,8 @@ public class Game {
     return currentPlayerIndex;
   }
 
-  /** Bubonic Plague: Each player excl. the player who played the card loses a random card from their hand **/
+  /** Bubonic Plague: Each player excl. the player who
+   * played the card loses a random card from their hand **/
   public void playBubonicPlague() {
     Player currentPlayer = getCurrentPlayer();
     for (Player player : players) {

@@ -234,6 +234,6 @@
   - **State of the system**: Game is running, current player has Bubonic Plague card, exactly 1 other player alive with cards
   - **Expected output**: Card removed from hand, discarded, one random card removed from that player's hand and added to draw pile, draw pile shuffled, empty list returned
 
-- **TC#: Current player is not affected**
+- **TC#: Current player is not affected** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have cards
   - **Expected output**: Current player's hand size unchanged, other players each lose one card
