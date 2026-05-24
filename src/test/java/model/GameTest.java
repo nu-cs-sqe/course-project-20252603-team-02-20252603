@@ -607,4 +607,33 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.playCard(skip));
   }
+
+
+  @Test
+  public void playSkipCardAppearsInDiscardPile() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    // Remove any existing skips from hand
+    while (currentPlayer.getHand().contains(new Card(CardType.SKIP))) {
+      currentPlayer.removeCard(new Card(CardType.SKIP));
+    }
+
+    // Add our skip
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(skip);
+    assertTrue(currentPlayer.getHand().contains(skip));
+
+    // Verify no skips in discard before
+    assertFalse(game.getDiscardPile().contains(new Card(CardType.SKIP)));
+
+    game.playCard(skip);
+
+    // Verify skip is now in discard and removed from hand
+    assertTrue(game.getDiscardPile().contains(skip));
+    assertFalse(currentPlayer.getHand().contains(new Card(CardType.SKIP)));
+  }
+
+  
 }

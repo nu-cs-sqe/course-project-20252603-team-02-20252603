@@ -235,7 +235,7 @@
     - **Expected output**:Throws `IllegalArgumentException`
 
 
-- **TC52: Skip card appears in discard pile after play** 
+- **TC52: Skip card appears in discard pile after play** ( :white_check_mark: )
     - **State of the system**: Game is started, current player plays a `SKIP` card
     - **Expected output**: `SKIP` card is present in discard pile
 
