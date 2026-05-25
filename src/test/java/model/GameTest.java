@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Random;
+
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 public class GameTest {
@@ -674,5 +676,59 @@ public class GameTest {
     assertEquals(expectedFirst, result.get(0));
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
+  }
+
+  @Test
+  void shuffleEmptyDeck() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card shuffleCard = new Card(CardType.SHUFFLE);
+    currentPlayer.addCard(shuffleCard);
+
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+
+    List<Card> result = game.playCard(shuffleCard);
+
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  void shuffleDeckWithOneElement() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card shuffleCard = new Card(CardType.SHUFFLE);
+    currentPlayer.addCard(shuffleCard);
+
+    while (game.getDrawPile().size() > 1) {
+      game.drawFromDeck();
+    }
+
+    List<Card> result = game.playCard(shuffleCard);
+
+    assertEquals(1, result.size());
+  }
+
+  @Test
+  void shuffleDeckWithMoreThanOneElement() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card shuffleCard = new Card(CardType.SHUFFLE);
+    currentPlayer.addCard(shuffleCard);
+
+    while (game.getDrawPile().size() > 3) {
+      game.drawFromDeck();
+    }
+
+    List<Card> result = game.playCard(shuffleCard);
+
+    assertEquals(3, result.size());
   }
 }

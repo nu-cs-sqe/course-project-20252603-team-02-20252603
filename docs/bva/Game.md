@@ -233,3 +233,16 @@
 - **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+### Method under test: `playShuffle()`
+- **TC55: Shuffle an empty deck** ( :white_check_mark: )
+  - **State of system** Game is running, current player has Shuffle, deck has 0 cards
+  - **Expected output** Card removed from hand, discarded, list of 0 cards returned
+
+- **TC56: Shuffle a deck with one element** ( :white_check_mark: )
+  - **State of system** Game is running, current player has Shuffle, deck has 1 card
+  - **Expected output** Card removed from hand, discarded, list of 1 card returned
+
+- **TC57: Shuffle a deck with more than one element** ( :white_check_mark: )
+  - **State of system** Game is running, current player has Shuffle, deck has 3 cards
+  - **Expected output** Card removed from hand, discarded, list of 3 cards returned

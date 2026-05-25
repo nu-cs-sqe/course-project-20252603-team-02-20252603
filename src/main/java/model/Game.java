@@ -125,6 +125,10 @@ public class Game {
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
+
+    if (card.getType() == CardType.SHUFFLE) {
+      return playShuffle();
+    }
     return Collections.emptyList();
   }
 
@@ -204,5 +208,10 @@ public class Game {
 
   public List<Card> playSeeTheFuture(){
     return deck.peekTopCards();
+  }
+
+  public List<Card> playShuffle() {
+    deck.shuffle();
+    return deck.getDeck();
   }
 }
