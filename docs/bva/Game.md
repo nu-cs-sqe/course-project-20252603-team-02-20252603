@@ -263,7 +263,7 @@
     - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 1
     - **Expected output**: turnsOwed decreases by 1 to 0, turn moves to next player
 
-- **TC58:  Player plays` Super Skip` with turnsOwed = 2 (targeted)**
+- **TC58:  Player plays` Super Skip` with turnsOwed = 2 (targeted)** ( :white_check_mark: )
     - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 2
     - **Expected output**:  turnsOwed decreases by 2 to 0, turn moves to next player
 

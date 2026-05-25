@@ -718,4 +718,22 @@ public class GameTest {
     assertEquals(0, currentPlayer.getTurnsOwed());
     assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
   }
+
+  @Test
+  public void playSuperSkipWithTwoTurnsOwed() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().contains(new Card(CardType.SUPER_SKIP))) {
+      currentPlayer.removeCard(new Card(CardType.SUPER_SKIP));
+    }
+    Card superSkip = new Card(CardType.SUPER_SKIP);
+    currentPlayer.addCard(superSkip);
+    currentPlayer.addTurn();
+
+    game.playCard(superSkip);
+
+    assertEquals(0, currentPlayer.getTurnsOwed());
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
 }
