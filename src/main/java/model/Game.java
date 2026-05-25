@@ -126,7 +126,7 @@ public class Game {
       return playSeeTheFuture();
     }
     
-    elif (card.getType() == CardType.ATTACK) {
+    else if (card.getType() == CardType.ATTACK) {
       playAttack();
       return Collections.emptyList();
     }
