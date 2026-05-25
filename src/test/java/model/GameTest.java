@@ -26,6 +26,7 @@ public class GameTest {
   private static final int FOURTH_PLAYER_INDEX = 3;
   private static final int TURNS_OWED = 2;
   private static final int EXISTING_TURNS = 1;
+  private static final int NUM_CARDS_PEEKED = 3;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -599,6 +600,85 @@ public class GameTest {
     return count;
   }
 
+  @Test
+  void seeTheFutureEmptyDeck() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
+
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(new Card(CardType.SEE_THE_FUTURE)));
+  }
+
+  @Test
+  void seeTheFutureOneCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
+
+    while (game.getDrawPile().size() > 1) {
+      game.drawFromDeck();
+    }
+
+    List<Card> drawPile = game.getDrawPile();
+    Card expectedFirst = drawPile.get(0);
+
+    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+
+    assertEquals(1, result.size());
+    assertEquals(expectedFirst, result.get(0));
+  }
+
+  @Test
+  void seeTheFutureMoreThanThreeCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
+
+    List<Card> drawPile = game.getDrawPile();
+    Card expectedFirst = drawPile.get(0);
+    Card expectedSecond = drawPile.get(1);
+    Card expectedThird = drawPile.get(2);
+
+    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+
+    assertEquals(NUM_CARDS_PEEKED, result.size());
+    assertEquals(expectedFirst, result.get(0));
+    assertEquals(expectedSecond, result.get(1));
+    assertEquals(expectedThird, result.get(2));
+  }
+
+  @Test
+  void seeTheFutureExactlyThreeCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.SEE_THE_FUTURE));
+
+    while (game.getDrawPile().size() > NUM_CARDS_PEEKED) {
+      game.drawFromDeck();
+    }
+
+    List<Card> drawPile = game.getDrawPile();
+    Card expectedFirst = drawPile.get(0);
+    Card expectedSecond = drawPile.get(1);
+    Card expectedThird = drawPile.get(2);
+
+    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+
+    assertEquals(NUM_CARDS_PEEKED, result.size());
+    assertEquals(expectedFirst, result.get(0));
+    assertEquals(expectedSecond, result.get(1));
+    assertEquals(expectedThird, result.get(2));
+  }
+  
   @Test
   void attackMoreThanOneOtherPlayerAlive() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));

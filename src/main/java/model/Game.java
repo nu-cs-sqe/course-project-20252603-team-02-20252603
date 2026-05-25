@@ -121,8 +121,12 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
-
-    if (card.getType() == CardType.ATTACK) {
+    
+    if (card.getType() == CardType.SEE_THE_FUTURE) {
+      return playSeeTheFuture();
+    }
+    
+    elif (card.getType() == CardType.ATTACK) {
       playAttack();
       return Collections.emptyList();
     }
@@ -202,7 +206,11 @@ public class Game {
   public int getCurrentPlayerIndex() {
     return currentPlayerIndex;
   }
-
+  
+  public List<Card> playSeeTheFuture(){
+    return deck.peekTopCards();
+  }
+  
   public void playAttack() {
     moveToNextPlayer();
     getCurrentPlayer().addTurn();
