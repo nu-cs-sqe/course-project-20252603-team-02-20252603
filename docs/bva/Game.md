@@ -259,7 +259,7 @@
     - **State of the system**: Game is started, current player plays a Super Skip card
     - **Expected output**: Super Skip card is present in discard pile
 
-- **TC57: Player plays `Super Skip` card with turnsOwed = 1 (not targetted)**
+- **TC57: Player plays `Super Skip` card with turnsOwed = 1 (not targetted)** ( :white_check_mark: )
     - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 1
     - **Expected output**: turnsOwed decreases by 1 to 0, turn moves to next player
 

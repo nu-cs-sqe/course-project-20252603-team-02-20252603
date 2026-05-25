@@ -701,4 +701,21 @@ public class GameTest {
     assertTrue(game.getDiscardPile().contains(superSkip));
     assertFalse(currentPlayer.getHand().contains(new Card(CardType.SUPER_SKIP)));
   }
+
+  @Test
+  public void playSuperSkipWithOneTurnOwed() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().contains(new Card(CardType.SUPER_SKIP))) {
+      currentPlayer.removeCard(new Card(CardType.SUPER_SKIP));
+    }
+    Card superSkip = new Card(CardType.SUPER_SKIP);
+    currentPlayer.addCard(superSkip);
+
+    game.playCard(superSkip);
+
+    assertEquals(0, currentPlayer.getTurnsOwed());
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
 }
