@@ -272,4 +272,91 @@
   - **State of the system**: Game is running, card type is DEFUSE
   - **Expected output**: false
 
+### Method under test: `isValidCatCombo()`
+- **TC#61: list is null** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards list is null
+  - **Expected output**: IllegalArgumentException
 
+- **TC#62: list is empty (size 0)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards list is empty
+  - **Expected output**: IllegalArgumentException
+
+- **TC#63: list has 1 card (below minimum valid size)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT]
+  - **Expected output**: false
+
+- **TC#64: list has 2 cards — both same real cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT]
+  - **Expected output**: true
+
+- **TC#65: list has 2 cards — two different real cats** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, BEARD_CAT]
+  - **Expected output**: false
+
+- **TC#66: list has 2 cards — one FERAL_CAT + one real cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [FERAL_CAT, TACOCAT]
+  - **Expected output**: true
+
+- **TC#67: list has 2 cards — both FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [FERAL_CAT, FERAL_CAT]
+  - **Expected output**: false
+
+- **TC#68: list has 2 cards — one cat, one non-cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, ATTACK]
+  - **Expected output**: false
+
+- **TC#69: list has 3 cards — all same real cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, TACOCAT]
+  - **Expected output**: true
+
+- **TC#70: list has 3 cards — 2 matching + 1 FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, FERAL_CAT]
+  - **Expected output**: true
+
+- **TC#71: list has 3 cards — 1 real cat + 2 FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, FERAL_CAT, FERAL_CAT]
+  - **Expected output**: true
+
+- **TC#72: list has 3 cards — all FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [FERAL_CAT, FERAL_CAT, FERAL_CAT]
+  - **Expected output**: false
+
+- **TC#73: list has 3 cards — 3 different real cats** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, BEARD_CAT, CATTERMELON]
+  - **Expected output**: false
+
+- **TC#74: list has 3 cards — 2 different real cats + 1 FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, BEARD_CAT, FERAL_CAT]
+  - **Expected output**: false
+
+- **TC#75: list has 3 cards — includes a non-cat card** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, ATTACK]
+  - **Expected output**: false
+
+- **TC#76: list has 4 cards (gap between valid sizes)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT]
+  - **Expected output**: false
+
+- **TC#77: list has 5 cards — all 5 distinct real cat types** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON]
+  - **Expected output**: true
+
+- **TC#78: list has 5 cards — 4 distinct real cats + 1 FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, FERAL_CAT]
+  - **Expected output**: true
+
+- **TC#79: list has 5 cards — duplicate real cat type present** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON]
+  - **Expected output**: false
+
+- **TC#80: list has 5 cards — 2 FERAL_CAT (duplicate feral)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, FERAL_CAT, FERAL_CAT]
+  - **Expected output**: false
+
+- **TC#81: list has 5 cards — includes a non-cat card** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, ATTACK]
+  - **Expected output**: false
+
+- **TC#82: list has 6 cards (above maximum valid size)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT, TACOCAT, TACOCAT]
+  - **Expected output**: false
