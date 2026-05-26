@@ -752,4 +752,25 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.playNosy(SECOND_PLAYER_INDEX));
   }
+
+  @Test
+  public void playNosyOnValidTarget() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().contains(new Card(CardType.NOSY))) {
+      currentPlayer.removeCard(new Card(CardType.NOSY));
+    }
+    Card nosy = new Card(CardType.NOSY);
+    currentPlayer.addCard(nosy);
+    List<Player> players = game.getPlayers();
+    List<Card> targetHand = players.get(SECOND_PLAYER_INDEX).getHand();
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    List<Card> result = game.playNosy(SECOND_PLAYER_INDEX);
+
+    assertEquals(targetHand, result);
+    assertFalse(currentPlayer.getHand().contains(new Card(CardType.NOSY)));
+    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
+  }
 }

@@ -272,7 +272,7 @@
     - **State of the system**: Game is started, target player is dead
     - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC61: Play Nosy on valid target player** 
+- **TC61: Play Nosy on valid target player** ( :white_check_mark: )
     - **State of the system**: Game is started, current player has a Nosy card, target is a different alive player
     - **Expected output**: Card removed from hand, card added to discard, target player's hand is returned
 
