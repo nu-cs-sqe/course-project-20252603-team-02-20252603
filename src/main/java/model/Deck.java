@@ -123,9 +123,15 @@ public class Deck {
     if (discard.isEmpty()) {
       throw new IllegalStateException("discard pile is empty");
     }
+    for (int i = 0; i < discard.size(); i++) {
+      Card curr = discard.get(i);
 
-    Card fake_card = new Card(CardType.DEFUSE);
-    return fake_card;
+      if (curr.getType() == type) {
+        return discard.remove(i);
+      }
+    }
+
+    throw new IllegalArgumentException("card type not in discard pile");
   }
 
   /* Getters */
