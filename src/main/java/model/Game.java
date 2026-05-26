@@ -298,5 +298,11 @@ public class Game {
     currentPlayer.addCard(stolen_card);
     return stolen_card;
   }
+
+  public Card playThreeMatchingCats(List<Card> cards, Player target, CardType wanted_card) {
+    Card fakecard = new Card(CardType.DEFUSE);
+    return fakecard;
+  }
+
 }
 
