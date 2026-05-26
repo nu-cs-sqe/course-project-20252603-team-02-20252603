@@ -235,5 +235,41 @@
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
 
+### Method under test: `isCatCard()`
+- **TC#52: type is null** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is null 
+  - **Expected output**: IllegalArgumentException, "invalid card"
+
+- **TC#53: type is TACOCAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is TACOCAT
+  - **Expected output**: true 
+  
+- **TC#54: type is RAINBOW_RALPHING_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is RAINBOW_RALPHING_CAT
+  - **Expected output**: true
+
+- **TC#55: type is BEARD_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is BEARD_CAT
+  - **Expected output**: true
+
+- **TC#56: type is CATTERMELON** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is CATTERMELON
+  - **Expected output**: true
+
+- **TC#57: type is FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is FERAL_CAT
+  - **Expected output**: true
+
+- **TC#58: type is a non-cat playable card (ATTACK)** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is ATTACK
+  - **Expected output**: false
+
+- **TC#59: type is EXPLODING_KITTEN** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is EXPLODING_KITTEN
+  - **Expected output**: false
+
+- **TC#60: type is DEFUSE** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is DEFUSE
+  - **Expected output**: false
 
 
