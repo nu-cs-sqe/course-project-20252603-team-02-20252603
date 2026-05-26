@@ -122,10 +122,15 @@ public class Game {
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
-    if (card.getType() == CardType.BUBONIC_PLAGUE) {
+    if (card.getType() == CardType.SEE_THE_FUTURE) {
+      return playSeeTheFuture();
+    }
+    
+    else if (card.getType() == CardType.BUBONIC_PLAGUE) {
       playBubonicPlague();
       return Collections.emptyList();
     }
+    
     return Collections.emptyList();
   }
 
@@ -217,5 +222,9 @@ public class Game {
       deck.addToDrawPile(randomCard, random.nextInt(deck.getDeck().size() + 1));
     }
     deck.shuffle();
+  }
+  
+  public List<Card> playSeeTheFuture(){
+    return deck.peekTopCards();
   }
 }
