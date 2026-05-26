@@ -319,7 +319,7 @@
 
 - **TC#72: list has 3 cards — all FERAL_CAT** ( :white_check_mark: )
   - **State of the system**: Game is running, cards = [FERAL_CAT, FERAL_CAT, FERAL_CAT]
-  - **Expected output**: false
+  - **Expected output**: true
 
 - **TC#73: list has 3 cards — 3 different real cats** ( :white_check_mark: )
   - **State of the system**: Game is running, cards = [TACOCAT, BEARD_CAT, CATTERMELON]

@@ -243,6 +243,20 @@ public class Game {
       if (aFeral || bFeral) return true;
       return a == b;
     }
+    else if (size == 3) {
+      long ferals = cards.stream()
+              .filter(c -> c.getType() == CardType.FERAL_CAT).count();
+      if (ferals == 3) return true;
+      List<CardType> realCats = new ArrayList<>();
+      for (Card c : cards) {
+        if (c.getType() != CardType.FERAL_CAT) realCats.add(c.getType());
+      }
+      CardType first = realCats.get(0);
+      for (CardType t : realCats) {
+        if (t != first) return false;
+      }
+      return true;
+    }
     return false;
   }
 }

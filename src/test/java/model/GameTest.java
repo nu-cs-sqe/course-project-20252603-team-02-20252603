@@ -837,9 +837,9 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_ThreeFerals_ReturnsFalse() {
+  public void isValidCatCombo_ThreeFerals_ReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-    assertFalse(game.isValidCatCombo(List.of(
+    assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.FERAL_CAT),
             new Card(CardType.FERAL_CAT),
             new Card(CardType.FERAL_CAT)
