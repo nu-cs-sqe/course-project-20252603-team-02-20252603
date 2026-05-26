@@ -89,7 +89,7 @@
 
 3. [in progress]
    
-   Group: Begin individual card implementation work for the next milestone.
+   Group: Work on individual card implementation work for the next milestone and review.
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
