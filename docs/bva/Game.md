@@ -299,7 +299,7 @@
 
 - **TC#67: list has 2 cards — both FERAL_CAT** ( :white_check_mark: )
   - **State of the system**: Game is running, cards = [FERAL_CAT, FERAL_CAT]
-  - **Expected output**: false
+  - **Expected output**: true
 
 - **TC#68: list has 2 cards — one cat, one non-cat** ( :white_check_mark: )
   - **State of the system**: Game is running, cards = [TACOCAT, ATTACK]

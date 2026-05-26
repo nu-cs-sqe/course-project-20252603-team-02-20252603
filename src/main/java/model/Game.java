@@ -226,6 +226,23 @@ public class Game {
     if (cards == null || cards.isEmpty()) {
       throw new IllegalArgumentException("cards cannot be null or empty");
     }
+
+    for (Card c : cards) {
+      if (!isCatCard(c.getType())) {
+        return false;
+      }
+    }
+
+    int size = cards.size(); // use size to check for applicable combo
+
+    if (size == 2) {
+      CardType a = cards.get(0).getType();
+      CardType b = cards.get(1).getType();
+      boolean aFeral = a == CardType.FERAL_CAT;
+      boolean bFeral = b == CardType.FERAL_CAT;
+      if (aFeral || bFeral) return true;
+      return a == b;
+    }
     return false;
   }
 }
