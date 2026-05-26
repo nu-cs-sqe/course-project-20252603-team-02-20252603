@@ -209,4 +209,16 @@ public class Game {
   public List<Card> playSeeTheFuture(){
     return deck.peekTopCards();
   }
+
+  public boolean isCatCard(CardType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("invalid card");
+    }
+    return type == CardType.TACOCAT
+            || type == CardType.HAIRY_POTATO_CAT
+            || type == CardType.RAINBOW_RALPHING_CAT
+            || type == CardType.BEARD_CAT
+            || type == CardType.CATTERMELON
+            || type == CardType.FERAL_CAT;
+  }
 }

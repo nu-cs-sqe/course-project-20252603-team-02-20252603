@@ -675,4 +675,63 @@ public class GameTest {
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
   }
+
+  @Test
+  public void testIsCatCardTypeIsNull() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.isCatCard(null);
+    });
+
+    assertEquals("invalid card", e.getMessage());
+  }
+
+  @Test
+  public void testIsCatCardTypeIsTacocat() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isCatCard(CardType.TACOCAT));
+  }
+
+  @Test
+  public void testIsCatCardTypeIsRainbowRalphingCat() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isCatCard(CardType.RAINBOW_RALPHING_CAT));
+  }
+
+  @Test
+  public void testIsCatCardTypeIsBeardCat() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isCatCard(CardType.BEARD_CAT));
+  }
+
+  @Test
+  public void testIsCatCardTypeIsCattermelon() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isCatCard(CardType.CATTERMELON));
+  }
+
+  @Test
+  public void testIsCatCardTypeIsFeralCat() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isCatCard(CardType.FERAL_CAT));
+  }
+
+  @Test
+  public void testIsCatCardTypeIsAttack() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isCatCard(CardType.ATTACK));
+  }
+
+  @Test
+  public void testIsCatCardTypeIsExplodingKitten() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isCatCard(CardType.EXPLODING_KITTEN));
+  }
+
+  @Test
+  public void testIsCatCardTypeIsDefuse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isCatCard(CardType.DEFUSE));
+  }
 }
