@@ -312,6 +312,10 @@ public class Game {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
+    if (!isValidCatCombo(cards) || cards.size() != 3) {
+      throw new IllegalArgumentException("invalid three-cat combo");
+    }
+
     return true;
   }
 
