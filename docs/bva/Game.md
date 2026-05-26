@@ -260,7 +260,7 @@
     - **State of the system**: Target player index is -1
     - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC58: Play Nosy on invalid player index (too large)** 
+- **TC58: Play Nosy on invalid player index (too large)** ( :white_check_mark: )
     - **State of the system**: Target player index is >= number of players
     - **Expected output**: Throws `IllegalArgumentException`
 
