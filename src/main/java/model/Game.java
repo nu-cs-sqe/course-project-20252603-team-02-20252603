@@ -174,6 +174,10 @@ public class Game {
     return new ArrayList<>(players);
   }
 
+  public List<Card> playNosy(int targetPlayerIndex) {
+    throw new IllegalArgumentException("card is not in player's hand");
+  }
+
   public List<Card> getDrawPile() {
     return deck.getDeck();
   }

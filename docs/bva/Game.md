@@ -248,7 +248,7 @@
 
 ### Method under test: `playNosy(int targetPlayerIndex)`
 
-- **TC55: Play Nosy but does not have one in hand** 
+- **TC55: Play Nosy but does not have one in hand** ( :white_check_mark: )
     - **State of the system**: Current player does not have a Nosy card
     - **Expected output**: Throws `IllegalArgumentException`
 

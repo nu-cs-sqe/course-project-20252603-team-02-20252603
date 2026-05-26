@@ -675,4 +675,16 @@ public class GameTest {
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
   }
+
+  @Test
+  public void playNosyCardNotInHandThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().contains(new Card(CardType.NOSY))) {
+      currentPlayer.removeCard(new Card(CardType.NOSY));
+    }
+
+    assertThrows(IllegalArgumentException.class, () -> game.playNosy(SECOND_PLAYER_INDEX));
+  }
 }
