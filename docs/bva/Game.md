@@ -256,7 +256,7 @@
     - **State of the system**: Position is -1
     - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC57: Defuse with position out of bounds (too large)**
+- **TC57: Defuse with position out of bounds (too large)** ( :white_check_mark: )
     - **State of the system**: Position is greater than drawPile.size()
     - **Expected output**: Throws `IllegalArgumentException`
 

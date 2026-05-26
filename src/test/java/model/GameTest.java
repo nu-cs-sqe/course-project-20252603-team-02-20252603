@@ -695,4 +695,14 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.defuse(-1));
   }
+
+  @Test
+  public void defuseWithPositionTooLargeThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    int drawPileSize = game.getDrawPile().size();
+
+    assertThrows(IllegalArgumentException.class, () -> game.defuse(drawPileSize + 1));
+  }
+
 }
