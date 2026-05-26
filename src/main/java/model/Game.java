@@ -221,4 +221,12 @@ public class Game {
             || type == CardType.CATTERMELON
             || type == CardType.FERAL_CAT;
   }
+
+  public boolean isValidCatCombo(List<Card> cards) {
+    if (cards == null || cards.isEmpty()) {
+      throw new IllegalArgumentException("cards cannot be null or empty");
+    }
+    return false;
+  }
 }
+

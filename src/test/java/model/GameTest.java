@@ -677,7 +677,7 @@ public class GameTest {
   }
 
   @Test
-  public void testIsCatCardTypeIsNull() {
+  public void IsCatCardTypeIsNull() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
@@ -688,50 +688,275 @@ public class GameTest {
   }
 
   @Test
-  public void testIsCatCardTypeIsTacocat() {
+  public void IsCatCardTypeIsTacocat() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.TACOCAT));
   }
 
   @Test
-  public void testIsCatCardTypeIsRainbowRalphingCat() {
+  public void IsCatCardTypeIsRainbowRalphingCat() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.RAINBOW_RALPHING_CAT));
   }
 
   @Test
-  public void testIsCatCardTypeIsBeardCat() {
+  public void IsCatCardTypeIsBeardCat() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.BEARD_CAT));
   }
 
   @Test
-  public void testIsCatCardTypeIsCattermelon() {
+  public void IsCatCardTypeIsCattermelon() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.CATTERMELON));
   }
 
   @Test
-  public void testIsCatCardTypeIsFeralCat() {
+  public void IsCatCardTypeIsFeralCat() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.FERAL_CAT));
   }
 
   @Test
-  public void testIsCatCardTypeIsAttack() {
+  public void IsCatCardTypeIsAttack() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isCatCard(CardType.ATTACK));
   }
 
   @Test
-  public void testIsCatCardTypeIsExplodingKitten() {
+  public void IsCatCardTypeIsExplodingKitten() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isCatCard(CardType.EXPLODING_KITTEN));
   }
 
   @Test
-  public void testIsCatCardTypeIsDefuse() {
+  public void IsCatCardTypeIsDefuse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isCatCard(CardType.DEFUSE));
+  }
+
+  @Test
+  public void isValidCatCombo_NullList_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.isValidCatCombo(null);
+    });
+    assertEquals("cards cannot be null or empty", e.getMessage());
+  }
+
+  @Test
+  public void isValidCatCombo_EmptyList_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.isValidCatCombo(List.of());
+    });
+    assertEquals("cards cannot be null or empty", e.getMessage());
+  }
+
+  @Test
+  public void isValidCatCombo_OneCard_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_TwoSameRealCats_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_TwoDifferentRealCats_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.BEARD_CAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_OneFeralOneRealCat_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isValidCatCombo(List.of(
+            new Card(CardType.FERAL_CAT),
+            new Card(CardType.TACOCAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_TwoFeralCats_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.FERAL_CAT),
+            new Card(CardType.FERAL_CAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_OneCatOneNonCat_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.ATTACK)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_ThreeSameRealCats_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_TwoMatchingOneFeral_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.FERAL_CAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_OneRealTwoFerals_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.FERAL_CAT),
+            new Card(CardType.FERAL_CAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_ThreeFerals_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.FERAL_CAT),
+            new Card(CardType.FERAL_CAT),
+            new Card(CardType.FERAL_CAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_ThreeDifferentRealCats_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.BEARD_CAT),
+            new Card(CardType.CATTERMELON)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_TwoDifferentRealCatsOneFeral_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.BEARD_CAT),
+            new Card(CardType.FERAL_CAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_ThreeCardsIncludingNonCat_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.ATTACK)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_FourCards_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_FiveDistinctRealCats_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.HAIRY_POTATO_CAT),
+            new Card(CardType.RAINBOW_RALPHING_CAT),
+            new Card(CardType.BEARD_CAT),
+            new Card(CardType.CATTERMELON)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_FourDistinctRealCatsOneFeral_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertTrue(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.HAIRY_POTATO_CAT),
+            new Card(CardType.RAINBOW_RALPHING_CAT),
+            new Card(CardType.BEARD_CAT),
+            new Card(CardType.FERAL_CAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_DuplicateRealCat_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.RAINBOW_RALPHING_CAT),
+            new Card(CardType.BEARD_CAT),
+            new Card(CardType.CATTERMELON)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_TwoFeralsInFiveCards_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.HAIRY_POTATO_CAT),
+            new Card(CardType.RAINBOW_RALPHING_CAT),
+            new Card(CardType.FERAL_CAT),
+            new Card(CardType.FERAL_CAT)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_FiveCardsIncludingNonCat_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.HAIRY_POTATO_CAT),
+            new Card(CardType.RAINBOW_RALPHING_CAT),
+            new Card(CardType.BEARD_CAT),
+            new Card(CardType.ATTACK)
+    )));
+  }
+
+  @Test
+  public void isValidCatCombo_SixCards_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isValidCatCombo(List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT)
+    )));
   }
 }
