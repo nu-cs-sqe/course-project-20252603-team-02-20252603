@@ -722,4 +722,20 @@ public class GameTest {
     assertEquals(drawPileSizeBefore + 1, game.getDrawPile().size());
   }
 
+  @Test
+  public void defuseWithPositionAtBottom() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    int drawPileSize = game.getDrawPile().size();
+    int defuseCountBefore = countCards(currentPlayer, CardType.DEFUSE);
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    game.defuse(drawPileSize);
+
+    assertEquals(defuseCountBefore - 1, countCards(currentPlayer, CardType.DEFUSE));
+    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
+    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(drawPileSize).getType());
+    assertEquals(drawPileSize + 1, game.getDrawPile().size());
+  }
 }

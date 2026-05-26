@@ -264,7 +264,7 @@
     - **State of the system**: Current player has a Defuse card, position is 0
     - **Expected output**: Exploding Kitten inserted at top of draw pile
 
-- **TC59: Defuse with position equal to drawPile.size() (bottom of draw pile)**
+- **TC59: Defuse with position equal to drawPile.size() (bottom of draw pile)** ( :white_check_mark: )
     - **State of the system**: Current player has a Defuse card, position is drawPile.size()
     - **Expected output**: Exploding Kitten inserted at bottom of draw pile
 
