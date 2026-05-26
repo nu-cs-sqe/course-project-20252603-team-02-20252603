@@ -360,3 +360,44 @@
 - **TC#82: list has 6 cards (above maximum valid size)** ( :white_check_mark: )
   - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT, TACOCAT, TACOCAT]
   - **Expected output**: false
+
+### Method under test: `playTwoMatchingCats()`
+- **TC#83: target is null** ( :white_check_mark: )
+  - **State of the system**: `current player has 2 matching cats, target is null
+  - **Expected output**: Throws `IllegalArgumentException`, "target cannot be null"
+
+- **TC#84: target is dead** ( :white_check_mark: )
+  - **State of the system**: current player has 2 matching cats, target player is not alive
+  - **Expected output**: Throws `IllegalArgumentException`, "target must be alive"
+
+- **TC#85: target is current player** ( :white_check_mark: )
+  - **State of the system**: current player has 2 matching cats, target == currentPlayer
+  - **Expected output**: Throws `IllegalArgumentException`, "cannot target yourself"
+
+- **TC#86: combo is invalid because cats do not match** ( :white_check_mark: )
+  - **State of the system**: cards = [TACOCAT, BEARD_CAT], target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid cat combo"
+
+- **TC#87: combo is invalid because size is 3 instead of 2** ( :white_check_mark: )
+  - **State of the system**: cards = [TACOCAT, TACOCAT, TACOCAT], target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid cat combo"
+
+- **TC#88: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: current player's hand does not contain the passed cards, target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "cards are not in current player's hand"
+
+- **TC#89: current player has only 1 of the 2 required cards** ( :white_check_mark: )
+  - **State of the system**: current player has 1 TACOCAT in hand, cards = [TACOCAT, TACOCAT], target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "cards are not in current player's hand"
+
+- **TC#90: target has exactly 1 card in hand** ( :white_check_mark: )
+  - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP]
+  - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, SKIP transferred to current player, target hand is empty, returns SKIP
+
+- **TC#91: target has exactly 2 cards in hand** ( :white_check_mark: )
+  - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP, ATTACK]
+  - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, exactly 1 target card transferred to current player, target hand has 1 card remaining, returns stolen card
+
+- **TC#92: target has many cards in hand** ( :white_check_mark: )
+  - **State of the system**: current player has valid 2-card combo in hand, target hand has 5 cards
+  - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, exactly 1 target card transferred to current player, target hand size goes from 5 to 4, returns stolen card
