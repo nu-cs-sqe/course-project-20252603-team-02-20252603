@@ -724,6 +724,7 @@ public class GameTest {
 
     // minus 1 for the played card itself, no additional cards removed
     assertEquals(currentHandSizeBefore - 1, game.getCurrentPlayer().getHand().size());
+  }
   
   @Test
   void seeTheFutureEmptyDeck() {
