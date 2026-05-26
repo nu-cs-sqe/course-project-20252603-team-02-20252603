@@ -204,6 +204,7 @@
   - **State of the system**: Game is over
   - **Expected output**: Throws `IllegalStateException`
 
+
 ### Method under test: `checkWinner()`
 - **TC48: More than one player alive** ( :white_check_mark: )
   - **State of the system**: 2 or more players are alive
@@ -233,3 +234,6 @@
 - **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+
+

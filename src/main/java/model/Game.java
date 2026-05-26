@@ -182,6 +182,10 @@ public class Game {
     return deck.getDiscard();
   }
 
+  public Card takeFromDiscard(CardType type) {
+    return deck.takeFromDiscard(type);
+  }
+
   public void addToDrawPile(Card card, int position) {
     deck.addToDrawPile(card, position);
   }
