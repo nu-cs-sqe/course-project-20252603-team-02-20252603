@@ -260,7 +260,7 @@
     - **State of the system**: Position is greater than drawPile.size()
     - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC58: Defuse with position 0 (top of draw pile)**
+- **TC58: Defuse with position 0 (top of draw pile)** ( :white_check_mark: )
     - **State of the system**: Current player has a Defuse card, position is 0
     - **Expected output**: Exploding Kitten inserted at top of draw pile
 

@@ -704,5 +704,22 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.defuse(drawPileSize + 1));
   }
+  @Test
+  public void defuseWithPositionZero() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    int defuseCountBefore = countCards(currentPlayer, CardType.DEFUSE);
+    int drawPileSizeBefore = game.getDrawPile().size();
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    game.defuse(0);
+
+    assertEquals(defuseCountBefore - 1, countCards(currentPlayer, CardType.DEFUSE));
+    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
+    assertEquals(CardType.DEFUSE, game.getDiscardPile().get(discardSizeBefore).getType());
+    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(0).getType());
+    assertEquals(drawPileSizeBefore + 1, game.getDrawPile().size());
+  }
 
 }

@@ -178,6 +178,11 @@ public class Game {
     if (position < 0 || position > deck.getDeck().size()){
       throw new IllegalArgumentException("position cannot be negative");
     }
+
+    Card defuse = new Card(CardType.DEFUSE);
+    currentPlayer.removeCard(defuse);
+    deck.discardCard(defuse);
+    deck.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), position);
   }
 
   public List<Player> getPlayers() {
