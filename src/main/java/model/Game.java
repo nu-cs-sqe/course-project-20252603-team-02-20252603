@@ -286,8 +286,17 @@ public class Game {
         throw new IllegalArgumentException("cards not in hand");
       }
     }
-    Card fake_card = new Card(CardType.DEFUSE);
-    return fake_card;
+
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+    List<Card> targetHand = target.getHand();
+    int index = random.nextInt(targetHand.size());
+    Card stolen_card = targetHand.get(index);
+    target.removeCard(stolen_card);
+    currentPlayer.addCard(stolen_card);
+    return stolen_card;
   }
 }
 

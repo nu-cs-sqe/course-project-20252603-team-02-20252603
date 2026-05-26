@@ -1083,4 +1083,96 @@ public class GameTest {
     assertEquals("cards not in hand", e.getMessage());
   }
 
+  @Test
+  public void playTwoMatchingCats_TargetHasOneCard_ReturnsStolenCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    target.addCard(skip);
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
+
+    assertEquals(CardType.SKIP, stolen.getType());
+    assertTrue(currentPlayer.getHand().contains(stolen));
+    assertFalse(currentPlayer.getHand().contains(cat1));
+    assertFalse(currentPlayer.getHand().contains(cat2));
+    assertEquals(0, target.getHand().size());
+    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
+  }
+
+  @Test
+  public void playTwoMatchingCats_TargetHasTwoCards_ReturnsStolenCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card skip = new Card(CardType.SKIP);
+    Card attack = new Card(CardType.ATTACK);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    target.addCard(skip);
+    target.addCard(attack);
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
+
+    assertTrue(stolen.getType() == CardType.SKIP || stolen.getType() == CardType.ATTACK);
+    assertTrue(currentPlayer.getHand().contains(stolen));
+    assertEquals(1, target.getHand().size());
+    assertFalse(target.getHand().contains(stolen));
+    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
+  }
+
+  @Test
+  public void playTwoMatchingCats_TargetHasFiveCards_ReturnsStolenCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+
+    target.addCard(new Card(CardType.SKIP));
+    target.addCard(new Card(CardType.ATTACK));
+    target.addCard(new Card(CardType.SHUFFLE));
+    target.addCard(new Card(CardType.FAVOR));
+    target.addCard(new Card(CardType.NOPE));
+
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
+
+    assertNotNull(stolen);
+    assertTrue(currentPlayer.getHand().contains(stolen));
+    assertEquals(4, target.getHand().size());
+    assertFalse(target.getHand().contains(stolen));
+    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
+  }
+
 }
