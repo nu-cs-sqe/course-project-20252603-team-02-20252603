@@ -257,6 +257,13 @@ public class Game {
       }
       return true;
     }
+    else if (size == 5) {
+      long distinctTypes = cards.stream()
+              .map(Card::getType)
+              .distinct()
+              .count();
+      return distinctTypes == 5;
+    }
     return false;
   }
 }
