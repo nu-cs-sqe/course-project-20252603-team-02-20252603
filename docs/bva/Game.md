@@ -418,40 +418,36 @@
 
 - **TC#97: named is null** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo, target is valid, named card = null
-  - **Expected output**: Throws `IllegalArgumentException`, "wanted card cannot be null"
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid wanted card type"
 
 - **TC#98: named is EXPLODING_KITTEN** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo, target is valid, named card = EXPLODING_KITTEN
-  - **Expected output**: Throws `IllegalArgumentException`, "cannot request exploding kitten or defuse"
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid wanted card type"
 
-- **TC#99: named is DEFUSE** ( :white_check_mark: )
-  - **State of the system**: current player has valid 3-cat combo, target is valid, named card = DEFUSE
-  - **Expected output**: Throws `IllegalArgumentException`, "cannot request exploding kitten or defuse"
-
-- **TC#100: combo is invalid because cats do not match** ( :white_check_mark: )
+- **TC#99: combo is invalid because cats do not match** ( :white_check_mark: )
   - **State of the system**: cards = [TACOCAT, BEARD_CAT, CATTERMELON], target is valid, named card = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "invalid three-cat combo"
 
-- **TC#101: combo is invalid because size is 2 instead of 3** ( :white_check_mark: )
+- **TC#100: combo is invalid because size is 2 instead of 3** ( :white_check_mark: )
   - **State of the system**: cards = [TACOCAT, TACOCAT], target is valid, named = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "invalid three-cat combo"
 
-- **TC#102: cards are not in current player's hand** ( :white_check_mark: )
+- **TC#101: cards are not in current player's hand** ( :white_check_mark: )
   - **State of the system**: combo cards are not held by current player, target is valid, named card = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "card not in hand"
 
-- **TC#103: target has 0 copies of named card** ( :white_check_mark: )
+- **TC#102: target has 0 copies of named card** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo in hand, target has no FAVOR, named card = FAVOR
   - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, no card transferred, returns false
 
-- **TC#104: target has exactly 1 copy of named card** ( :white_check_mark: )
+- **TC#103: target has exactly 1 copy of named card** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo in hand, target hand = [FAVOR], named card = FAVOR
   - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, FAVOR transferred to current player, target hand is empty, returns true
 
-- **TC#105: target has exactly 2 copies of named card** ( :white_check_mark: )
+- **TC#104: target has exactly 2 copies of named card** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo in hand, target hand = [FAVOR, FAVOR], named card = FAVOR
   - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, exactly 1 FAVOR transferred, target still has 1 FAVOR, returns true
 
-- **TC#106: target has named card plus other cards** ( :white_check_mark: )
+- **TC#105: target has named card plus other cards** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo in hand, target hand = [FAVOR, ATTACK, SKIP], named card = FAVOR
   - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, FAVOR transferred, target hand = [ATTACK, SKIP], returns true

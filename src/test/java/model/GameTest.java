@@ -1175,4 +1175,290 @@ public class GameTest {
     assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
   }
 
+  @Test
+  public void playThreeMatchingCats_NullTarget_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), null, CardType.FAVOR);
+    });
+
+    assertEquals("target cannot be null or dead", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCats_DeadTarget_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    target.die();
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    });
+
+    assertEquals("target cannot be null or dead", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCats_SelfTarget_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), currentPlayer, CardType.FAVOR);
+    });
+
+    assertEquals("cannot target yourself", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCats_NullNamedCard_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, null);
+    });
+
+    assertEquals("invalid wanted card type", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCats_ExplodingKittenNamedCard_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.EXPLODING_KITTEN);
+    });
+
+    assertEquals("invalid wanted card type", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCats_NonMatchingCats_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.BEARD_CAT);
+    Card cat3 = new Card(CardType.CATTERMELON);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    });
+
+    assertEquals("invalid three-cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCats_TwoCards_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playThreeMatchingCats(List.of(cat1, cat2), target, CardType.FAVOR);
+    });
+
+    assertEquals("invalid three-cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCats_CardsNotInHand_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    });
+
+    assertEquals("cards not in hand", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCats_TargetHasNoNamedCard_ReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    target.addCard(new Card(CardType.ATTACK));
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+
+    assertFalse(result);
+    assertFalse(currentPlayer.getHand().contains(cat1));
+    assertFalse(currentPlayer.getHand().contains(cat2));
+    assertFalse(currentPlayer.getHand().contains(cat3));
+    assertEquals(1, target.getHand().size());
+    assertEquals(CardType.ATTACK, target.getHand().get(0).getType());
+    assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
+  }
+
+  @Test
+  public void playThreeMatchingCats_TargetHasOneNamedCard_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    Card favor = new Card(CardType.FAVOR);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    target.addCard(favor);
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+
+    assertTrue(result);
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(currentPlayer.getHand().contains(cat1));
+    assertFalse(currentPlayer.getHand().contains(cat2));
+    assertFalse(currentPlayer.getHand().contains(cat3));
+    assertEquals(0, target.getHand().size());
+    assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
+  }
+
+  @Test
+  public void playThreeMatchingCats_TargetHasTwoNamedCards_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    Card favor1 = new Card(CardType.FAVOR);
+    Card favor2 = new Card(CardType.FAVOR);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    target.addCard(favor1);
+    target.addCard(favor2);
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+
+    assertTrue(result);
+    assertEquals(1, countCards(currentPlayer, CardType.FAVOR));
+    assertEquals(1, countCards(target, CardType.FAVOR));
+    assertFalse(currentPlayer.getHand().contains(cat1));
+    assertFalse(currentPlayer.getHand().contains(cat2));
+    assertFalse(currentPlayer.getHand().contains(cat3));
+    assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
+  }
+
+  @Test
+  public void playThreeMatchingCats_TargetHasNamedCardAndOtherCards_ReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    Card favor = new Card(CardType.FAVOR);
+    Card attack = new Card(CardType.ATTACK);
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    target.addCard(favor);
+    target.addCard(attack);
+    target.addCard(skip);
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+
+    assertTrue(result);
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(target.getHand().contains(favor));
+    assertTrue(target.getHand().contains(attack));
+    assertTrue(target.getHand().contains(skip));
+    assertEquals(2, target.getHand().size());
+    assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
+  }
+
 }

@@ -299,9 +299,20 @@ public class Game {
     return stolen_card;
   }
 
-  public Card playThreeMatchingCats(List<Card> cards, Player target, CardType wanted_card) {
-    Card fakecard = new Card(CardType.DEFUSE);
-    return fakecard;
+  public boolean playThreeMatchingCats(List<Card> cards, Player target, CardType wanted_card) {
+    if (target == null || !target.isAlive()) {
+      throw new IllegalArgumentException("target cannot be null or dead");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    if (target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+
+    if (wanted_card == null || wanted_card == CardType.EXPLODING_KITTEN) {
+      throw new IllegalArgumentException("invalid wanted card type");
+    }
+
+    return true;
   }
 
 }
