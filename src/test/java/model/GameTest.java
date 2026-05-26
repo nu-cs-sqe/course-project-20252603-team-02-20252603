@@ -609,7 +609,7 @@ public class GameTest {
     }
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(new Card(CardType.SEE_THE_FUTURE)));
+        game.playCard(new Card(CardType.SEE_THE_FUTURE)));
   }
 
   @Test
@@ -704,6 +704,7 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.defuse(drawPileSize + 1));
   }
+
   @Test
   public void defuseWithPositionZero() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
