@@ -959,4 +959,128 @@ public class GameTest {
             new Card(CardType.TACOCAT)
     )));
   }
+
+  @Test
+  public void playTwoMatchingCats_NullTarget_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playTwoMatchingCats(List.of(cat1, cat2), null);
+    });
+
+    assertEquals("target cannot be null or dead", e.getMessage());
+  }
+
+  @Test
+  public void playTwoMatchingCats_DeadTarget_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    target.die();
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+    });
+
+    assertEquals("target cannot be null or dead", e.getMessage());
+  }
+
+  @Test
+  public void playTwoMatchingCats_SelfTarget_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playTwoMatchingCats(List.of(cat1, cat2), currentPlayer);
+    });
+
+    assertEquals("cannot target yourself", e.getMessage());
+  }
+
+  @Test
+  public void playTwoMatchingCats_NonMatchingCats_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.BEARD_CAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+    });
+
+    assertEquals("invalid two-cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playTwoMatchingCats_ThreeCards_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playTwoMatchingCats(List.of(cat1, cat2, cat3), target);
+    });
+
+    assertEquals("invalid two-cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playTwoMatchingCats_CardsNotInHand_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+    });
+
+    assertEquals("cards not in hand", e.getMessage());
+  }
+
+  @Test
+  public void playTwoMatchingCats_OnlyOneRequiredCardInHand_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+    });
+
+    assertEquals("cards not in hand", e.getMessage());
+  }
+
 }

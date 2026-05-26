@@ -376,19 +376,19 @@
 
 - **TC#86: combo is invalid because cats do not match** ( :white_check_mark: )
   - **State of the system**: cards = [TACOCAT, BEARD_CAT], target is valid
-  - **Expected output**: Throws `IllegalArgumentException`, "invalid cat combo"
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid two-cat combo"
 
 - **TC#87: combo is invalid because size is 3 instead of 2** ( :white_check_mark: )
   - **State of the system**: cards = [TACOCAT, TACOCAT, TACOCAT], target is valid
-  - **Expected output**: Throws `IllegalArgumentException`, "invalid cat combo"
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid two-cat combo"
 
 - **TC#88: cards are not in current player's hand** ( :white_check_mark: )
   - **State of the system**: current player's hand does not contain the passed cards, target is valid
-  - **Expected output**: Throws `IllegalArgumentException`, "cards are not in current player's hand"
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
 
 - **TC#89: current player has only 1 of the 2 required cards** ( :white_check_mark: )
   - **State of the system**: current player has 1 TACOCAT in hand, cards = [TACOCAT, TACOCAT], target is valid
-  - **Expected output**: Throws `IllegalArgumentException`, "cards are not in current player's hand"
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
 
 - **TC#90: target has exactly 1 card in hand** ( :white_check_mark: )
   - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP]

@@ -266,5 +266,28 @@ public class Game {
     }
     return false;
   }
+
+  public Card playTwoMatchingCats(List<Card> cards, Player target) {
+    if (target == null || !target.isAlive()) {
+      throw new IllegalArgumentException("target cannot be null or dead");
+    }
+
+    Player currentPlayer = getCurrentPlayer();
+    if (target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (!isValidCatCombo(cards) || cards.size() != 2) {
+      throw new IllegalArgumentException("invalid two-cat combo");
+    }
+
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+    Card fake_card = new Card(CardType.DEFUSE);
+    return fake_card;
+  }
 }
 
