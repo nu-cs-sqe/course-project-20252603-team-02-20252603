@@ -300,4 +300,27 @@ public class DeckTests {
 
     assertThrows(IllegalStateException.class, () -> deck.peekTopCards());
   }
+
+  @Test
+  public void testTakeFromDiscardTypeIsNull() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    deck.discardCard(new Card(CardType.FAVOR));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      deck.takeFromDiscard(null);
+    });
+
+    assertEquals("invalid card type", e.getMessage());
+  }
+
+  @Test
+  public void testTakeFromDiscardDiscardPileIsEmpty() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    Exception e = assertThrows(IllegalStateException.class, () -> {
+      deck.takeFromDiscard(CardType.FAVOR);
+    });
+
+    assertEquals("discard pile is empty", e.getMessage());
+  }
 }

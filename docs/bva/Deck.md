@@ -76,11 +76,11 @@
   - **Expected output**: Throws `IllegalStateException`
 
 ### Method under test: `takeFromDiscard()`
-- **TC#19: type is null** (:x:)
+- **TC#19: type is null** (:white_check_mark:)
   - **state of the system**: Game running, discard has cards 
   - **Expected output**: throw IllegalArgumentException, "invalid card type"
 
-- **TC#20: discard pile is empty** (:x:)
+- **TC#20: discard pile is empty** (:white_check_mark:)
   - **state of the system**: Game running, discard pile has 0 cards, wanted card type = FAVOR
   - **Expected output**: throw IllegalStateException, "discard pile is empty"
 

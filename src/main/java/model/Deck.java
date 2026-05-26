@@ -114,6 +114,20 @@ public class Deck {
     return new ArrayList<>(deck.subList(0, count));
   }
 
+  /* Remove a specific card from discard pile */
+  public Card takeFromDiscard(CardType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("invalid card type");
+    }
+
+    if (discard.isEmpty()) {
+      throw new IllegalStateException("discard pile is empty");
+    }
+
+    Card fake_card = new Card(CardType.DEFUSE);
+    return fake_card;
+  }
+
   /* Getters */
   public List<Card> getDeck() {
     return new ArrayList<>(deck);
