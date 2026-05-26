@@ -316,6 +316,26 @@ public class Game {
       throw new IllegalArgumentException("invalid three-cat combo");
     }
 
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+
+    Card namedCard = new Card(wanted_card);
+    List<Card> targetHand = target.getHand();
+    // current player gets nothing if target doesn't have the card they ask for
+    if (!targetHand.contains(namedCard)) {
+      return false;
+    }
+    target.removeCard(namedCard);
+    currentPlayer.addCard(namedCard);
     return true;
   }
 
