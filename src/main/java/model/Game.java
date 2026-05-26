@@ -175,7 +175,15 @@ public class Game {
   }
 
   public List<Card> playNosy(int targetPlayerIndex) {
-    throw new IllegalArgumentException("card is not in player's hand");
+    Player currentPlayer = getCurrentPlayer();
+    Card nosy = new Card(CardType.NOSY);
+
+    if (!currentPlayer.getHand().contains(nosy)) {
+      throw new IllegalArgumentException("card is not in player's hand");
+    }
+    currentPlayer.removeCard(nosy);
+    deck.discardCard(nosy);
+    return players.get(targetPlayerIndex).getHand();
   }
 
   public List<Card> getDrawPile() {
