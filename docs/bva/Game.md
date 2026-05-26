@@ -268,7 +268,7 @@
     - **State of the system**: Current player has a Defuse card, position is drawPile.size()
     - **Expected output**: Exploding Kitten inserted at bottom of draw pile
 
-- **TC60: Defuse with valid position in middle of draw pile**
+- **TC60: Defuse with valid position in middle of draw pile** ( :white_check_mark: )
     - **State of the system**: Current player has a Defuse card, position is between 0 and drawPile.size()
     - **Expected output**: Defuse removed from hand, Defuse added to discard, Exploding Kitten inserted at given
       position

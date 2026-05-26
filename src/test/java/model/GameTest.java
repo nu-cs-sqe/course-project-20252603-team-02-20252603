@@ -738,4 +738,22 @@ public class GameTest {
     assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(drawPileSize).getType());
     assertEquals(drawPileSize + 1, game.getDrawPile().size());
   }
+
+  @Test
+  public void defuseWithPositionInMiddle() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    int drawPileSize = game.getDrawPile().size();
+    int middlePosition = drawPileSize / 2;
+    int defuseCountBefore = countCards(currentPlayer, CardType.DEFUSE);
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    game.defuse(middlePosition);
+
+    assertEquals(defuseCountBefore - 1, countCards(currentPlayer, CardType.DEFUSE));
+    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
+    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(middlePosition).getType());
+    assertEquals(drawPileSize + 1, game.getDrawPile().size());
+  }
 }
