@@ -740,4 +740,16 @@ public class GameTest {
     assertThrows(IllegalArgumentException.class, () -> game.playNosy(FIRST_PLAYER_INDEX));
   }
 
+  @Test
+  public void playNosyOnDeadPlayerThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card nosy = new Card(CardType.NOSY);
+    currentPlayer.addCard(nosy);
+    List<Player> players = game.getPlayers();
+    players.get(SECOND_PLAYER_INDEX).die();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playNosy(SECOND_PLAYER_INDEX));
+  }
 }

@@ -187,6 +187,9 @@ public class Game {
     if (targetPlayerIndex == currentPlayerIndex) {
       throw new IllegalArgumentException("cannot target yourself");
     }
+    if (!players.get(targetPlayerIndex).isAlive()) {
+      throw new IllegalArgumentException("target player is not alive");
+    }
 
     currentPlayer.removeCard(nosy);
     deck.discardCard(nosy);

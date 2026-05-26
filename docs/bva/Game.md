@@ -268,7 +268,7 @@
     - **State of the system**: Game is started, current player targets themselves
     - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC60: Play Nosy on dead player** 
+- **TC60: Play Nosy on dead player** ( :white_check_mark: )
     - **State of the system**: Game is started, target player is dead
     - **Expected output**: Throws `IllegalArgumentException`
 
