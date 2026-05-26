@@ -170,6 +170,13 @@ public class Game {
     }
   }
 
+  public void defuse(int position) {
+    Player currentPlayer = getCurrentPlayer();
+    if (!currentPlayer.hasDefuse()) {
+      throw new IllegalStateException("player does not have a defuse card");
+    }
+  }
+
   public List<Player> getPlayers() {
     return new ArrayList<>(players);
   }
