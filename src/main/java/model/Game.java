@@ -181,6 +181,10 @@ public class Game {
     if (!currentPlayer.getHand().contains(nosy)) {
       throw new IllegalArgumentException("card is not in player's hand");
     }
+    if (targetPlayerIndex < 0) {
+      throw new IllegalArgumentException("invalid player index");
+    }
+
     currentPlayer.removeCard(nosy);
     deck.discardCard(nosy);
     return players.get(targetPlayerIndex).getHand();

@@ -706,4 +706,15 @@ public class GameTest {
     assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
     assertTrue(game.getDiscardPile().contains(nosy));
   }
+
+  @Test
+  public void playNosyOnNegativeIndexThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card nosy = new Card(CardType.NOSY);
+    currentPlayer.addCard(nosy);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playNosy(-1));
+  }
 }
