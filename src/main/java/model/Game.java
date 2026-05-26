@@ -175,6 +175,9 @@ public class Game {
     if (!currentPlayer.hasDefuse()) {
       throw new IllegalStateException("player does not have a defuse card");
     }
+    if (position < 0) {
+      throw new IllegalArgumentException("position cannot be negative");
+    }
   }
 
   public List<Player> getPlayers() {

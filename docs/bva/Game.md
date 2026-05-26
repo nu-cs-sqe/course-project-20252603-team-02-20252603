@@ -252,7 +252,7 @@
     - **State of the system**: Current player does not have a Defuse card
     - **Expected output**: Throws `IllegalStateException`
 
-- **TC56: Defuse with position out of bounds (negative)**
+- **TC56: Defuse with position out of bounds (negative)** ( :white_check_mark: )
     - **State of the system**: Position is -1
     - **Expected output**: Throws `IllegalArgumentException`
 

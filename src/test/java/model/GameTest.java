@@ -687,4 +687,12 @@ public class GameTest {
 
     assertThrows(IllegalStateException.class, () -> game.defuse(0));
   }
+
+  @Test
+  public void defuseWithNegativePositionThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.defuse(-1));
+  }
 }
