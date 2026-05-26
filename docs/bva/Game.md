@@ -264,7 +264,7 @@
     - **State of the system**: Target player index is >= number of players
     - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC59: Play Nosy on self** 
+- **TC59: Play Nosy on self** ( :white_check_mark: )
     - **State of the system**: Game is started, current player targets themselves
     - **Expected output**: Throws `IllegalArgumentException`
 

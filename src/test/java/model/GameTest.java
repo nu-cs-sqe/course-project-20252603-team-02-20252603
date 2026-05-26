@@ -728,4 +728,16 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () -> game.playNosy(MIN_PLAYERS));
   }
+
+  @Test
+  public void playNosyOnSelfThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card nosy = new Card(CardType.NOSY);
+    currentPlayer.addCard(nosy);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playNosy(FIRST_PLAYER_INDEX));
+  }
+
 }

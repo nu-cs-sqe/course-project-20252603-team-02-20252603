@@ -184,6 +184,9 @@ public class Game {
     if (targetPlayerIndex < 0 || targetPlayerIndex >= players.size()) {
       throw new IllegalArgumentException("invalid player index");
     }
+    if (targetPlayerIndex == currentPlayerIndex) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
 
     currentPlayer.removeCard(nosy);
     deck.discardCard(nosy);
