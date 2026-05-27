@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
@@ -1733,6 +1734,222 @@ public class GameTest {
     assertFalse(game.getDiscardPile().contains(favor));
     assertTrue(game.getDiscardPile().contains(attack));
     assertTrue(game.getDiscardPile().contains(skip));
+  }
+
+  @Test
+  public void playCatCards_GameNotLaunched_ThrowsIllegalStateException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    List<Card> cards = List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT));
+    Player dummy = new Player();
+
+    Exception e = assertThrows(IllegalStateException.class, () ->
+            game.playCatCards(cards, dummy, null));
+
+    assertEquals("game has not started", e.getMessage());
+  }
+
+  @Test
+  public void playCatCards_GameIsOver_ThrowsIllegalStateException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(1).die();
+    players.get(2).die();
+    game.checkWinner();
+    List<Card> cards = List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT));
+
+    Exception e = assertThrows(IllegalStateException.class, () ->
+            game.playCatCards(cards, players.get(0), null));
+
+    assertEquals("game is over", e.getMessage());
+  }
+
+  @Test
+  public void playCatCards_CardsIsNull_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(1);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playCatCards(null, target, CardType.FAVOR));
+
+    assertEquals("cards cannot be null or empty", e.getMessage());
+  }
+
+  @Test
+  public void playCatCards_ComboSizeOne_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(1);
+    List<Card> cards = List.of(new Card(CardType.TACOCAT));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playCatCards(cards, target, null));
+
+    assertEquals("invalid cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playCatCards_ComboSizeFour_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(1);
+    List<Card> cards = List.of(
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT)
+    );
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playCatCards(cards, target, null));
+
+    assertEquals("invalid cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playCatCards_TwoMatchingCats_TargetHasOneCard_StealsCatd() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(1);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    new ArrayList<>(target.getHand()).forEach(target::removeCard);
+    target.addCard(skip);
+
+    game.playCatCards(List.of(cat1, cat2), target, null);
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(game.getDiscardPile().contains(cat1));
+    assertTrue(game.getDiscardPile().contains(cat2));
+  }
+
+  @Test
+  public void playCatCards_TwoMatchingCats_TargetHasNoCards_NothingTransferred() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(1);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    new ArrayList<>(target.getHand()).forEach(target::removeCard);
+
+    game.playCatCards(List.of(cat1, cat2), target, null);
+
+    assertTrue(game.getDiscardPile().contains(cat1));
+    assertTrue(game.getDiscardPile().contains(cat2));
+    assertTrue(target.getHand().isEmpty());
+  }
+
+  @Test
+  public void playCatCards_ThreeMatchingCats_TargetHasNamedCard_TransfersCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(1);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    Card favor = new Card(CardType.FAVOR);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    target.addCard(favor);
+
+    game.playCatCards(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(target.getHand().contains(favor));
+    assertTrue(game.getDiscardPile().contains(cat1));
+    assertTrue(game.getDiscardPile().contains(cat2));
+    assertTrue(game.getDiscardPile().contains(cat3));
+  }
+
+  @Test
+  public void playCatCards_ThreeMatchingCats_TargetLacksNamedCard_NothingTransferred() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(1);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    new ArrayList<>(target.getHand())
+            .stream()
+            .filter(c -> c.getType() == CardType.FAVOR)
+            .forEach(target::removeCard);
+
+    game.playCatCards(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+
+    assertFalse(currentPlayer.getHand().contains(new Card(CardType.FAVOR)));
+    assertTrue(game.getDiscardPile().contains(cat1));
+    assertTrue(game.getDiscardPile().contains(cat2));
+    assertTrue(game.getDiscardPile().contains(cat3));
+  }
+
+  @Test
+  public void playCatCards_FiveDifferentCats_NamedCardInDiscard_TransfersCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card favor = new Card(CardType.FAVOR);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.addToDiscard(favor);
+
+    game.playCatCards(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR);
+
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(game.getDiscardPile().contains(favor));
+  }
+
+  @Test
+  public void playCatCards_FiveDifferentCats_NamedCardNotInDiscard_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playCatCards(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR));
+
+    assertEquals("card type not in discard pile", e.getMessage());
   }
 
 }

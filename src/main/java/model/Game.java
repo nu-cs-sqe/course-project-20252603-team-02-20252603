@@ -372,5 +372,17 @@ public class Game {
     return wantedCard;
   }
 
+  public void playCatCards(List<Card> cards, Player target, CardType named) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isValidCatCombo(cards)) {
+      throw new IllegalArgumentException("invalid cat combo");
+    }
+  }
+
 }
 
