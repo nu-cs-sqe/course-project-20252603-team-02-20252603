@@ -130,7 +130,7 @@ public class Game {
 
     boolean isNoped = false;
     boolean nopePlayedThisRound = true;
-    Scanner scanner = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in, "UTF-8");
 
     System.out.println("Player " + currentPlayerIndex + " played " + card.getType() + "\n");
 

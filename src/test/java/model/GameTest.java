@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 public class GameTest {
   private static final int RANDOM_SEED = 42;
@@ -703,7 +703,7 @@ public class GameTest {
     player2.addCard(nopeCard);
     int p2HandSizeBefore = player2.getHand().size();
 
-    while (game.getDrawPile().size() < 3) {
+    while (game.getDrawPile().size() < NUM_CARDS_PEEKED) {
       game.addToDrawPile(new Card(CardType.TACOCAT), 0);
     }
 
@@ -711,7 +711,7 @@ public class GameTest {
     InputStream originalIn = System.in;
 
     try {
-      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes(StandardCharsets.UTF_8)));
 
       List<Card> result = game.playCard(stf);
 
@@ -719,7 +719,8 @@ public class GameTest {
 
       assertEquals(p2HandSizeBefore, player2.getHand().size());
       assertTrue(player2.getHand().contains(nopeCard));
-    } finally {
+    }
+    finally {
       System.setIn(originalIn);
     }
   }
@@ -741,7 +742,7 @@ public class GameTest {
     InputStream originalIn = System.in;
 
     try {
-      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes(StandardCharsets.UTF_8)));
 
       List<Card> result = game.playCard(stf);
 
@@ -749,7 +750,8 @@ public class GameTest {
 
       assertEquals(p2HandSizeBefore - 1, player2.getHand().size());
       assertFalse(player2.getHand().contains(nopeCard));
-    } finally {
+    }
+    finally {
       System.setIn(originalIn);
     }
   }
@@ -768,7 +770,7 @@ public class GameTest {
     Player player3 = game.getPlayers().get(THIRD_PLAYER_INDEX);
     player3.addCard(new Card(CardType.NOPE));
 
-    while (game.getDrawPile().size() < 3) {
+    while (game.getDrawPile().size() < NUM_CARDS_PEEKED) {
       game.addToDrawPile(new Card(CardType.TACOCAT), 0);
     }
 
@@ -776,7 +778,7 @@ public class GameTest {
     InputStream originalIn = System.in;
 
     try {
-      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes(StandardCharsets.UTF_8)));
 
       List<Card> result = game.playCard(stf);
 
@@ -784,7 +786,8 @@ public class GameTest {
 
       assertFalse(player2.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE));
       assertFalse(player3.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE));
-    } finally {
+    }
+    finally {
       System.setIn(originalIn);
     }
   }
