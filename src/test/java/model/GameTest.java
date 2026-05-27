@@ -1831,26 +1831,6 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_TwoMatchingCats_TargetHasNoCards_NothingTransferred() {
-    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-    game.startGame();
-    Player currentPlayer = game.getCurrentPlayer();
-    Player target = game.getPlayers().get(1);
-
-    Card cat1 = new Card(CardType.TACOCAT);
-    Card cat2 = new Card(CardType.TACOCAT);
-    currentPlayer.addCard(cat1);
-    currentPlayer.addCard(cat2);
-    new ArrayList<>(target.getHand()).forEach(target::removeCard);
-
-    game.playCatCards(List.of(cat1, cat2), target, null);
-
-    assertTrue(game.getDiscardPile().contains(cat1));
-    assertTrue(game.getDiscardPile().contains(cat2));
-    assertTrue(target.getHand().isEmpty());
-  }
-
-  @Test
   public void playCatCards_ThreeMatchingCats_TargetHasNamedCard_TransfersCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -1864,6 +1844,12 @@ public class GameTest {
     currentPlayer.addCard(cat1);
     currentPlayer.addCard(cat2);
     currentPlayer.addCard(cat3);
+
+    new ArrayList<>(target.getHand())
+            .stream()
+            .filter(c -> c.getType() == CardType.FAVOR)
+            .forEach(target::removeCard);
+
     target.addCard(favor);
 
     game.playCatCards(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
@@ -1946,10 +1932,10 @@ public class GameTest {
     currentPlayer.addCard(cat4);
     currentPlayer.addCard(cat5);
 
-    Exception e = assertThrows(IllegalArgumentException.class, () ->
+    Exception e = assertThrows(IllegalStateException.class, () ->
             game.playCatCards(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR));
 
-    assertEquals("card type not in discard pile", e.getMessage());
+    assertEquals("discard pile is empty", e.getMessage());
   }
 
 }

@@ -382,6 +382,14 @@ public class Game {
     if (!isValidCatCombo(cards)) {
       throw new IllegalArgumentException("invalid cat combo");
     }
+    int size = cards.size();
+    if (size == 2) {
+      playTwoMatchingCats(cards, target);
+    } else if (size == 3) {
+      playThreeMatchingCats(cards, target, named);
+    } else {
+      playFiveDifferentCats(cards, named);
+    }
   }
 
 }
