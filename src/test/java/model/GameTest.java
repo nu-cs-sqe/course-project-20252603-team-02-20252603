@@ -757,4 +757,71 @@ public class GameTest {
 
     assertEquals("target does not have that card", e.getMessage());
   }
+
+  @Test
+  public void playFavor_TargetHasOneMatchingCard_TransfersCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card skip = new Card(CardType.SKIP);
+    target.addCard(skip);
+
+    game.playFavor(target, skip);
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(target.getHand().isEmpty());
+  }
+
+  @Test
+  public void playFavor_TargetHasTwoCardsGivenMatchesOne_TransfersCorrectCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card skip = new Card(CardType.SKIP);
+    Card attack = new Card(CardType.ATTACK);
+    target.addCard(skip);
+    target.addCard(attack);
+
+    game.playFavor(target, skip);
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(target.getHand().contains(attack));
+    assertEquals(1, target.getHand().size());
+  }
+
+  @Test
+  public void playFavor_TargetHasTwoCopiesOfGiven_TransfersExactlyOne() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card skip1 = new Card(CardType.SKIP);
+    Card skip2 = new Card(CardType.SKIP);
+    target.addCard(skip1);
+    target.addCard(skip2);
+
+    game.playFavor(target, skip1);
+
+    assertEquals(1, countCards(currentPlayer, CardType.SKIP));
+    assertEquals(1, countCards(target, CardType.SKIP));
+  }
 }
