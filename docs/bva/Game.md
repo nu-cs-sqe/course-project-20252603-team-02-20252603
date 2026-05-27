@@ -496,3 +496,49 @@
 - **TC#117: discard has wanted_card among other cards** ( :white_check_mark: )
   - **State of the system**: Discard has [ATTACK, FAVOR, SKIP], wanted_card = FAVOR
   - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
+
+### Method under test: `playCatCards()`
+
+- **TC#118: game has not been launched** ( :white_check_mark: )
+  - **State of the system**: gameLaunched = false, cards = [TACOCAT, TACOCAT], target = player2, named = null
+  - **Expected output**: Throws `IllegalStateException`, "game has not started"
+
+- **TC#119: game is over** ( :white_check_mark: )
+  - **State of the system**: gameOver = true, cards = [TACOCAT, TACOCAT], target = player2, named = null
+  - **Expected output**: Throws `IllegalStateException`, "game is over"
+
+- **TC#120: cards is null** ( :white_check_mark: )
+  - **State of the system**: Game running, cards = null, target = player2, named = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "cards cannot be null or empty"
+
+- **TC#121: combo is invalid — size 1** ( :white_check_mark: )
+  - **State of the system**: Game running, cards = [TACOCAT], target = player2, named = null
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid cat combo"
+
+- **TC#122: combo is invalid — size 4** ( :white_check_mark: )
+  - **State of the system**: Game running, cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT], target = player2, named = null
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid cat combo"
+
+- **TC#123: valid 2-cat combo, target has 1 card — routes to playTwoMatchingCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, TACOCAT], target has [SKIP]
+  - **Expected output**: Two `TACOCAT`s added to discard, `SKIP` transferred to current player, target hand empty
+
+- **TC#124: valid 2-cat combo, target has 0 cards — routes to playTwoMatchingCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, TACOCAT], target hand is empty
+  - **Expected output**: Two `TACOCAT`s added to discard, nothing transferred
+
+- **TC#125: valid 3-cat combo, target has named card — routes to playThreeMatchingCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, TACOCAT, TACOCAT], target has `FAVOR`, named = `FAVOR`
+  - **Expected output**: Three `TACOCAT`s added to discard, `FAVOR` transferred to current player
+
+- **TC#126: valid 3-cat combo, target lacks named card — routes to playThreeMatchingCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, TACOCAT, TACOCAT], target has no `FAVOR`, named = `FAVOR`
+  - **Expected output**: Three `TACOCAT`s added to discard, nothing transferred
+
+- **TC#127: valid 5-cat combo, named card in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has `FAVOR`, named = `FAVOR`
+  - **Expected output**: Five cats added to discard, `FAVOR` transferred to current player
+
+- **TC#128: valid 5-cat combo, named card not in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has no `FAVOR`, named = `FAVOR`
+  - **Expected output**: Throws `IllegalArgumentException`, "card type not in discard pile"
