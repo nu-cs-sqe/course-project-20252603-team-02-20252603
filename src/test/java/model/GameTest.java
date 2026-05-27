@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 public class GameTest {
   private static final int RANDOM_SEED = 42;
   private static final int TOO_FEW_PLAYERS = 2;
@@ -674,5 +677,115 @@ public class GameTest {
     assertEquals(expectedFirst, result.get(0));
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
+  }
+
+  @Test
+  public void playNopeWhenNoActionPendingThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card nopeCard = new Card(CardType.NOPE);
+    currentPlayer.addCard(nopeCard);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(nopeCard));
+  }
+
+  @Test
+  public void playCardWhenAnotherPlayerDeclinesNope() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card stf = new Card(CardType.SEE_THE_FUTURE);
+    currentPlayer.addCard(stf);
+
+    Player player2 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card nopeCard = new Card(CardType.NOPE);
+    player2.addCard(nopeCard);
+    int p2HandSizeBefore = player2.getHand().size();
+
+    while (game.getDrawPile().size() < 3) {
+      game.addToDrawPile(new Card(CardType.TACOCAT), 0);
+    }
+
+    String simulatedInput = "n\n";
+    InputStream originalIn = System.in;
+
+    try {
+      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+
+      List<Card> result = game.playCard(stf);
+
+      assertEquals(NUM_CARDS_PEEKED, result.size());
+
+      assertEquals(p2HandSizeBefore, player2.getHand().size());
+      assertTrue(player2.getHand().contains(nopeCard));
+    } finally {
+      System.setIn(originalIn);
+    }
+  }
+
+  @Test
+  public void playCardWhenAnotherPlayerAcceptsNope() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card stf = new Card(CardType.SEE_THE_FUTURE);
+    currentPlayer.addCard(stf);
+
+    Player player2 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card nopeCard = new Card(CardType.NOPE);
+    player2.addCard(nopeCard);
+    int p2HandSizeBefore = player2.getHand().size();
+
+    String simulatedInput = "y\n";
+    InputStream originalIn = System.in;
+
+    try {
+      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+
+      List<Card> result = game.playCard(stf);
+
+      assertTrue(result.isEmpty());
+
+      assertEquals(p2HandSizeBefore - 1, player2.getHand().size());
+      assertFalse(player2.getHand().contains(nopeCard));
+    } finally {
+      System.setIn(originalIn);
+    }
+  }
+
+  @Test
+  public void playCardDoubleNope() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card stf = new Card(CardType.SEE_THE_FUTURE);
+    currentPlayer.addCard(stf);
+
+    Player player2 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    player2.addCard(new Card(CardType.NOPE));
+
+    Player player3 = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    player3.addCard(new Card(CardType.NOPE));
+
+    while (game.getDrawPile().size() < 3) {
+      game.addToDrawPile(new Card(CardType.TACOCAT), 0);
+    }
+
+    String simulatedInput = "y\ny\n";
+    InputStream originalIn = System.in;
+
+    try {
+      System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+
+      List<Card> result = game.playCard(stf);
+
+      assertEquals(NUM_CARDS_PEEKED, result.size());
+
+      assertFalse(player2.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE));
+      assertFalse(player3.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE));
+    } finally {
+      System.setIn(originalIn);
+    }
   }
 }

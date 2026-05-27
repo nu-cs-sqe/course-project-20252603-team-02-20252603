@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
   private static final int MIN_PLAYERS = 3;
@@ -119,8 +120,60 @@ public class Game {
       throw new IllegalArgumentException("card is not playable");
     }
     Player currentPlayer = getCurrentPlayer();
+
+    if (card.getType() == CardType.NOPE) {
+      throw new IllegalArgumentException("Cannot play a Nope card when no action is pending.");
+    }
+
     currentPlayer.removeCard(card);
     deck.discardCard(card);
+
+    boolean isNoped = false;
+    boolean nopePlayedThisRound = true;
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.println("Player " + currentPlayerIndex + " played " + card.getType() + "\n");
+
+    while (nopePlayedThisRound) {
+      nopePlayedThisRound = false;
+
+      for (int i = 0; i < players.size(); i++) {
+        Player p = players.get(i);
+
+        if (!p.isAlive()) {
+          continue;
+        }
+
+        Card nopeCardToPlay = null;
+        for (Card c : p.getHand()) {
+          if (c.getType() == CardType.NOPE) {
+            nopeCardToPlay = c;
+            break;
+          }
+        }
+
+        if (nopeCardToPlay != null) {
+          System.out.print("Player " + i + ", play your NOPE card? (y/n): ");
+
+          String input = scanner.nextLine().trim().toLowerCase();
+
+          if (input.equals("y")) {
+            p.removeCard(nopeCardToPlay);
+            deck.discardCard(nopeCardToPlay);
+
+            isNoped = !isNoped;
+            nopePlayedThisRound = true;
+
+            System.out.println("Player " + i + " played a NOPE!\n");
+            break;
+          }
+        }
+      }
+    }
+
+    if (isNoped) {
+      return Collections.emptyList();
+    }
 
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();

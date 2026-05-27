@@ -233,3 +233,20 @@
 - **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+### Method under test: `playCard()`:
+- **TC55: Play NOPE when no action** ( :white_check_mark: )
+  - **State of the system**: Current player attempts to play NOPE directly from their hand
+  - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC56: Another player has NOPE but declines** ( :white_check_mark: )
+  - **State of the system**: Current player plays See The Future. Player 2 has NOPE but enters 'n'
+  - **Expected output**: STF happens normally, NOPE remains in Player 2's hand
+
+- **TC57: Another player plays NOPE** ( :white_check_mark: )
+  - **State of the system**: Current player plays See The Future. Player 2 has NOPE and enters 'y'
+  - **Expected output**: STF is canceled, NOPE is removed from Player 2's hand and discarded
+
+- **TC58: Action played, NOPE played, NOPE is NOPED (Double Nope)** ( :white_check_mark: )
+  - **State of the system**: Player 1 plays See The Future. Player 2 plays NOPE ('y'). Player 3 plays NOPE ('y')
+  - **Expected output**: The Nopes cancel out and both NOPE cards are discarded. STF is played normally.
