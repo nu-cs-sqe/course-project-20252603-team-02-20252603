@@ -677,7 +677,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_TargetIsNull_ThrowsIllegalArgumentException() {
+  public void playFavorTargetIsNullThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
 
@@ -688,10 +688,11 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_TargetIsDead_ThrowsIllegalArgumentException() {
+  public void playFavorTargetIsDeadThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
     target.die();
 
     Exception e = assertThrows(IllegalArgumentException.class, () ->
@@ -701,7 +702,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_TargetIsCurrentPlayer_ThrowsIllegalArgumentException() {
+  public void playFavorTargetIsCurrentPlayerThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -713,7 +714,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_GivenIsNull_ThrowsIllegalArgumentException() {
+  public void playFavorGivenIsNullThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
@@ -725,7 +726,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_TargetHasEmptyHand_ThrowsIllegalArgumentException() {
+  public void playFavorTargetHasEmptyHandThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
@@ -741,7 +742,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_TargetHasOneCardGivenDoesNotMatch_ThrowsIllegalArgumentException() {
+  public void playFavorTargetHasOneCardGivenDoesNotMatchThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
@@ -759,7 +760,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_TargetHasOneMatchingCard_TransfersCard() {
+  public void playFavorTargetHasOneMatchingCardTransfersCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -780,7 +781,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_TargetHasTwoCardsGivenMatchesOne_TransfersCorrectCard() {
+  public void playFavorTargetHasTwoCardsGivenMatchesOneTransfersCorrectCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -792,6 +793,7 @@ public class GameTest {
 
     Card skip = new Card(CardType.SKIP);
     Card attack = new Card(CardType.ATTACK);
+
     target.addCard(skip);
     target.addCard(attack);
 
@@ -804,7 +806,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFavor_TargetHasTwoCopiesOfGiven_TransfersExactlyOne() {
+  public void playFavorTargetHasTwoCopiesOfGivenTransfersExactlyOne() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -816,6 +818,7 @@ public class GameTest {
 
     Card skip1 = new Card(CardType.SKIP);
     Card skip2 = new Card(CardType.SKIP);
+
     target.addCard(skip1);
     target.addCard(skip2);
 
