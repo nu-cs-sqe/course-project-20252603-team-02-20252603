@@ -796,4 +796,63 @@ public class GameTest {
     assertEquals("all cards must be neko cards", e.getMessage());
   }
 
+  @Test
+  public void playNekoOneCardIsNotNekoThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card attack = new Card(CardType.ATTACK);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(attack);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko1, neko2, attack)));
+
+    assertEquals("all cards must be neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoThreeNekosOnlyTwoInHandThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko1, neko2, neko3)));
+
+    assertEquals("cards not in hand", e.getMessage());
+  }
+
+  @Test
+  public void playNekoOneOpponentAlreadyDeadRemainingOpponentDies() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    List<Player> players = game.getPlayers();
+
+    players.get(SECOND_PLAYER_INDEX).die();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(neko3);
+
+    game.playNeko(List.of(neko1, neko2, neko3));
+
+    assertTrue(game.isGameOver());
+    assertTrue(currentPlayer.isAlive());
+    assertFalse(players.get(THIRD_PLAYER_INDEX).isAlive());
+  }
 }

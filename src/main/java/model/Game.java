@@ -208,6 +208,9 @@ public class Game {
   }
 
   public void playNeko(List<Card> cards) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
     if (cards == null) {
       throw new IllegalArgumentException("cards cannot be null");
     }
