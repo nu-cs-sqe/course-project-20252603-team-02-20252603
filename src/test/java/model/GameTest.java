@@ -1589,7 +1589,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_EmptyDiscardPile_ReturnsNull() {
+  public void playFiveDifferentCats_EmptyDiscardPile_ThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1606,20 +1606,18 @@ public class GameTest {
     currentPlayer.addCard(cat4);
     currentPlayer.addCard(cat5);
 
-    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
-            CardType.FAVOR);
+    Exception e = assertThrows(IllegalStateException.class, () -> {
+      game.playFiveDifferentCats(
+              List.of(cat1, cat2, cat3, cat4, cat5),
+              CardType.FAVOR
+      );
+    });
 
-    assertNull(result);
-    assertFalse(currentPlayer.getHand().contains(cat1));
-    assertFalse(currentPlayer.getHand().contains(cat2));
-    assertFalse(currentPlayer.getHand().contains(cat3));
-    assertFalse(currentPlayer.getHand().contains(cat4));
-    assertFalse(currentPlayer.getHand().contains(cat5));
-    assertEquals(5, game.getDiscardPile().size());
+    assertEquals("discard pile is empty", e.getMessage());
   }
 
   @Test
-  public void playFiveDifferentCats_DiscardHasOneNonMatchingCard_ReturnsNull() {
+  public void playFiveDifferentCats_DiscardHasOneNonMatchingCard_ThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1636,14 +1634,14 @@ public class GameTest {
     currentPlayer.addCard(cat3);
     currentPlayer.addCard(cat4);
     currentPlayer.addCard(cat5);
-    game.getDiscardPile().add(attack);
+    game.addToDiscard(attack);
 
-    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
-            CardType.FAVOR);
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+    });
 
-    assertNull(result);
+    assertEquals("card type not in discard pile", e.getMessage());
     assertTrue(game.getDiscardPile().contains(attack));
-    assertEquals(6, game.getDiscardPile().size());
   }
 
   @Test
@@ -1664,7 +1662,7 @@ public class GameTest {
     currentPlayer.addCard(cat3);
     currentPlayer.addCard(cat4);
     currentPlayer.addCard(cat5);
-    game.getDiscardPile().add(favor);
+    game.addToDiscard(favor);
 
     Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
             CardType.FAVOR);
@@ -1693,15 +1691,14 @@ public class GameTest {
     currentPlayer.addCard(cat3);
     currentPlayer.addCard(cat4);
     currentPlayer.addCard(cat5);
-    game.getDiscardPile().add(favor1);
-    game.getDiscardPile().add(favor2);
+    game.addToDiscard(favor1);
+    game.addToDiscard(favor2);
 
     Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
             CardType.FAVOR);
 
     assertEquals(CardType.FAVOR, result.getType());
     assertEquals(1, countCards(currentPlayer, CardType.FAVOR));
-    assertEquals(1, countCardsInList(game.getDiscardPile(), CardType.FAVOR));
   }
 
   @Test
@@ -1724,9 +1721,9 @@ public class GameTest {
     currentPlayer.addCard(cat3);
     currentPlayer.addCard(cat4);
     currentPlayer.addCard(cat5);
-    game.getDiscardPile().add(attack);
-    game.getDiscardPile().add(favor);
-    game.getDiscardPile().add(skip);
+    game.addToDiscard(attack);
+    game.addToDiscard(favor);
+    game.addToDiscard(skip);
 
     Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
             CardType.FAVOR);
@@ -1736,16 +1733,6 @@ public class GameTest {
     assertFalse(game.getDiscardPile().contains(favor));
     assertTrue(game.getDiscardPile().contains(attack));
     assertTrue(game.getDiscardPile().contains(skip));
-  }
-
-  private int countCardsInList(List<Card> cards, CardType cardType) {
-    int count = 0;
-    for (Card card : cards) {
-      if (card.getType() == cardType) {
-        count++;
-      }
-    }
-    return count;
   }
 
 }

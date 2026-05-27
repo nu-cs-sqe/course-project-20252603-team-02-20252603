@@ -479,11 +479,11 @@
 
 - **TC#113: discard pile is empty** ( :white_check_mark: )
   - **State of the system**: Valid combo in hand, discard pile is empty, wanted_card = FAVOR
-  - **Expected output**: Five cats removed from hand and discarded, no card transferred, returns null
+  - **Expected output**: Throws `IllegalArgumentException`, "wanted card not in discard pile"
 
 - **TC#114: discard has 1 card that does not match wanted_card** ( :white_check_mark: )
   - **State of the system**: Discard has [ATTACK], wanted_card = FAVOR
-  - **Expected output**: Five cats removed from hand and discarded, ATTACK remains in discard, returns null
+  - **Expected output**: Throws `IllegalArgumentException`, "wanted card not in discard pile"
 
 - **TC#115: discard has 1 card that matches wanted_card** ( :white_check_mark: )
   - **State of the system**: Discard has [FAVOR], wanted_card = FAVOR

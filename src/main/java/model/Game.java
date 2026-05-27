@@ -194,6 +194,10 @@ public class Game {
     return deck.drawCard();
   }
 
+  public void addToDiscard(Card card) {
+    deck.discardCard(card);
+  }
+
   public boolean isGameLaunched() {
     return gameLaunched;
   }
@@ -359,8 +363,13 @@ public class Game {
         throw new IllegalArgumentException("cards not in hand");
       }
     }
-    Card fakecard = new Card(CardType.DEFUSE);
-    return fakecard;
+    Card wantedCard = takeFromDiscard(wanted_card); // throws if not found
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+    currentPlayer.addCard(wantedCard);
+    return wantedCard;
   }
 
 }
