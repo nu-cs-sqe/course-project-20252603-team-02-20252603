@@ -233,3 +233,40 @@
 - **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+### Method under test: `playFavor()`
+- **TC#: target is null** ( :white_check_mark: )
+  - **State of the system**: target = null, given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid target"
+
+- **TC#: target is dead** ( :white_check_mark: )
+  - **State of the system**: target.alive = false, given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid target"
+
+- **TC#: target is current player** ( :white_check_mark: )
+  - **State of the system**: target == currentPlayer, given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "cannot target yourself"
+
+- **TC#: given is null** ( :white_check_mark: )
+  - **State of the system**: valid target, given = null
+  - **Expected output**: Throws `IllegalArgumentException`, "given card cannot be null"
+
+- **TC#: target has empty hand** ( :white_check_mark: )
+  - **State of the system**: valid target with 0 cards, given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "target does not have that card"
+
+- **TC#: target has 1 card, given does not match** ( :white_check_mark: )
+  - **State of the system**: target hand = [ATTACK], given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "target does not have that card"
+
+- **TC#: target has exactly 1 card, given matches** ( :white_check_mark: )
+  - **State of the system**: target hand = [SKIP], given = SKIP
+  - **Expected output**: `SKIP` transferred to current player, target hand is now empty
+
+- **TC#: target has 2 cards, given matches one of them** ( :white_check_mark: )
+  - **State of the system**: target hand = [SKIP, ATTACK], given = SKIP
+  - **Expected output**: `SKIP` transferred to current player, target hand = [ATTACK]
+
+- **TC#: target has 2 copies of the given card** ( :white_check_mark: )
+  - **State of the system**: target hand = [SKIP, SKIP], given = SKIP
+  - **Expected output**: Exactly 1 `SKIP` transferred to current player, target hand still has 1 `SKIP`
