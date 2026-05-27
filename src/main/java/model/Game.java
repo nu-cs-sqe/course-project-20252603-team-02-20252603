@@ -8,6 +8,7 @@ import java.util.Random;
 public class Game {
   private static final int MIN_PLAYERS = 3;
   private static final int MAX_PLAYERS = 5;
+  private static final int NUM_NEKO_CARDS = 3;
 
   private final int numberOfPlayers;
   private final Random random;
@@ -204,5 +205,14 @@ public class Game {
 
   public List<Card> playSeeTheFuture(){
     return deck.peekTopCards();
+  }
+
+  public void playNeko(List<Card> cards) {
+    if (cards == null) {
+      throw new IllegalArgumentException("cards cannot be null");
+    }
+    if (cards.size() != NUM_NEKO_CARDS) {
+      throw new IllegalArgumentException("must play exactly 3 neko cards");
+    }
   }
 }

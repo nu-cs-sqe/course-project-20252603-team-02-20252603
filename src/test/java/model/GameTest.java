@@ -675,4 +675,56 @@ public class GameTest {
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
   }
+
+  @Test
+  public void playNekoCardsIsNullThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(null));
+
+    assertEquals("cards cannot be null", e.getMessage());
+  }
+
+  @Test
+  public void playNekoCardsIsEmptyThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of()));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoOneCardThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card neko = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoTwoCardsThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko1, neko2)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+  }
 }
