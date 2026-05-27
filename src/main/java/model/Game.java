@@ -205,4 +205,10 @@ public class Game {
   public List<Card> playSeeTheFuture(){
     return deck.peekTopCards();
   }
+
+  public void playFavor(Player target, Card given) {
+    if (target == null || !target.isAlive()) {
+      throw new IllegalArgumentException("invalid target");
+    }
+  }
 }

@@ -675,4 +675,28 @@ public class GameTest {
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
   }
+
+  @Test
+  public void playFavor_TargetIsNull_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(null, new Card(CardType.SKIP)));
+
+    assertEquals("invalid target", e.getMessage());
+  }
+
+  @Test
+  public void playFavor_TargetIsDead_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    target.die();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
+
+    assertEquals("invalid target", e.getMessage());
+  }
 }
