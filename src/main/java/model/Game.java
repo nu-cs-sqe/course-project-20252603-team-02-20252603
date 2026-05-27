@@ -125,6 +125,10 @@ public class Game {
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
+    if (card.getType() == CardType.SWAP_TOP_BOTTOM) {
+      playSwap();
+      return Collections.emptyList();
+    }
     return Collections.emptyList();
   }
 

@@ -675,4 +675,92 @@ public class GameTest {
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
   }
+
+  @Test
+  void playSwapEmptyDeck() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
+    currentPlayer.addCard(swapCard);
+
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+
+    int handSizeBefore = currentPlayer.getHand().size();
+
+    game.playCard(swapCard);
+
+    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
+    assertTrue(game.getDrawPile().isEmpty());
+  }
+
+  @Test
+  void playSwapOneCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
+    currentPlayer.addCard(swapCard);
+
+    while (game.getDrawPile().size() > 1) {
+      game.drawFromDeck();
+    }
+
+    Card onlyCard = game.getDrawPile().get(0);
+    int handSizeBefore = currentPlayer.getHand().size();
+
+    game.playCard(swapCard);
+
+    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
+    assertEquals(1, game.getDrawPile().size());
+    assertEquals(onlyCard, game.getDrawPile().get(0));
+  }
+
+  @Test
+  void playSwapTwoCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
+    currentPlayer.addCard(swapCard);
+
+    while (game.getDrawPile().size() > 2) {
+      game.drawFromDeck();
+    }
+
+    Card originalTop = game.getDrawPile().get(0);
+    Card originalBottom = game.getDrawPile().get(1);
+    int handSizeBefore = currentPlayer.getHand().size();
+
+    game.playCard(swapCard);
+
+    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
+    assertEquals(2, game.getDrawPile().size());
+    assertEquals(originalBottom, game.getDrawPile().get(0));
+    assertEquals(originalTop, game.getDrawPile().get(1));
+  }
+
+  @Test
+  void playSwapMoreThanTwoCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
+    currentPlayer.addCard(swapCard);
+
+    int deckSizeBefore = game.getDrawPile().size();
+    Card originalTop = game.getDrawPile().get(0);
+    Card originalBottom = game.getDrawPile().get(deckSizeBefore - 1);
+    int handSizeBefore = currentPlayer.getHand().size();
+
+    game.playCard(swapCard);
+
+    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
+
+    assertEquals(deckSizeBefore, game.getDrawPile().size());
+    assertEquals(originalBottom, game.getDrawPile().get(0));
+    assertEquals(originalTop, game.getDrawPile().get(deckSizeBefore - 1));
+  }
 }

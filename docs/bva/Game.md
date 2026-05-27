@@ -233,3 +233,20 @@
 - **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+### Method under test: `playSwap()`
+- **TC19: Swap when draw pile has no cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Swap, Draw pile has no cards
+  - **Expected output**: Card removed from hand, discarded, Draw pile unchanged
+
+- **TC19: Swap when draw pile has 1 card** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Swap, Draw pile has 1 card
+  - **Expected output**: Card removed from hand, discarded, Draw pile unchanged
+
+- **TC20: Swap when draw pile has 2 cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Swap, Draw pile has 2 cards
+  - **Expected output**: Card removed from hand, discarded, Draw pile has first and second cards swapped
+
+- **TC21: Swap when draw pile has more than 2 cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Swap, Draw pile has 3 cards
+  - **Expected output**: Card removed from hand, discarded, Draw pile has first and last cards swapped
