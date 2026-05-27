@@ -74,6 +74,23 @@
    Group: Discuss and document locale plan.
    Group: Discuss and document integration plan.
 
+# Week 8 (05/18/2026-05/24/2026)
+1. [done]
+   
+   Ben + Ana: Game class and linters reviewed and merged (https://github.com/nu-cs-sqe/course-project-20252603-team-02-20252603/pull/46, https://github.com/nu-cs-sqe/course-project-20252603-team-02-20252603/pull/36)
+   
+2. [not started]
+   
+   Group: Discuss and document locale plan.
+   
+   Group: Discuss and document integration plan.
+   
+   Group: Decide whether the UI will use terminal commands or a GUI and begin implementing (finish UI for at least Game Setup phase).
+
+3. [in progress]
+   
+   Group: Work on individual card implementation work for the next milestone and review.
+
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
 1. [done] Person: Task (Links to PR)
