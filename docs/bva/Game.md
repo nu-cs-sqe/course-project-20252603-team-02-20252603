@@ -233,3 +233,53 @@
 - **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+### Method under test: `playNeko()`
+
+- **TC#: cards is null** ( :white_check_mark: )
+  - **State of the system**: cards = null
+  - **Expected output**: Throws `IllegalArgumentException`, "cards cannot be null"
+
+- **TC#: cards has 0 cards** ( :white_check_mark: )
+  - **State of the system**: cards = []
+  - **Expected output**: Throws `IllegalArgumentException`, "must play exactly 3 neko cards"
+
+- **TC#: cards has 1 NEKO** ( :white_check_mark: )
+  - **State of the system**: current player has 1 NEKO, cards = [NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "must play exactly 3 neko cards"
+
+- **TC#: cards has 2 NEKOs** ( :white_check_mark: )
+  - **State of the system**: current player has 2 NEKOs, cards = [NEKO, NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "must play exactly 3 neko cards"
+
+- **TC#: cards has exactly 3 NEKOs** ( :white_check_mark: )
+  - **State of the system**: current player has 3 NEKOs in hand
+  - **Expected output**: All 3 `NEKO`s discarded, all other players dead, `gameOver = true`
+
+- **TC#: cards has 4 NEKOs** ( :white_check_mark: )
+  - **State of the system**: current player has 4 NEKOs, cards = [NEKO, NEKO, NEKO, NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "must play exactly 3 neko cards"
+
+- **TC#: cards has 3 cards but one is null** ( :white_check_mark: )
+  - **State of the system**: cards = [NEKO, null, NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "all cards must be neko cards"
+
+- **TC#: cards has 3 cards but one is not NEKO** ( :white_check_mark: )
+  - **State of the system**: cards = [NEKO, NEKO, ATTACK]
+  - **Expected output**: Throws `IllegalArgumentException`, "all cards must be neko cards"
+
+- **TC#: cards has 3 NEKOs but current player only has 2 in hand** ( :white_check_mark: )
+  - **State of the system**: current player hand has only 2 NEKO cards, cards = [NEKO, NEKO, NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#: cards has 3 NEKOs, current player has exactly 3 in hand, 2 other players alive** ( :white_check_mark: )
+  - **State of the system**: with 3 players, current player has 3 NEKOs
+  - **Expected output**: All 3 `NEKO`s discarded, both other players dead, `gameOver = true`, current player still alive
+
+- **TC#: cards has 3 NEKOs, current player has exactly 3 in hand, 4 other players alive** ( :white_check_mark: )
+  - **State of the system**: with 5 players, current player has 3 NEKOs
+  - **Expected output**: All 3 `NEKO`s discarded, all 4 other players dead, `gameOver = true`, current player still alive
+
+- **TC#: cards has 3 NEKOs, one other player is already dead** ( :white_check_mark: )
+  - **State of the system**: with 3 players, one opponent already dead, current player has 3 NEKOs
+  - **Expected output**: All 3 `NEKO`s discarded, remaining alive opponent now dead, `gameOver = true`, current player still alive
