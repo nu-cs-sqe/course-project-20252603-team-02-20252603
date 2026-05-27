@@ -1461,4 +1461,291 @@ public class GameTest {
     assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
   }
 
+  @Test
+  public void playFiveDifferentCats_NullCards_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(null, CardType.FAVOR);
+    });
+
+    assertEquals("cards cannot be null", e.getMessage());
+  }
+
+  @Test
+  public void playFiveDifferentCats_NullWantedCard_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), null);
+    });
+
+    assertEquals("invalid wanted card type", e.getMessage());
+  }
+
+  @Test
+  public void playFiveDifferentCats_ExplodingKittenWantedCard_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+              CardType.EXPLODING_KITTEN);
+    });
+
+    assertEquals("invalid wanted card type", e.getMessage());
+  }
+
+  @Test
+  public void playFiveDifferentCats_DuplicateCatType_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+    });
+
+    assertEquals("invalid five-cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playFiveDifferentCats_ThreeCards_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(List.of(cat1, cat2, cat3), CardType.FAVOR);
+    });
+
+    assertEquals("invalid five-cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playFiveDifferentCats_CardsNotInHand_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+    });
+
+    assertEquals("cards not in hand", e.getMessage());
+  }
+
+  @Test
+  public void playFiveDifferentCats_EmptyDiscardPile_ReturnsNull() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+
+    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+            CardType.FAVOR);
+
+    assertNull(result);
+    assertFalse(currentPlayer.getHand().contains(cat1));
+    assertFalse(currentPlayer.getHand().contains(cat2));
+    assertFalse(currentPlayer.getHand().contains(cat3));
+    assertFalse(currentPlayer.getHand().contains(cat4));
+    assertFalse(currentPlayer.getHand().contains(cat5));
+    assertEquals(5, game.getDiscardPile().size());
+  }
+
+  @Test
+  public void playFiveDifferentCats_DiscardHasOneNonMatchingCard_ReturnsNull() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card attack = new Card(CardType.ATTACK);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.getDiscardPile().add(attack);
+
+    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+            CardType.FAVOR);
+
+    assertNull(result);
+    assertTrue(game.getDiscardPile().contains(attack));
+    assertEquals(6, game.getDiscardPile().size());
+  }
+
+  @Test
+  public void playFiveDifferentCats_DiscardHasOneMatchingCard_ReturnsWantedCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card favor = new Card(CardType.FAVOR);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.getDiscardPile().add(favor);
+
+    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+            CardType.FAVOR);
+
+    assertEquals(CardType.FAVOR, result.getType());
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(game.getDiscardPile().contains(favor));
+  }
+
+  @Test
+  public void playFiveDifferentCats_DiscardHasTwoMatchingCards_TransfersOneCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card favor1 = new Card(CardType.FAVOR);
+    Card favor2 = new Card(CardType.FAVOR);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.getDiscardPile().add(favor1);
+    game.getDiscardPile().add(favor2);
+
+    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+            CardType.FAVOR);
+
+    assertEquals(CardType.FAVOR, result.getType());
+    assertEquals(1, countCards(currentPlayer, CardType.FAVOR));
+    assertEquals(1, countCardsInList(game.getDiscardPile(), CardType.FAVOR));
+  }
+
+  @Test
+  public void playFiveDifferentCats_DiscardHasWantedCardAmongOtherCards_ReturnsWantedCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card attack = new Card(CardType.ATTACK);
+    Card favor = new Card(CardType.FAVOR);
+    Card skip = new Card(CardType.SKIP);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.getDiscardPile().add(attack);
+    game.getDiscardPile().add(favor);
+    game.getDiscardPile().add(skip);
+
+    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+            CardType.FAVOR);
+
+    assertEquals(CardType.FAVOR, result.getType());
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(game.getDiscardPile().contains(favor));
+    assertTrue(game.getDiscardPile().contains(attack));
+    assertTrue(game.getDiscardPile().contains(skip));
+  }
+
+  private int countCardsInList(List<Card> cards, CardType cardType) {
+    int count = 0;
+    for (Card card : cards) {
+      if (card.getType() == cardType) {
+        count++;
+      }
+    }
+    return count;
+  }
+
 }

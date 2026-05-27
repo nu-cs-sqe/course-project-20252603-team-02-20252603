@@ -455,7 +455,7 @@
 ### Method under test: `playFiveDifferentCats()`
 - **TC#107: cards is null** ( :white_check_mark: )
   - **State of the system**: cards = null, wanted_card = FAVOR
-  - **Expected output**: Throws `IllegalArgumentException`, "cards cannot be null or empty"
+  - **Expected output**: Throws `IllegalArgumentException`, "cards cannot be null"
 
 - **TC#108: wanted_card is null** ( :white_check_mark: )
   - **State of the system**: Current player has valid 5-card combo, wanted_card = null

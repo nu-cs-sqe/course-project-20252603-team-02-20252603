@@ -339,5 +339,29 @@ public class Game {
     return true;
   }
 
+  public Card playFiveDifferentCats(List<Card> cards, CardType wanted_card) {
+    if (cards == null) {
+      throw new IllegalArgumentException("cards cannot be null");
+    }
+
+    if (wanted_card == null || wanted_card == CardType.EXPLODING_KITTEN) {
+      throw new IllegalArgumentException("invalid wanted card type");
+    }
+
+    if (!isValidCatCombo(cards) || cards.size() != 5) {
+      throw new IllegalArgumentException("invalid five-cat combo");
+    }
+
+    Player currentPlayer = getCurrentPlayer();
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+    Card fakecard = new Card(CardType.DEFUSE);
+    return fakecard;
+  }
+
 }
 
