@@ -129,6 +129,25 @@ public class Game {
     return Collections.emptyList();
   }
 
+  public List<Card> playCard(List<Card> cards) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (cards == null || cards.isEmpty()) {
+      throw new IllegalArgumentException("cards cannot be null or empty");
+    }
+    for (Card c : cards) {
+      if (c == null || c.getType() != CardType.NEKO) {
+        throw new IllegalArgumentException("all cards must be neko cards");
+      }
+    }
+    playNeko(cards);
+    return Collections.emptyList();
+  }
+
   private boolean isPlayableCard(Card card) {
     return card != null &&
             card.getType() != CardType.EXPLODING_KITTEN &&
