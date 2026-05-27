@@ -210,5 +210,18 @@ public class Game {
     if (target == null || !target.isAlive()) {
       throw new IllegalArgumentException("invalid target");
     }
+    Player currentPlayer = getCurrentPlayer();
+    if (target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (given == null) {
+      throw new IllegalArgumentException("given card cannot be null");
+    }
+    if (!target.getHand().contains(given)) {
+      throw new IllegalArgumentException("target does not have that card");
+    }
+
+    target.removeCard(given);
+    currentPlayer.addCard(given);
   }
 }

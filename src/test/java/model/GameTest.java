@@ -699,4 +699,62 @@ public class GameTest {
 
     assertEquals("invalid target", e.getMessage());
   }
+
+  @Test
+  public void playFavor_TargetIsCurrentPlayer_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(currentPlayer, new Card(CardType.SKIP)));
+
+    assertEquals("cannot target yourself", e.getMessage());
+  }
+
+  @Test
+  public void playFavor_GivenIsNull_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, null));
+
+    assertEquals("given card cannot be null", e.getMessage());
+  }
+
+  @Test
+  public void playFavor_TargetHasEmptyHand_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
+
+    assertEquals("target does not have that card", e.getMessage());
+  }
+
+  @Test
+  public void playFavor_TargetHasOneCardGivenDoesNotMatch_ThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    target.addCard(new Card(CardType.ATTACK));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
+
+    assertEquals("target does not have that card", e.getMessage());
+  }
 }
