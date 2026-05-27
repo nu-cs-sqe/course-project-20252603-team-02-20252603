@@ -451,3 +451,48 @@
 - **TC#105: target has named card plus other cards** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo in hand, target hand = [FAVOR, ATTACK, SKIP], named card = FAVOR
   - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, FAVOR transferred, target hand = [ATTACK, SKIP], returns true
+
+### Method under test: `playFiveDifferentCats()`
+- **TC#107: cards is null** ( :white_check_mark: )
+  - **State of the system**: cards = null, wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "cards cannot be null or empty"
+
+- **TC#108: wanted_card is null** ( :white_check_mark: )
+  - **State of the system**: Current player has valid 5-card combo, wanted_card = null
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid wanted card type"
+
+- **TC#109: wanted_card is EXPLODING_KITTEN** ( :white_check_mark: )
+  - **State of the system**: Current player has valid 5-card combo, wanted_card = EXPLODING_KITTEN
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid wanted card type"
+
+- **TC#110: combo is invalid because duplicate cat type is present** ( :white_check_mark: )
+  - **State of the system**: Cards = [TACOCAT, TACOCAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid five-cat combo"
+
+- **TC#111: combo is invalid because size is 3 instead of 5** ( :white_check_mark: )
+  - **State of the system**: Cards = [TACOCAT, TACOCAT, TACOCAT], wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid five-cat combo"
+
+- **TC#112: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: Valid 5-card combo shape, but current player does not hold those cards
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#113: discard pile is empty** ( :white_check_mark: )
+  - **State of the system**: Valid combo in hand, discard pile is empty, wanted_card = FAVOR
+  - **Expected output**: Five cats removed from hand and discarded, no card transferred, returns null
+
+- **TC#114: discard has 1 card that does not match wanted_card** ( :white_check_mark: )
+  - **State of the system**: Discard has [ATTACK], wanted_card = FAVOR
+  - **Expected output**: Five cats removed from hand and discarded, ATTACK remains in discard, returns null
+
+- **TC#115: discard has 1 card that matches wanted_card** ( :white_check_mark: )
+  - **State of the system**: Discard has [FAVOR], wanted_card = FAVOR
+  - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred to current player, returns FAVOR
+
+- **TC#116: discard has 2 copies of wanted_card** ( :white_check_mark: )
+  - **State of the system**: Discard has [FAVOR, FAVOR], wanted_card = FAVOR
+  - **Expected output**: Five cats removed from hand and discarded, exactly 1 FAVOR transferred, discard still has 1 FAVOR remaining, returns FAVOR
+
+- **TC#117: discard has wanted_card among other cards** ( :white_check_mark: )
+  - **State of the system**: Discard has [ATTACK, FAVOR, SKIP], wanted_card = FAVOR
+  - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
