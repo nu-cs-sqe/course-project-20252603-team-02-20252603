@@ -8,6 +8,9 @@ import java.util.Random;
 public class Game {
   private static final int MIN_PLAYERS = 3;
   private static final int MAX_PLAYERS = 5;
+  private static final int TWO_CAT_COMBO_SIZE = 2;
+  private static final int THREE_CAT_COMBO_SIZE = 3;
+  private static final int FIVE_CAT_COMBO_SIZE = 5;
 
   private final int numberOfPlayers;
   private final Random random;
@@ -251,36 +254,42 @@ public class Game {
       }
     }
 
-    int size = cards.size(); // use size to check for applicable combo
+    int size = cards.size();
 
-    if (size == 2) {
+    if (size == TWO_CAT_COMBO_SIZE) {
       CardType a = cards.get(0).getType();
       CardType b = cards.get(1).getType();
       boolean aFeral = a == CardType.FERAL_CAT;
       boolean bFeral = b == CardType.FERAL_CAT;
-      if (aFeral || bFeral) return true;
+      if (aFeral || bFeral) {
+        return true;
+      }
       return a == b;
-    }
-    else if (size == 3) {
+    } else if (size == THREE_CAT_COMBO_SIZE) {
       long ferals = cards.stream()
               .filter(c -> c.getType() == CardType.FERAL_CAT).count();
-      if (ferals == 3) return true;
+      if (ferals == THREE_CAT_COMBO_SIZE) {
+        return true;
+      }
       List<CardType> realCats = new ArrayList<>();
       for (Card c : cards) {
-        if (c.getType() != CardType.FERAL_CAT) realCats.add(c.getType());
+        if (c.getType() != CardType.FERAL_CAT) {
+          realCats.add(c.getType());
+        }
       }
       CardType first = realCats.get(0);
       for (CardType t : realCats) {
-        if (t != first) return false;
+        if (t != first) {
+          return false;
+        }
       }
       return true;
-    }
-    else if (size == 5) {
+    } else if (size == FIVE_CAT_COMBO_SIZE) {
       long distinctTypes = cards.stream()
               .map(Card::getType)
               .distinct()
               .count();
-      return distinctTypes == 5;
+      return distinctTypes == FIVE_CAT_COMBO_SIZE;
     }
     return false;
   }
@@ -294,7 +303,7 @@ public class Game {
     if (target == currentPlayer) {
       throw new IllegalArgumentException("cannot target yourself");
     }
-    if (!isValidCatCombo(cards) || cards.size() != 2) {
+    if (!isValidCatCombo(cards) || cards.size() != TWO_CAT_COMBO_SIZE) {
       throw new IllegalArgumentException("invalid two-cat combo");
     }
 
@@ -311,13 +320,13 @@ public class Game {
     }
     List<Card> targetHand = target.getHand();
     int index = random.nextInt(targetHand.size());
-    Card stolen_card = targetHand.get(index);
-    target.removeCard(stolen_card);
-    currentPlayer.addCard(stolen_card);
-    return stolen_card;
+    Card stolenCard = targetHand.get(index);
+    target.removeCard(stolenCard);
+    currentPlayer.addCard(stolenCard);
+    return stolenCard;
   }
 
-  public boolean playThreeMatchingCats(List<Card> cards, Player target, CardType wanted_card) {
+  public boolean playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
     if (target == null || !target.isAlive()) {
       throw new IllegalArgumentException("target cannot be null or dead");
     }
@@ -326,11 +335,11 @@ public class Game {
       throw new IllegalArgumentException("cannot target yourself");
     }
 
-    if (wanted_card == null || wanted_card == CardType.EXPLODING_KITTEN) {
+    if (wantedCard == null || wantedCard == CardType.EXPLODING_KITTEN) {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
-    if (!isValidCatCombo(cards) || cards.size() != 3) {
+    if (!isValidCatCombo(cards) || cards.size() != THREE_CAT_COMBO_SIZE) {
       throw new IllegalArgumentException("invalid three-cat combo");
     }
 
@@ -346,7 +355,7 @@ public class Game {
       deck.discardCard(c);
     }
 
-    Card namedCard = new Card(wanted_card);
+    Card namedCard = new Card(wantedCard);
     List<Card> targetHand = target.getHand();
     // current player gets nothing if target doesn't have the card they ask for
     if (!targetHand.contains(namedCard)) {
@@ -357,16 +366,16 @@ public class Game {
     return true;
   }
 
-  public Card playFiveDifferentCats(List<Card> cards, CardType wanted_card) {
+  public Card playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
     if (cards == null) {
       throw new IllegalArgumentException("cards cannot be null");
     }
 
-    if (wanted_card == null || wanted_card == CardType.EXPLODING_KITTEN) {
+    if (wantedCard == null || wantedCard == CardType.EXPLODING_KITTEN) {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
-    if (!isValidCatCombo(cards) || cards.size() != 5) {
+    if (!isValidCatCombo(cards) || cards.size() != FIVE_CAT_COMBO_SIZE) {
       throw new IllegalArgumentException("invalid five-cat combo");
     }
 
@@ -377,13 +386,13 @@ public class Game {
         throw new IllegalArgumentException("cards not in hand");
       }
     }
-    Card wantedCard = takeFromDiscard(wanted_card); // throws if not found
+    Card receivedCard = takeFromDiscard(wantedCard); // throws if not found
     for (Card c : cards) {
       currentPlayer.removeCard(c);
       deck.discardCard(c);
     }
-    currentPlayer.addCard(wantedCard);
-    return wantedCard;
+    currentPlayer.addCard(receivedCard);
+    return receivedCard;
   }
 
   public void playCatCards(List<Card> cards, Player target, CardType named) {
@@ -397,9 +406,9 @@ public class Game {
       throw new IllegalArgumentException("invalid cat combo");
     }
     int size = cards.size();
-    if (size == 2) {
+    if (size == TWO_CAT_COMBO_SIZE) {
       playTwoMatchingCats(cards, target);
-    } else if (size == 3) {
+    } else if (size == THREE_CAT_COMBO_SIZE) {
       playThreeMatchingCats(cards, target, named);
     } else {
       playFiveDifferentCats(cards, named);

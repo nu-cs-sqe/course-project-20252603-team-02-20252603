@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +25,9 @@ public class GameTest {
   private static final int THIRD_PLAYER_INDEX = 2;
   private static final int FOURTH_PLAYER_INDEX = 3;
   private static final int NUM_CARDS_PEEKED = 3;
+  private static final int THREE_CARDS = 3;
+  private static final int FOUR_CARDS = 4;
+  private static final int FIVE_CARDS = 5;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -678,7 +681,7 @@ public class GameTest {
   }
 
   @Test
-  public void IsCatCardTypeIsNull() {
+  public void isCatCardTypeIsNull() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
@@ -689,55 +692,55 @@ public class GameTest {
   }
 
   @Test
-  public void IsCatCardTypeIsTacocat() {
+  public void isCatCardTypeIsTacocat() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.TACOCAT));
   }
 
   @Test
-  public void IsCatCardTypeIsRainbowRalphingCat() {
+  public void isCatCardTypeIsRainbowRalphingCat() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.RAINBOW_RALPHING_CAT));
   }
 
   @Test
-  public void IsCatCardTypeIsBeardCat() {
+  public void isCatCardTypeIsBeardCat() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.BEARD_CAT));
   }
 
   @Test
-  public void IsCatCardTypeIsCattermelon() {
+  public void isCatCardTypeIsCattermelon() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.CATTERMELON));
   }
 
   @Test
-  public void IsCatCardTypeIsFeralCat() {
+  public void isCatCardTypeIsFeralCat() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isCatCard(CardType.FERAL_CAT));
   }
 
   @Test
-  public void IsCatCardTypeIsAttack() {
+  public void isCatCardTypeIsAttack() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isCatCard(CardType.ATTACK));
   }
 
   @Test
-  public void IsCatCardTypeIsExplodingKitten() {
+  public void isCatCardTypeIsExplodingKitten() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isCatCard(CardType.EXPLODING_KITTEN));
   }
 
   @Test
-  public void IsCatCardTypeIsDefuse() {
+  public void isCatCardTypeIsDefuse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isCatCard(CardType.DEFUSE));
   }
 
   @Test
-  public void isValidCatCombo_NullList_ThrowsIllegalArgumentException() {
+  public void isValidCatComboNullListThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
       game.isValidCatCombo(null);
@@ -746,7 +749,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_EmptyList_ThrowsIllegalArgumentException() {
+  public void isValidCatComboEmptyListThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
       game.isValidCatCombo(List.of());
@@ -755,7 +758,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_OneCard_ReturnsFalse() {
+  public void isValidCatComboOneCardReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT)
@@ -763,7 +766,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_TwoSameRealCats_ReturnsTrue() {
+  public void isValidCatComboTwoSameRealCatsReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -772,7 +775,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_TwoDifferentRealCats_ReturnsFalse() {
+  public void isValidCatComboTwoDifferentRealCatsReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -781,7 +784,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_OneFeralOneRealCat_ReturnsTrue() {
+  public void isValidCatComboOneFeralOneRealCatReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.FERAL_CAT),
@@ -790,7 +793,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_TwoFeralCats_ReturnsTrue() {
+  public void isValidCatComboTwoFeralCatsReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.FERAL_CAT),
@@ -799,7 +802,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_OneCatOneNonCat_ReturnsFalse() {
+  public void isValidCatComboOneCatOneNonCatReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -808,7 +811,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_ThreeSameRealCats_ReturnsTrue() {
+  public void isValidCatComboThreeSameRealCatsReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -818,7 +821,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_TwoMatchingOneFeral_ReturnsTrue() {
+  public void isValidCatComboTwoMatchingOneFeralReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -828,7 +831,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_OneRealTwoFerals_ReturnsTrue() {
+  public void isValidCatComboOneRealTwoFeralsReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -838,7 +841,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_ThreeFerals_ReturnsTrue() {
+  public void isValidCatComboThreeFeralsReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.FERAL_CAT),
@@ -848,7 +851,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_ThreeDifferentRealCats_ReturnsFalse() {
+  public void isValidCatComboThreeDifferentRealCatsReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -858,7 +861,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_TwoDifferentRealCatsOneFeral_ReturnsFalse() {
+  public void isValidCatComboTwoDifferentRealCatsOneFeralReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -868,7 +871,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_ThreeCardsIncludingNonCat_ReturnsFalse() {
+  public void isValidCatComboThreeCardsIncludingNonCatReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -878,7 +881,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_FourCards_ReturnsFalse() {
+  public void isValidCatComboFourCardsReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -889,7 +892,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_FiveDistinctRealCats_ReturnsTrue() {
+  public void isValidCatComboFiveDistinctRealCatsReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -901,7 +904,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_FourDistinctRealCatsOneFeral_ReturnsTrue() {
+  public void isValidCatComboFourDistinctRealCatsOneFeralReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertTrue(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -913,7 +916,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_DuplicateRealCat_ReturnsFalse() {
+  public void isValidCatComboDuplicateRealCatReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -925,7 +928,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_TwoFeralsInFiveCards_ReturnsFalse() {
+  public void isValidCatComboTwoFeralsInFiveCardsReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -937,7 +940,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_FiveCardsIncludingNonCat_ReturnsFalse() {
+  public void isValidCatComboFiveCardsIncludingNonCatReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -949,7 +952,7 @@ public class GameTest {
   }
 
   @Test
-  public void isValidCatCombo_SixCards_ReturnsFalse() {
+  public void isValidCatComboSixCardsReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     assertFalse(game.isValidCatCombo(List.of(
             new Card(CardType.TACOCAT),
@@ -962,7 +965,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_NullTarget_ThrowsIllegalArgumentException() {
+  public void playTwoMatchingCatsNullTargetThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -979,7 +982,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_DeadTarget_ThrowsIllegalArgumentException() {
+  public void playTwoMatchingCatsDeadTargetThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -998,7 +1001,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_SelfTarget_ThrowsIllegalArgumentException() {
+  public void playTwoMatchingCatsSelfTargetThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1015,7 +1018,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_NonMatchingCats_ThrowsIllegalArgumentException() {
+  public void playTwoMatchingCatsNonMatchingCatsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1033,7 +1036,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_ThreeCards_ThrowsIllegalArgumentException() {
+  public void playTwoMatchingCatsThreeCardsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1053,7 +1056,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_CardsNotInHand_ThrowsIllegalArgumentException() {
+  public void playTwoMatchingCatsCardsNotInHandThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
@@ -1068,7 +1071,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_OnlyOneRequiredCardInHand_ThrowsIllegalArgumentException() {
+  public void playTwoMatchingCatsOnlyOneRequiredCardInHandThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1085,7 +1088,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_TargetHasOneCard_ReturnsStolenCard() {
+  public void playTwoMatchingCatsTargetHasOneCardReturnsStolenCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1114,7 +1117,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_TargetHasTwoCards_ReturnsStolenCard() {
+  public void playTwoMatchingCatsTargetHasTwoCardsReturnsStolenCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1144,7 +1147,7 @@ public class GameTest {
   }
 
   @Test
-  public void playTwoMatchingCats_TargetHasFiveCards_ReturnsStolenCard() {
+  public void playTwoMatchingCatsTargetHasFiveCardsReturnsStolenCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1171,13 +1174,13 @@ public class GameTest {
 
     assertNotNull(stolen);
     assertTrue(currentPlayer.getHand().contains(stolen));
-    assertEquals(4, target.getHand().size());
+    assertEquals(FOUR_CARDS, target.getHand().size());
     assertFalse(target.getHand().contains(stolen));
     assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
   }
 
   @Test
-  public void playThreeMatchingCats_NullTarget_ThrowsIllegalArgumentException() {
+  public void playThreeMatchingCatsNullTargetThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1196,7 +1199,7 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCats_DeadTarget_ThrowsIllegalArgumentException() {
+  public void playThreeMatchingCatsDeadTargetThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1217,7 +1220,7 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCats_SelfTarget_ThrowsIllegalArgumentException() {
+  public void playThreeMatchingCatsSelfTargetThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1236,7 +1239,7 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCats_NullNamedCard_ThrowsIllegalArgumentException() {
+  public void playThreeMatchingCatsNullNamedCardThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1256,7 +1259,7 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCats_ExplodingKittenNamedCard_ThrowsIllegalArgumentException() {
+  public void playThreeMatchingCatsExplodingKittenNamedCardThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1276,7 +1279,7 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCats_NonMatchingCats_ThrowsIllegalArgumentException() {
+  public void playThreeMatchingCatsNonMatchingCatsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1296,7 +1299,7 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCats_TwoCards_ThrowsIllegalArgumentException() {
+  public void playThreeMatchingCatsTwoCardsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1314,7 +1317,7 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCats_CardsNotInHand_ThrowsIllegalArgumentException() {
+  public void playThreeMatchingCatsCardsNotInHandThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
@@ -1330,7 +1333,7 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCats_TargetHasNoNamedCard_ReturnsFalse() {
+  public void playThreeMatchingCatsTargetHasNoNamedCardReturnsFalse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1357,11 +1360,11 @@ public class GameTest {
     assertFalse(currentPlayer.getHand().contains(cat3));
     assertEquals(1, target.getHand().size());
     assertEquals(CardType.ATTACK, target.getHand().get(0).getType());
-    assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
+    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
   @Test
-  public void playThreeMatchingCats_TargetHasOneNamedCard_ReturnsTrue() {
+  public void playThreeMatchingCatsTargetHasOneNamedCardReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1389,11 +1392,11 @@ public class GameTest {
     assertFalse(currentPlayer.getHand().contains(cat2));
     assertFalse(currentPlayer.getHand().contains(cat3));
     assertEquals(0, target.getHand().size());
-    assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
+    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
   @Test
-  public void playThreeMatchingCats_TargetHasTwoNamedCards_ReturnsTrue() {
+  public void playThreeMatchingCatsTargetHasTwoNamedCardsReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1423,11 +1426,11 @@ public class GameTest {
     assertFalse(currentPlayer.getHand().contains(cat1));
     assertFalse(currentPlayer.getHand().contains(cat2));
     assertFalse(currentPlayer.getHand().contains(cat3));
-    assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
+    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
   @Test
-  public void playThreeMatchingCats_TargetHasNamedCardAndOtherCards_ReturnsTrue() {
+  public void playThreeMatchingCatsTargetHasNamedCardAndOtherCardsReturnsTrue() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1459,11 +1462,11 @@ public class GameTest {
     assertTrue(target.getHand().contains(attack));
     assertTrue(target.getHand().contains(skip));
     assertEquals(2, target.getHand().size());
-    assertEquals(discardSizeBefore + 3, game.getDiscardPile().size());
+    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
   @Test
-  public void playFiveDifferentCats_NullCards_ThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsNullCardsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
 
@@ -1475,7 +1478,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_NullWantedCard_ThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsNullWantedCardThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1500,7 +1503,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_ExplodingKittenWantedCard_ThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsExplodingKittenWantedCardThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1526,7 +1529,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_DuplicateCatType_ThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsDuplicateCatTypeThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1551,7 +1554,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_ThreeCards_ThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsThreeCardsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1572,7 +1575,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_CardsNotInHand_ThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsCardsNotInHandThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
 
@@ -1590,7 +1593,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_EmptyDiscardPile_ThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsEmptyDiscardPileThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1618,7 +1621,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_DiscardHasOneNonMatchingCard_ThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsDiscardHasOneNonMatchingCardThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1646,7 +1649,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_DiscardHasOneMatchingCard_ReturnsWantedCard() {
+  public void playFiveDifferentCatsDiscardHasOneMatchingCardReturnsWantedCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1674,7 +1677,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_DiscardHasTwoMatchingCards_TransfersOneCard() {
+  public void playFiveDifferentCatsDiscardHasTwoMatchingCardsTransfersOneCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1703,7 +1706,7 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCats_DiscardHasWantedCardAmongOtherCards_ReturnsWantedCard() {
+  public void playFiveDifferentCatsDiscardHasWantedCardAmongOtherCardsReturnsWantedCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1737,7 +1740,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_GameNotLaunched_ThrowsIllegalStateException() {
+  public void playCatCardsGameNotLaunchedThrowsIllegalStateException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     List<Card> cards = List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT));
     Player dummy = new Player();
@@ -1749,7 +1752,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_GameIsOver_ThrowsIllegalStateException() {
+  public void playCatCardsGameIsOverThrowsIllegalStateException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     List<Player> players = game.getPlayers();
@@ -1765,7 +1768,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_CardsIsNull_ThrowsIllegalArgumentException() {
+  public void playCatCardsCardsIsNullThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(1);
@@ -1777,7 +1780,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_ComboSizeOne_ThrowsIllegalArgumentException() {
+  public void playCatCardsComboSizeOneThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(1);
@@ -1790,7 +1793,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_ComboSizeFour_ThrowsIllegalArgumentException() {
+  public void playCatCardsComboSizeFourThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player target = game.getPlayers().get(1);
@@ -1808,7 +1811,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_TwoMatchingCats_TargetHasOneCard_StealsCatd() {
+  public void playCatCardsTwoMatchingCatsTargetHasOneCardStealsCatd() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1831,7 +1834,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_ThreeMatchingCats_TargetHasNamedCard_TransfersCard() {
+  public void playCatCardsThreeMatchingCatsTargetHasNamedCardTransfersCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1862,7 +1865,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_ThreeMatchingCats_TargetLacksNamedCard_NothingTransferred() {
+  public void playCatCardsThreeMatchingCatsTargetLacksNamedCardNothingTransferred() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1889,7 +1892,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_FiveDifferentCats_NamedCardInDiscard_TransfersCard() {
+  public void playCatCardsFiveDifferentCatsNamedCardInDiscardTransfersCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
@@ -1915,7 +1918,7 @@ public class GameTest {
   }
 
   @Test
-  public void playCatCards_FiveDifferentCats_NamedCardNotInDiscard_ThrowsIllegalArgumentException() {
+  public void playCatCardsFiveDifferentCatsNamedCardNotInDiscardThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
