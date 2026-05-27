@@ -10,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Random;
-
-import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 public class GameTest {
@@ -723,12 +721,12 @@ public class GameTest {
     Card shuffleCard = new Card(CardType.SHUFFLE);
     currentPlayer.addCard(shuffleCard);
 
-    while (game.getDrawPile().size() > 3) {
+    while (game.getDrawPile().size() > NUM_CARDS_PEEKED) {
       game.drawFromDeck();
     }
 
     List<Card> result = game.playCard(shuffleCard);
 
-    assertEquals(3, result.size());
+    assertEquals(NUM_CARDS_PEEKED, result.size());
   }
 }
