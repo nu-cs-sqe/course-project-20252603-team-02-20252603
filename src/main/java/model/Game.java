@@ -128,6 +128,27 @@ public class Game {
     return Collections.emptyList();
   }
 
+  public List<Card> playCard(Card card, Player target, Card given) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    if (card.getType() != CardType.FAVOR) {
+      throw new IllegalArgumentException("card is not a favor card");
+    }
+
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+    playFavor(target, given);
+    return Collections.emptyList();
+  }
+
   private boolean isPlayableCard(Card card) {
     return card != null &&
             card.getType() != CardType.EXPLODING_KITTEN &&
