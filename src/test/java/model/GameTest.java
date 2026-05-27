@@ -727,4 +727,30 @@ public class GameTest {
 
     assertEquals("must play exactly 3 neko cards", e.getMessage());
   }
+
+  @Test
+  public void playNekoThreeNekosGameOver() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    List<Player> players = game.getPlayers();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(neko3);
+
+    game.playNeko(List.of(neko1, neko2, neko3));
+
+    assertTrue(game.isGameOver());
+    assertTrue(currentPlayer.isAlive());
+    assertFalse(players.get(SECOND_PLAYER_INDEX).isAlive());
+    assertFalse(players.get(THIRD_PLAYER_INDEX).isAlive());
+    assertTrue(game.getDiscardPile().contains(neko1));
+    assertTrue(game.getDiscardPile().contains(neko2));
+    assertTrue(game.getDiscardPile().contains(neko3));
+  }
+
 }

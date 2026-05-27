@@ -214,5 +214,22 @@ public class Game {
     if (cards.size() != NUM_NEKO_CARDS) {
       throw new IllegalArgumentException("must play exactly 3 neko cards");
     }
+    Player currentPlayer = getCurrentPlayer();
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+    for (Player p : players) {
+      if (p != currentPlayer) {
+        p.die();
+      }
+    }
+    gameOver = true;
   }
 }
