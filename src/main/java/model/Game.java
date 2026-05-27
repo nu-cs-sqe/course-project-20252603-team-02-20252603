@@ -205,4 +205,8 @@ public class Game {
   public List<Card> playSeeTheFuture(){
     return deck.peekTopCards();
   }
+
+  public void playSwap() {
+    deck.swapTopBottomCards();
+  }
 }
