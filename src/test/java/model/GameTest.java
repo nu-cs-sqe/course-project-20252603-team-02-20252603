@@ -753,4 +753,47 @@ public class GameTest {
     assertTrue(game.getDiscardPile().contains(neko3));
   }
 
+  @Test
+  public void playNekoFourCardsThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    Card neko4 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(neko3);
+    currentPlayer.addCard(neko4);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko1, neko2, neko3, neko4)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoOneCardIsNullThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+
+    List<Card> cards = new java.util.ArrayList<>();
+    cards.add(neko1);
+    cards.add(null);
+    cards.add(neko2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(cards));
+
+    assertEquals("all cards must be neko cards", e.getMessage());
+  }
+
 }

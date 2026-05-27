@@ -214,6 +214,11 @@ public class Game {
     if (cards.size() != NUM_NEKO_CARDS) {
       throw new IllegalArgumentException("must play exactly 3 neko cards");
     }
+    for (Card c : cards) {
+      if (c == null || c.getType() != CardType.NEKO) {
+        throw new IllegalArgumentException("all cards must be neko cards");
+      }
+    }
     Player currentPlayer = getCurrentPlayer();
     List<Card> hand = new ArrayList<>(currentPlayer.getHand());
     for (Card c : cards) {
