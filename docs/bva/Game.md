@@ -538,3 +538,4 @@
 - **TC#127: valid 5-cat combo, named card not in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has no `FAVOR`, named = `FAVOR`
   - **Expected output**: Throws `IllegalArgumentException`, "card type not in discard pile"
+

@@ -128,6 +128,20 @@ public class Game {
     return Collections.emptyList();
   }
 
+  public List<Card> playCard(List<Card> cards, Player target, CardType named) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isValidCatCombo(cards)) {
+      throw new IllegalArgumentException("invalid cat combo");
+    }
+    playCatCards(cards, target, named);
+    return Collections.emptyList();
+  }
+
   private boolean isPlayableCard(Card card) {
     return card != null &&
             card.getType() != CardType.EXPLODING_KITTEN &&
