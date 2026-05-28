@@ -177,11 +177,15 @@
 
 - **TC41: Draw Exploding Kitten with Defuse** ( :white_check_mark: )
   - **State of the system**: Current player draws `EXPLODING_KITTEN` and has a `DEFUSE`
-  - **Expected output**: Defuse is used, player stays alive, and Exploding Kitten returns to draw pile
+  - **Expected output**: Defuse is discarded, player stays alive, and Exploding Kitten returns to draw pile
 
 - **TC42: Draw Exploding Kitten without Defuse** ( :white_check_mark: )
   - **State of the system**: Current player draws `EXPLODING_KITTEN` and has no `DEFUSE`
   - **Expected output**: Current player dies and game checks for winner
+
+- **TC42.5: Draw Exploding Kitten without Defuse when one other player is alive** ( :white_check_mark: )
+  - **State of the system**: Current player draws `EXPLODING_KITTEN`, has no `DEFUSE`, and only one other player is alive
+  - **Expected output**: Current player dies and game is over
 
 ### Method under test: `playCard()`
 - **TC43: Player plays a playable card** ( :white_check_mark: )

@@ -476,6 +476,7 @@ public class GameTest {
     int defuseCountBefore = countCards(firstPlayer, CardType.DEFUSE);
     game.addToDrawPile(explodingKitten, 0);
     int deckSizeBefore = game.getDrawPile().size();
+    int discardSizeBefore = game.getDiscardPile().size();
 
     game.drawCard();
 
@@ -484,6 +485,8 @@ public class GameTest {
     assertFalse(firstPlayer.getHand().contains(explodingKitten));
     assertEquals(deckSizeBefore, game.getDrawPile().size());
     assertEquals(explodingKitten, game.getDrawPile().get(0));
+    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
+    assertEquals(new Card(CardType.DEFUSE), game.getDiscardPile().get(discardSizeBefore));
   }
 
   @Test
@@ -500,6 +503,24 @@ public class GameTest {
 
     assertFalse(firstPlayer.isAlive());
     assertFalse(game.isGameOver());
+  }
+
+  @Test
+  public void drawCardExplodingKittenWithoutDefuseEndsGameWithOneOtherAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player firstPlayer = game.getCurrentPlayer();
+    List<Player> players = game.getPlayers();
+    while (firstPlayer.hasDefuse()) {
+      firstPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), 0);
+
+    game.drawCard();
+
+    assertFalse(firstPlayer.isAlive());
+    assertTrue(game.isGameOver());
   }
 
   @Test

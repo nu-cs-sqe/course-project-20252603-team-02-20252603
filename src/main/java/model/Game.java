@@ -8,6 +8,7 @@ import java.util.Random;
 public class Game {
   private static final int MIN_PLAYERS = 3;
   private static final int MAX_PLAYERS = 5;
+  private static final int TOP_OF_DRAW_PILE = 0;
 
   private final int numberOfPlayers;
   private final Random random;
@@ -91,21 +92,25 @@ public class Game {
   public void drawCard() {
     Player currentPlayer = getCurrentPlayer();
     Card card = deck.drawCard();
-    if (card.getType() == CardType.EXPLODING_KITTEN && currentPlayer.hasDefuse()) {
-      Card defuse = new Card(CardType.DEFUSE);
-      currentPlayer.removeCard(defuse);
-      deck.discardCard(defuse);
-      deck.addToDrawPile(card, 0);
-      completeOneTurn();
-      return;
-    }
     if (card.getType() == CardType.EXPLODING_KITTEN) {
-      currentPlayer.die();
-      checkWinner();
+      handleExplodingKitten(card, currentPlayer);
       return;
     }
     currentPlayer.addCard(card);
     completeOneTurn();
+  }
+
+  private void handleExplodingKitten(Card explodingKitten, Player currentPlayer) {
+    if (currentPlayer.hasDefuse()) {
+      Card defuse = new Card(CardType.DEFUSE);
+      currentPlayer.removeCard(defuse);
+      deck.discardCard(defuse);
+      deck.addToDrawPile(explodingKitten, TOP_OF_DRAW_PILE);
+      completeOneTurn();
+      return;
+    }
+    currentPlayer.die();
+    checkWinner();
   }
 
   public List<Card> playCard(Card card) {
