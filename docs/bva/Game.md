@@ -215,8 +215,50 @@
 
 - **TC50: No players alive** ( :white_check_mark: )
   - **State of the system**: 0 players are alive
-  - **Expected output**: Throws `IllegalStateException`
-  
+  - **Expected output**: Throws `IllegalStateException`  
+
+### Method under test: `playBubonicPlague()`
+- **TC#: All other players have cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have at least 1 card in hand
+  - **Expected output**: Card removed from hand, discarded, one random card removed from each other player's hand and added to draw pile, draw pile shuffled, empty list returned
+
+- **TC#: One other player has no cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, one other player has no cards in hand
+  - **Expected output**: Card removed from hand, discarded, player with no cards is skipped, one random card removed from each other player with cards, draw pile shuffled, empty list returned
+
+- **TC#: All other players have no cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have empty hands
+  - **Expected output**: Card removed from hand, discarded, no cards moved to draw pile, draw pile shuffled, empty list returned
+
+- **TC#: Exactly one other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, exactly 1 other player alive with cards
+  - **Expected output**: Card removed from hand, discarded, one random card removed from that player's hand and added to draw pile, draw pile shuffled, empty list returned
+
+- **TC#: Current player is not affected** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have cards
+  - **Expected output**: Current player's hand size unchanged, other players each lose one card
+
+### Method under test: `playTargetedAttack()`
+- **TC#: Targeted Attack, target is the next player in order** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is the next player in turn order, target is alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is not the next player in order** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is a player further ahead in turn order, target is alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player skipping players in between, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is the only other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, exactly 1 other player alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is a dead player** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target player is not alive
+  - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC#: Targeted Attack, target is the current player** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is themselves
+  - **Expected output**: Throws `IllegalArgumentException`
+
 ### Method under test: `playSeeTheFuture()`
 - **TC#51: Deck has 0 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck is empty
