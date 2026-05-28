@@ -130,16 +130,21 @@ public class Game {
       return playSeeTheFuture();
     }
     
-    else if (card.getType() == CardType.ATTACK) {
-      playAttack();
+    if (card.getType() == CardType.SWAP_TOP_BOTTOM) {
+      playSwap();
+      return Collections.emptyList();
     }
     
-    else if (card.getType() == CardType.BUBONIC_PLAGUE) {
+    if (card.getType() == CardType.ATTACK) {
+      playAttack();
+      return Collections.emptyList();
+    }
+    
+    if (card.getType() == CardType.BUBONIC_PLAGUE) {
       playBubonicPlague();
       return Collections.emptyList();
     }
     
-
     return Collections.emptyList();
   }
 
@@ -335,6 +340,10 @@ public class Game {
     return deck.peekTopCards();
   }
 
+  public void playSwap() {
+    deck.swapTopBottomCards();
+  }
+  
   public boolean isCatCard(CardType type) {
     if (type == null) {
       throw new IllegalArgumentException("invalid card");

@@ -75,6 +75,23 @@
   - **State of the system**: Draw pile has 0 cards
   - **Expected output**: Throws `IllegalStateException`
 
+### Method under test: `swapTopBottomCards()`
+- **TC19: Swap when draw pile has no cards** ( :white_check_mark: )
+  - **State of the system**: Draw pile has no cards
+  - **Expected output**: Draw pile unchanged
+
+- **TC19: Swap when draw pile has 1 card** ( :white_check_mark: )
+  - **State of the system**: Draw pile has 1 card
+  - **Expected output**: Draw pile unchanged
+
+- **TC20: Swap when draw pile has 2 cards** ( :white_check_mark: )
+  - **State of the system**: Draw pile has 2 cards
+  - **Expected output**: Draw pile has first and second cards swapped
+
+- **TC21: Swap when draw pile has more than 2 cards** ( :white_check_mark: )
+  - **State of the system**: Draw pile has 3 cards
+  - **Expected output**: Draw pile has first and last cards swapped
+  
 ### Method under test: `takeFromDiscard()`
 - **TC#19: type is null** (:white_check_mark:)
   - **state of the system**: Game running, discard has cards 
