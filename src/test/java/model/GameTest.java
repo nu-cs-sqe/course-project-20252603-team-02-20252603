@@ -1938,6 +1938,15 @@ public class GameTest {
     while (!target.getHand().isEmpty()) {
       target.removeCard(target.getHand().get(0));
     }
+
+    Card skip = new Card(CardType.SKIP);
+    target.addCard(skip);
+
+    game.playFavor(target, skip);
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(target.getHand().isEmpty());
   }
 
   @Test
