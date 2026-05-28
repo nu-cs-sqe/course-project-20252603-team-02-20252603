@@ -8,6 +8,7 @@ import java.util.Random;
 public class Game {
   private static final int MIN_PLAYERS = 3;
   private static final int MAX_PLAYERS = 5;
+  private static final int NUM_NEKO_CARDS = 3;
 
   private final int numberOfPlayers;
   private final Random random;
@@ -181,6 +182,25 @@ public class Game {
     return Collections.emptyList();
   }
 
+  public List<Card> playCard(List<Card> cards) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (cards == null || cards.isEmpty()) {
+      throw new IllegalArgumentException("cards cannot be null or empty");
+    }
+    for (Card c : cards) {
+      if (c == null || c.getType() != CardType.NEKO) {
+        throw new IllegalArgumentException("all cards must be neko cards");
+      }
+    }
+    playNeko(cards);
+    return Collections.emptyList();
+  }
+
   private boolean isPlayableCard(Card card) {
     return card != null &&
             card.getType() != CardType.EXPLODING_KITTEN &&
@@ -290,6 +310,40 @@ public class Game {
     return deck.peekTopCards();
   }
 
+  public void playNeko(List<Card> cards) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (cards == null) {
+      throw new IllegalArgumentException("cards cannot be null");
+    }
+    if (cards.size() != NUM_NEKO_CARDS) {
+      throw new IllegalArgumentException("must play exactly 3 neko cards");
+    }
+    for (Card c : cards) {
+      if (c == null || c.getType() != CardType.NEKO) {
+        throw new IllegalArgumentException("all cards must be neko cards");
+      }
+    }
+    Player currentPlayer = getCurrentPlayer();
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+    for (Player p : players) {
+      if (p != currentPlayer) {
+        p.die();
+      }
+    }
+    gameOver = true;
+  }
+  
   public void playFavor(Player target, Card given) {
     if (target == null || !target.isAlive()) {
       throw new IllegalArgumentException("invalid target");
