@@ -245,6 +245,7 @@ public class Game {
     }
     deck.shuffle();
   }
+  
   public void playTargetedAttack(Player target) {
     if (target == null) {
       throw new IllegalArgumentException("target cannot be null");
