@@ -962,6 +962,122 @@ public class GameTest {
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
   }
+
+  @Test
+  void alterFutureMoreThanThreeCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    Card firstCard = new Card(CardType.FAVOR);
+    Card secondCard = new Card(CardType.SHUFFLE);
+    Card thirdCard = new Card(CardType.NOPE);
+    currentPlayer.addCard(alterFuture);
+    game.addToDrawPile(thirdCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(secondCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(firstCard, FIRST_PLAYER_INDEX);
+    List<Card> reorderedCards = new ArrayList<>();
+    reorderedCards.add(thirdCard);
+    reorderedCards.add(firstCard);
+    reorderedCards.add(secondCard);
+
+    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    List<Card> drawPile = game.getDrawPile();
+
+    assertEquals(Collections.emptyList(), result);
+    assertEquals(thirdCard, drawPile.get(FIRST_PLAYER_INDEX));
+    assertEquals(firstCard, drawPile.get(SECOND_PLAYER_INDEX));
+    assertEquals(secondCard, drawPile.get(THIRD_PLAYER_INDEX));
+  }
+
+  @Test
+  void alterFutureExactlyThreeCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    Card firstCard = new Card(CardType.FAVOR);
+    Card secondCard = new Card(CardType.SHUFFLE);
+    Card thirdCard = new Card(CardType.NOPE);
+    currentPlayer.addCard(alterFuture);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+    game.addToDrawPile(thirdCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(secondCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(firstCard, FIRST_PLAYER_INDEX);
+    List<Card> reorderedCards = new ArrayList<>();
+    reorderedCards.add(secondCard);
+    reorderedCards.add(thirdCard);
+    reorderedCards.add(firstCard);
+
+    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    List<Card> drawPile = game.getDrawPile();
+
+    assertEquals(Collections.emptyList(), result);
+    assertEquals(secondCard, drawPile.get(FIRST_PLAYER_INDEX));
+    assertEquals(thirdCard, drawPile.get(SECOND_PLAYER_INDEX));
+    assertEquals(firstCard, drawPile.get(THIRD_PLAYER_INDEX));
+  }
+
+  @Test
+  void alterFutureWithOneCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    Card onlyCard = new Card(CardType.FAVOR);
+    currentPlayer.addCard(alterFuture);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+    game.addToDrawPile(onlyCard, FIRST_PLAYER_INDEX);
+    List<Card> reorderedCards = new ArrayList<>();
+    reorderedCards.add(onlyCard);
+
+    List<Card> result = game.playCard(alterFuture, reorderedCards);
+
+    assertEquals(Collections.emptyList(), result);
+    assertEquals(onlyCard, game.getDrawPile().get(FIRST_PLAYER_INDEX));
+  }
+
+  @Test
+  void alterFutureEmptyDeck() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    currentPlayer.addCard(alterFuture);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(alterFuture, Collections.emptyList()));
+  }
+
+  @Test
+  void alterFutureInvalidOrder() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    Card firstCard = new Card(CardType.FAVOR);
+    Card secondCard = new Card(CardType.SHUFFLE);
+    Card thirdCard = new Card(CardType.NOPE);
+    Card wrongCard = new Card(CardType.ATTACK);
+    currentPlayer.addCard(alterFuture);
+    game.addToDrawPile(thirdCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(secondCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(firstCard, FIRST_PLAYER_INDEX);
+    List<Card> reorderedCards = new ArrayList<>();
+    reorderedCards.add(wrongCard);
+    reorderedCards.add(firstCard);
+    reorderedCards.add(secondCard);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(alterFuture, reorderedCards));
+  }
   
   @Test
   void attackMoreThanOneOtherPlayerAlive() {

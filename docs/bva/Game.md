@@ -200,6 +200,27 @@
   - **State of the system**: Current player resolves `DRAW_FROM_BOTTOM` and draw pile has 0 cards
   - **Expected output**: Throws `IllegalStateException`
 
+### Method under test: `playAlterTheFuture()`
+- **TC#: Alter the Future with many cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has more than 3 cards, and player gives a valid order for the top 3 cards
+  - **Expected output**: Played card is discarded, top 3 draw pile cards are reordered, and empty list is returned
+
+- **TC#: Alter the Future with exactly 3 cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 3 cards, and player gives a valid order for all 3 cards
+  - **Expected output**: Played card is discarded, all 3 draw pile cards are reordered, and empty list is returned
+
+- **TC#: Alter the Future with exactly 1 card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 1 card, and player gives that card back
+  - **Expected output**: Played card is discarded, the only draw pile card remains on top, and empty list is returned
+
+- **TC#: Alter the Future with empty draw pile** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE` and draw pile has 0 cards
+  - **Expected output**: Throws `IllegalStateException`
+
+- **TC#: Alter the Future with invalid order** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE` and reordered cards do not match the visible top cards
+  - **Expected output**: Throws `IllegalArgumentException`
+
 ### Method under test: `playCard()`
 - **TC43: Player plays a playable card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a playable card

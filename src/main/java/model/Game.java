@@ -170,6 +170,27 @@ public class Game {
     return Collections.emptyList();
   }
 
+  public List<Card> playCard(Card card, List<Card> reorderedCards) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+
+    if (card.getType() == CardType.ALTER_FUTURE) {
+      playAlterTheFuture(reorderedCards);
+      return Collections.emptyList();
+    }
+    return Collections.emptyList();
+  }
+
   private boolean isPlayableCard(Card card) {
     return card != null &&
             card.getType() != CardType.EXPLODING_KITTEN &&
@@ -296,5 +317,9 @@ public class Game {
     }
     getCurrentPlayer().addCard(card);
     completeOneTurn();
+  }
+
+  public void playAlterTheFuture(List<Card> reorderedCards) {
+    deck.reorderTopCards(reorderedCards);
   }
 }
