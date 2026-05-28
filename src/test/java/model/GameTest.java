@@ -1039,6 +1039,7 @@ public class GameTest {
 
     assertEquals(1, countCards(currentPlayer, CardType.SKIP));
     assertEquals(1, countCards(target, CardType.SKIP));
+  }
   
   @Test
   void attackMoreThanOneOtherPlayerAlive() {
