@@ -8,6 +8,9 @@ import java.util.Random;
 public class Game {
   private static final int MIN_PLAYERS = 3;
   private static final int MAX_PLAYERS = 5;
+  private static final int TWO_CAT_COMBO_SIZE = 2;
+  private static final int THREE_CAT_COMBO_SIZE = 3;
+  private static final int FIVE_CAT_COMBO_SIZE = 5;
   private static final int NUM_NEKO_CARDS = 3;
 
   private final int numberOfPlayers;
@@ -201,6 +204,20 @@ public class Game {
     return Collections.emptyList();
   }
 
+  public List<Card> playCard(List<Card> cards, Player target, CardType named) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isValidCatCombo(cards)) {
+      throw new IllegalArgumentException("invalid cat combo");
+    }
+    playCatCards(cards, target, named);
+    return Collections.emptyList();
+  }
+
   private boolean isPlayableCard(Card card) {
     return card != null &&
             card.getType() != CardType.EXPLODING_KITTEN &&
@@ -255,12 +272,20 @@ public class Game {
     return deck.getDiscard();
   }
 
+  public Card takeFromDiscard(CardType type) {
+    return deck.takeFromDiscard(type);
+  }
+
   public void addToDrawPile(Card card, int position) {
     deck.addToDrawPile(card, position);
   }
 
   public Card drawFromDeck() {
     return deck.drawCard();
+  }
+
+  public void addToDiscard(Card card) {
+    deck.discardCard(card);
   }
 
   public boolean isGameLaunched() {
@@ -310,6 +335,103 @@ public class Game {
     return deck.peekTopCards();
   }
 
+  public boolean isCatCard(CardType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("invalid card");
+    }
+    return type == CardType.TACOCAT
+            || type == CardType.HAIRY_POTATO_CAT
+            || type == CardType.RAINBOW_RALPHING_CAT
+            || type == CardType.BEARD_CAT
+            || type == CardType.CATTERMELON
+            || type == CardType.FERAL_CAT;
+  }
+
+  public boolean isValidCatCombo(List<Card> cards) {
+    if (cards == null || cards.isEmpty()) {
+      throw new IllegalArgumentException("cards cannot be null or empty");
+    }
+
+    for (Card c : cards) {
+      if (!isCatCard(c.getType())) {
+        return false;
+      }
+    }
+
+    int size = cards.size();
+
+    if (size == TWO_CAT_COMBO_SIZE) {
+      CardType a = cards.get(0).getType();
+      CardType b = cards.get(1).getType();
+      boolean aFeral = a == CardType.FERAL_CAT;
+      boolean bFeral = b == CardType.FERAL_CAT;
+      if (aFeral || bFeral) {
+        return true;
+      }
+      return a == b;
+    } 
+    else if (size == THREE_CAT_COMBO_SIZE) {
+      long ferals = cards.stream()
+              .filter(c -> c.getType() == CardType.FERAL_CAT).count();
+      if (ferals == THREE_CAT_COMBO_SIZE) {
+        return true;
+      }
+      List<CardType> realCats = new ArrayList<>();
+      for (Card c : cards) {
+        if (c.getType() != CardType.FERAL_CAT) {
+          realCats.add(c.getType());
+        }
+      }
+      CardType first = realCats.get(0);
+      for (CardType t : realCats) {
+        if (t != first) {
+          return false;
+        }
+      }
+      return true;
+    } 
+    else if (size == FIVE_CAT_COMBO_SIZE) {
+      long distinctTypes = cards.stream()
+              .map(Card::getType)
+              .distinct()
+              .count();
+      return distinctTypes == FIVE_CAT_COMBO_SIZE;
+    }
+    return false;
+  }
+
+  public Card playTwoMatchingCats(List<Card> cards, Player target) {
+    if (target == null || !target.isAlive()) {
+      throw new IllegalArgumentException("target cannot be null or dead");
+    }
+
+    Player currentPlayer = getCurrentPlayer();
+    if (target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (!isValidCatCombo(cards) || cards.size() != TWO_CAT_COMBO_SIZE) {
+      throw new IllegalArgumentException("invalid two-cat combo");
+    }
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+    
+    List<Card> targetHand = target.getHand();
+    int index = random.nextInt(targetHand.size());
+    Card stolenCard = targetHand.get(index);
+    target.removeCard(stolenCard);
+    currentPlayer.addCard(stolenCard);
+    return stolenCard;
+  }
+
   public void playNeko(List<Card> cards) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
@@ -336,12 +458,53 @@ public class Game {
       currentPlayer.removeCard(c);
       deck.discardCard(c);
     }
+    
     for (Player p : players) {
       if (p != currentPlayer) {
         p.die();
       }
     }
     gameOver = true;
+  }
+
+  public boolean playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
+    if (target == null || !target.isAlive()) {
+      throw new IllegalArgumentException("target cannot be null or dead");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    if (target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+
+    if (wantedCard == null || wantedCard == CardType.EXPLODING_KITTEN) {
+      throw new IllegalArgumentException("invalid wanted card type");
+    }
+
+    if (!isValidCatCombo(cards) || cards.size() != THREE_CAT_COMBO_SIZE) {
+      throw new IllegalArgumentException("invalid three-cat combo");
+    }
+
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+
+    Card namedCard = new Card(wantedCard);
+    List<Card> targetHand = target.getHand();
+    // current player gets nothing if target doesn't have the card they ask for
+    if (!targetHand.contains(namedCard)) {
+      return false;
+    }
+    target.removeCard(namedCard);
+    currentPlayer.addCard(namedCard);
+    return true;
   }
   
   public void playFavor(Player target, Card given) {
@@ -362,9 +525,59 @@ public class Game {
     target.removeCard(given);
     currentPlayer.addCard(given);
   }
+
+  public Card playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
+    if (cards == null) {
+      throw new IllegalArgumentException("cards cannot be null");
+    }
+
+    if (wantedCard == null || wantedCard == CardType.EXPLODING_KITTEN) {
+      throw new IllegalArgumentException("invalid wanted card type");
+    }
+
+    if (!isValidCatCombo(cards) || cards.size() != FIVE_CAT_COMBO_SIZE) {
+      throw new IllegalArgumentException("invalid five-cat combo");
+    }
+
+    Player currentPlayer = getCurrentPlayer();
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+    Card receivedCard = takeFromDiscard(wantedCard); // throws if not found
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+    currentPlayer.addCard(receivedCard);
+    return receivedCard;
+  }
+
+  public void playCatCards(List<Card> cards, Player target, CardType named) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isValidCatCombo(cards)) {
+      throw new IllegalArgumentException("invalid cat combo");
+    }
+    int size = cards.size();
+    if (size == TWO_CAT_COMBO_SIZE) {
+      playTwoMatchingCats(cards, target);
+    } else if (size == THREE_CAT_COMBO_SIZE) {
+      playThreeMatchingCats(cards, target, named);
+    } else {
+      playFiveDifferentCats(cards, named);
+    }
+  }
   
   public void playAttack() {
     moveToNextPlayer();
     getCurrentPlayer().addTurn();
   }
 }
+

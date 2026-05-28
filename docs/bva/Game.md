@@ -204,6 +204,7 @@
   - **State of the system**: Game is over
   - **Expected output**: Throws `IllegalStateException`
 
+
 ### Method under test: `checkWinner()`
 - **TC48: More than one player alive** ( :white_check_mark: )
   - **State of the system**: 2 or more players are alive
@@ -275,6 +276,308 @@
 - **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+### Method under test: `isCatCard()`
+- **TC#52: type is null** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is null 
+  - **Expected output**: IllegalArgumentException, "invalid card"
+
+- **TC#53: type is TACOCAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is TACOCAT
+  - **Expected output**: true 
+  
+- **TC#54: type is RAINBOW_RALPHING_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is RAINBOW_RALPHING_CAT
+  - **Expected output**: true
+
+- **TC#55: type is BEARD_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is BEARD_CAT
+  - **Expected output**: true
+
+- **TC#56: type is CATTERMELON** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is CATTERMELON
+  - **Expected output**: true
+
+- **TC#57: type is FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is FERAL_CAT
+  - **Expected output**: true
+
+- **TC#58: type is a non-cat playable card (ATTACK)** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is ATTACK
+  - **Expected output**: false
+
+- **TC#59: type is EXPLODING_KITTEN** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is EXPLODING_KITTEN
+  - **Expected output**: false
+
+- **TC#60: type is DEFUSE** ( :white_check_mark: )
+  - **State of the system**: Game is running, card type is DEFUSE
+  - **Expected output**: false
+
+### Method under test: `isValidCatCombo()`
+- **TC#61: list is null** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards list is null
+  - **Expected output**: IllegalArgumentException
+
+- **TC#62: list is empty (size 0)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards list is empty
+  - **Expected output**: IllegalArgumentException
+
+- **TC#63: list has 1 card (below minimum valid size)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT]
+  - **Expected output**: false
+
+- **TC#64: list has 2 cards — both same real cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT]
+  - **Expected output**: true
+
+- **TC#65: list has 2 cards — two different real cats** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, BEARD_CAT]
+  - **Expected output**: false
+
+- **TC#66: list has 2 cards — one FERAL_CAT + one real cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [FERAL_CAT, TACOCAT]
+  - **Expected output**: true
+
+- **TC#67: list has 2 cards — both FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [FERAL_CAT, FERAL_CAT]
+  - **Expected output**: true
+
+- **TC#68: list has 2 cards — one cat, one non-cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, ATTACK]
+  - **Expected output**: false
+
+- **TC#69: list has 3 cards — all same real cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, TACOCAT]
+  - **Expected output**: true
+
+- **TC#70: list has 3 cards — 2 matching + 1 FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, FERAL_CAT]
+  - **Expected output**: true
+
+- **TC#71: list has 3 cards — 1 real cat + 2 FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, FERAL_CAT, FERAL_CAT]
+  - **Expected output**: true
+
+- **TC#72: list has 3 cards — all FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [FERAL_CAT, FERAL_CAT, FERAL_CAT]
+  - **Expected output**: true
+
+- **TC#73: list has 3 cards — 3 different real cats** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, BEARD_CAT, CATTERMELON]
+  - **Expected output**: false
+
+- **TC#74: list has 3 cards — 2 different real cats + 1 FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, BEARD_CAT, FERAL_CAT]
+  - **Expected output**: false
+
+- **TC#75: list has 3 cards — includes a non-cat card** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, ATTACK]
+  - **Expected output**: false
+
+- **TC#76: list has 4 cards (gap between valid sizes)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT]
+  - **Expected output**: false
+
+- **TC#77: list has 5 cards — all 5 distinct real cat types** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON]
+  - **Expected output**: true
+
+- **TC#78: list has 5 cards — 4 distinct real cats + 1 FERAL_CAT** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, FERAL_CAT]
+  - **Expected output**: true
+
+- **TC#79: list has 5 cards — duplicate real cat type present** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON]
+  - **Expected output**: false
+
+- **TC#80: list has 5 cards — 2 FERAL_CAT (duplicate feral)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, FERAL_CAT, FERAL_CAT]
+  - **Expected output**: false
+
+- **TC#81: list has 5 cards — includes a non-cat card** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, ATTACK]
+  - **Expected output**: false
+
+- **TC#82: list has 6 cards (above maximum valid size)** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT, TACOCAT, TACOCAT]
+  - **Expected output**: false
+
+### Method under test: `playTwoMatchingCats()`
+- **TC#83: target is null** ( :white_check_mark: )
+  - **State of the system**: `current player has 2 matching cats, target is null
+  - **Expected output**: Throws `IllegalArgumentException`, "target cannot be null or dead"
+
+- **TC#84: target is dead** ( :white_check_mark: )
+  - **State of the system**: current player has 2 matching cats, target player is not alive
+  - **Expected output**: Throws `IllegalArgumentException`, "target cannot be null or dead"
+
+- **TC#85: target is current player** ( :white_check_mark: )
+  - **State of the system**: current player has 2 matching cats, target == currentPlayer
+  - **Expected output**: Throws `IllegalArgumentException`, "cannot target yourself"
+
+- **TC#86: combo is invalid because cats do not match** ( :white_check_mark: )
+  - **State of the system**: cards = [TACOCAT, BEARD_CAT], target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid two-cat combo"
+
+- **TC#87: combo is invalid because size is 3 instead of 2** ( :white_check_mark: )
+  - **State of the system**: cards = [TACOCAT, TACOCAT, TACOCAT], target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid two-cat combo"
+
+- **TC#88: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: current player's hand does not contain the passed cards, target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#89: current player has only 1 of the 2 required cards** ( :white_check_mark: )
+  - **State of the system**: current player has 1 TACOCAT in hand, cards = [TACOCAT, TACOCAT], target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#90: target has exactly 1 card in hand** ( :white_check_mark: )
+  - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP]
+  - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, SKIP transferred to current player, target hand is empty, returns SKIP
+
+- **TC#91: target has exactly 2 cards in hand** ( :white_check_mark: )
+  - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP, ATTACK]
+  - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, exactly 1 target card transferred to current player, target hand has 1 card remaining, returns stolen card
+
+- **TC#92: target has many cards in hand** ( :white_check_mark: )
+  - **State of the system**: current player has valid 2-card combo in hand, target hand has 5 cards
+  - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, exactly 1 target card transferred to current player, target hand size goes from 5 to 4, returns stolen card
+
+### Method under test: `playThreeMatchingCats()`
+- **TC#94: target is null** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo, named card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "target cannot be null or dead"
+
+- **TC#95: target is dead** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo, target player is not alive, named card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "target cannot be null or dead"
+
+- **TC#96: target is current player** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo, target == currentPlayer, named card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "cannot target yourself"
+
+- **TC#97: named is null** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo, target is valid, named card = null
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid wanted card type"
+
+- **TC#98: named is EXPLODING_KITTEN** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo, target is valid, named card = EXPLODING_KITTEN
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid wanted card type"
+
+- **TC#99: combo is invalid because cats do not match** ( :white_check_mark: )
+  - **State of the system**: cards = [TACOCAT, BEARD_CAT, CATTERMELON], target is valid, named card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid three-cat combo"
+
+- **TC#100: combo is invalid because size is 2 instead of 3** ( :white_check_mark: )
+  - **State of the system**: cards = [TACOCAT, TACOCAT], target is valid, named = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid three-cat combo"
+
+- **TC#101: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: combo cards are not held by current player, target is valid, named card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "card not in hand"
+
+- **TC#102: target has 0 copies of named card** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo in hand, target has no FAVOR, named card = FAVOR
+  - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, no card transferred, returns false
+
+- **TC#103: target has exactly 1 copy of named card** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo in hand, target hand = [FAVOR], named card = FAVOR
+  - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, FAVOR transferred to current player, target hand is empty, returns true
+
+- **TC#104: target has exactly 2 copies of named card** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo in hand, target hand = [FAVOR, FAVOR], named card = FAVOR
+  - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, exactly 1 FAVOR transferred, target still has 1 FAVOR, returns true
+
+- **TC#105: target has named card plus other cards** ( :white_check_mark: )
+  - **State of the system**: current player has valid 3-cat combo in hand, target hand = [FAVOR, ATTACK, SKIP], named card = FAVOR
+  - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, FAVOR transferred, target hand = [ATTACK, SKIP], returns true
+
+### Method under test: `playFiveDifferentCats()`
+- **TC#107: cards is null** ( :white_check_mark: )
+  - **State of the system**: cards = null, wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "cards cannot be null"
+
+- **TC#108: wanted_card is null** ( :white_check_mark: )
+  - **State of the system**: Current player has valid 5-card combo, wanted_card = null
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid wanted card type"
+
+- **TC#109: wanted_card is EXPLODING_KITTEN** ( :white_check_mark: )
+  - **State of the system**: Current player has valid 5-card combo, wanted_card = EXPLODING_KITTEN
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid wanted card type"
+
+- **TC#110: combo is invalid because duplicate cat type is present** ( :white_check_mark: )
+  - **State of the system**: Cards = [TACOCAT, TACOCAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid five-cat combo"
+
+- **TC#111: combo is invalid because size is 3 instead of 5** ( :white_check_mark: )
+  - **State of the system**: Cards = [TACOCAT, TACOCAT, TACOCAT], wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid five-cat combo"
+
+- **TC#112: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: Valid 5-card combo shape, but current player does not hold those cards
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#113: discard pile is empty** ( :white_check_mark: )
+  - **State of the system**: Valid combo in hand, discard pile is empty, wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "wanted card not in discard pile"
+
+- **TC#114: discard has 1 card that does not match wanted_card** ( :white_check_mark: )
+  - **State of the system**: Discard has [ATTACK], wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "wanted card not in discard pile"
+
+- **TC#115: discard has 1 card that matches wanted_card** ( :white_check_mark: )
+  - **State of the system**: Discard has [FAVOR], wanted_card = FAVOR
+  - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred to current player, returns FAVOR
+
+- **TC#116: discard has 2 copies of wanted_card** ( :white_check_mark: )
+  - **State of the system**: Discard has [FAVOR, FAVOR], wanted_card = FAVOR
+  - **Expected output**: Five cats removed from hand and discarded, exactly 1 FAVOR transferred, discard still has 1 FAVOR remaining, returns FAVOR
+
+- **TC#117: discard has wanted_card among other cards** ( :white_check_mark: )
+  - **State of the system**: Discard has [ATTACK, FAVOR, SKIP], wanted_card = FAVOR
+  - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
+
+### Method under test: `playCatCards()`
+- **TC#118: game has not been launched** ( :white_check_mark: )
+  - **State of the system**: gameLaunched = false, cards = [TACOCAT, TACOCAT], target = player2, named = null
+  - **Expected output**: Throws `IllegalStateException`, "game has not started"
+
+- **TC#119: game is over** ( :white_check_mark: )
+  - **State of the system**: gameOver = true, cards = [TACOCAT, TACOCAT], target = player2, named = null
+  - **Expected output**: Throws `IllegalStateException`, "game is over"
+
+- **TC#120: cards is null** ( :white_check_mark: )
+  - **State of the system**: Game running, cards = null, target = player2, named = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "cards cannot be null or empty"
+
+- **TC#121: combo is invalid — size 1** ( :white_check_mark: )
+  - **State of the system**: Game running, cards = [TACOCAT], target = player2, named = null
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid cat combo"
+
+- **TC#122: combo is invalid — size 4** ( :white_check_mark: )
+  - **State of the system**: Game running, cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT], target = player2, named = null
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid cat combo"
+
+- **TC#123: valid 2-cat combo, target has 1 card — routes to playTwoMatchingCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, TACOCAT], target has [SKIP]
+  - **Expected output**: Two `TACOCAT`s added to discard, `SKIP` transferred to current player, target hand empty
+
+- **TC#124: valid 3-cat combo, target has named card — routes to playThreeMatchingCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, TACOCAT, TACOCAT], target has `FAVOR`, named = `FAVOR`
+  - **Expected output**: Three `TACOCAT`s added to discard, `FAVOR` transferred to current player
+
+- **TC#125: valid 3-cat combo, target lacks named card — routes to playThreeMatchingCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, TACOCAT, TACOCAT], target has no `FAVOR`, named = `FAVOR`
+  - **Expected output**: Three `TACOCAT`s added to discard, nothing transferred
+
+- **TC#126: valid 5-cat combo, named card in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has `FAVOR`, named = `FAVOR`
+  - **Expected output**: Five cats added to discard, `FAVOR` transferred to current player
+
+- **TC#127: valid 5-cat combo, named card not in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
+  - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has no `FAVOR`, named = `FAVOR`
+  - **Expected output**: Throws `IllegalArgumentException`, "card type not in discard pile"
 
 ### Method under test: `playNeko()`
 - **TC#: cards is null** ( :white_check_mark: )

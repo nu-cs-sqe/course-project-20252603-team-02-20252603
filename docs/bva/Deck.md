@@ -74,3 +74,32 @@
 - **TC18: Peek from an empty draw pile** ( :white_check_mark: )
   - **State of the system**: Draw pile has 0 cards
   - **Expected output**: Throws `IllegalStateException`
+
+### Method under test: `takeFromDiscard()`
+- **TC#19: type is null** (:white_check_mark:)
+  - **state of the system**: Game running, discard has cards 
+  - **Expected output**: throw IllegalArgumentException, "invalid card type"
+
+- **TC#20: discard pile is empty** (:white_check_mark:)
+  - **state of the system**: Game running, discard pile has 0 cards, wanted card type = FAVOR
+  - **Expected output**: throw IllegalStateException, "discard pile is empty"
+
+- **TC#21: discard has 1 card, type does not match** (:white_check_mark:)
+  - **state of the system**: Discard = [ATTACK], type = FAVOR
+  - **Expected output**: throw IllegalArgumentException, "card type not in discard pile"
+
+- **TC#22: discard has 1 card, type matches** (:white_check_mark:)
+  - **state of the system**: Discard = [FAVOR], type = FAVOR
+  - **Expected output**: returns the FAVOR card, discard is now empty
+
+- **TC#23: discard has 2 cards, only the last matches** (:white_check_mark:)
+  - **state of the system**: Discard = [ATTACK, FAVOR], type = FAVOR
+  - **Expected output**: returns the FAVOR card, discard = [ATTACK]
+
+- **TC#24: discard has 2 matching cards (takes only the first)** (:white_check_mark:)
+  - **state of the system**: Discard = [FAVOR, FAVOR], type = FAVOR
+  - **Expected output**: returns one FAVOR, discard = [FAVOR]
+
+- **TC#25: discard has many cards, none match** (:white_check_mark:)
+  - **state of the system**: Discard = [ATTACK, SKIP, NOPE], type = FAVOR
+  - **Expected output**: throw IllegalArgumentException, "card type not in discard pile"
