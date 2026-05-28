@@ -130,7 +130,6 @@ public class Game {
 
     if (card.getType() == CardType.SUPER_SKIP) {
       playSuperSkip();
-      return Collections.emptyList();
     }
     return Collections.emptyList();
 
