@@ -121,7 +121,7 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
-
+    
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
@@ -131,6 +131,28 @@ public class Game {
       return Collections.emptyList();
     }
     
+
+    return Collections.emptyList();
+  }
+
+  public List<Card> playCard(Card card, Player target) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+
+    if (card.getType() == CardType.TARGETED_ATTACK) {
+      playTargetedAttack(target);
+      return Collections.emptyList();
+    }
     return Collections.emptyList();
   }
 
@@ -222,6 +244,20 @@ public class Game {
       deck.addToDrawPile(randomCard, random.nextInt(deck.getDeck().size() + 1));
     }
     deck.shuffle();
+  }
+  public void playTargetedAttack(Player target) {
+    if (target == null) {
+      throw new IllegalArgumentException("target cannot be null");
+    }
+    if (target == getCurrentPlayer()) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (!target.isAlive()) {
+      throw new IllegalArgumentException("target is not alive");
+    }
+
+    currentPlayerIndex = players.indexOf(target);
+    getCurrentPlayer().addTurn();
   }
   
   public List<Card> playSeeTheFuture(){
