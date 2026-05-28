@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ public class GameTest {
   private static final int SECOND_PLAYER_INDEX = 1;
   private static final int THIRD_PLAYER_INDEX = 2;
   private static final int FOURTH_PLAYER_INDEX = 3;
+  private static final int TURNS_OWED = 2;
   private static final int NUM_CARDS_PEEKED = 3;
 
   @Test
@@ -598,6 +600,87 @@ public class GameTest {
   }
 
   @Test
+  void targetedAttackTargetIsNextPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player target = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void targetedAttackTargetIsNotNextPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    // target player 2 spots ahead
+    int targetIndex = (game.getCurrentPlayerIndex() + 2) % game.getPlayers().size();
+    Player target = game.getPlayers().get(targetIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(targetIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void targetedAttackOnlyOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    List<Player> players = game.getPlayers();
+    players.get(THIRD_PLAYER_INDEX).die();
+
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player target = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void targetedAttackTargetIsDeadPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    Player deadPlayer = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    deadPlayer.die();
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(new Card(CardType.TARGETED_ATTACK), deadPlayer));
+  }
+
+  @Test
+  void targetedAttackTargetIsCurrentPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(new Card(CardType.TARGETED_ATTACK), currentPlayer));
+  }
+  
+  @Test  
   void seeTheFutureEmptyDeck() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();

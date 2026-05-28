@@ -217,6 +217,27 @@
   - **State of the system**: 0 players are alive
   - **Expected output**: Throws `IllegalStateException`
 
+### Method under test: `playTargetedAttack()`
+- **TC#: Targeted Attack, target is the next player in order** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is the next player in turn order, target is alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is not the next player in order** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is a player further ahead in turn order, target is alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player skipping players in between, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is the only other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, exactly 1 other player alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is a dead player** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target player is not alive
+  - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC#: Targeted Attack, target is the current player** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is themselves
+  - **Expected output**: Throws `IllegalArgumentException`
+
 ### Method under test: `playSeeTheFuture()`
 - **TC#51: Deck has 0 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck is empty
