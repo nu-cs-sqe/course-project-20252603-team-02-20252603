@@ -1814,23 +1814,30 @@ public class GameTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
     Card cat3 = new Card(CardType.TACOCAT);
+    Card favor = new Card(CardType.FAVOR);
     currentPlayer.addCard(cat1);
     currentPlayer.addCard(cat2);
     currentPlayer.addCard(cat3);
-    target.addCard(new Card(CardType.ATTACK));
+    target.addCard(favor);
     int discardSizeBefore = game.getDiscardPile().size();
 
     boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
 
-    assertFalse(result);
+    assertTrue(result);
+    assertTrue(currentPlayer.getHand().contains(favor));
     assertFalse(currentPlayer.getHand().contains(cat1));
     assertFalse(currentPlayer.getHand().contains(cat2));
     assertFalse(currentPlayer.getHand().contains(cat3));
-    assertEquals(1, target.getHand().size());
-    assertEquals(CardType.ATTACK, target.getHand().get(0).getType());
+    assertEquals(0, target.getHand().size());
     assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
@@ -1920,7 +1927,7 @@ public class GameTest {
     assertEquals(2, target.getHand().size());
     assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
-
+  
   @Test
   public void playFavorTargetHasOneMatchingCardTransfersCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
