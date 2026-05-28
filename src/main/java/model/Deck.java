@@ -92,6 +92,14 @@ public class Deck {
     return deck.remove(0);
   }
 
+  /* Draw from bottom of draw pile */
+  public Card drawFromBottom() {
+    if (deck.isEmpty()) {
+      throw new IllegalStateException("Draw pile is empty");
+    }
+    return deck.remove(deck.size() - 1);
+  }
+
   /* Add card to discard pile */
   public void discardCard(Card card) {
     discard.add(card);

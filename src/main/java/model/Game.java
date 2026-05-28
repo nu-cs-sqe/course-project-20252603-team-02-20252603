@@ -139,6 +139,11 @@ public class Game {
       playBubonicPlague();
       return Collections.emptyList();
     }
+
+    else if (card.getType() == CardType.DRAW_FROM_BOTTOM) {
+      playDrawFromBottom();
+      return Collections.emptyList();
+    }
     
 
     return Collections.emptyList();
@@ -227,6 +232,10 @@ public class Game {
     return deck.drawCard();
   }
 
+  public Card drawFromBottomOfDeck() {
+    return deck.drawFromBottom();
+  }
+
   public boolean isGameLaunched() {
     return gameLaunched;
   }
@@ -277,5 +286,15 @@ public class Game {
   public void playAttack() {
     moveToNextPlayer();
     getCurrentPlayer().addTurn();
+  }
+
+  public void playDrawFromBottom() {
+    Card card = deck.drawFromBottom();
+    if (card.getType() == CardType.EXPLODING_KITTEN) {
+      handleExplodingKitten(card, getCurrentPlayer());
+      return;
+    }
+    getCurrentPlayer().addCard(card);
+    completeOneTurn();
   }
 }

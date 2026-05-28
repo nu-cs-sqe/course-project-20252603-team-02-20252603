@@ -187,6 +187,19 @@
   - **State of the system**: Current player draws `EXPLODING_KITTEN`, has no `DEFUSE`, and only one other player is alive
   - **Expected output**: Current player dies and game is over
 
+### Method under test: `playDrawFromBottom()`
+- **TC#: Draw from bottom with many cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has more than 1 card
+  - **Expected output**: Bottom card is added to current player's hand, played card is discarded, draw pile size decreases by 1, and one turn is completed
+
+- **TC#: Draw from bottom with exactly 1 card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has exactly 1 card
+  - **Expected output**: Bottom card is added to current player's hand and draw pile becomes empty
+
+- **TC#: Draw from bottom with empty draw pile** ( :white_check_mark: )
+  - **State of the system**: Current player resolves `DRAW_FROM_BOTTOM` and draw pile has 0 cards
+  - **Expected output**: Throws `IllegalStateException`
+
 ### Method under test: `playCard()`
 - **TC43: Player plays a playable card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a playable card

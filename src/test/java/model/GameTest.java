@@ -524,6 +524,59 @@ public class GameTest {
   }
 
   @Test
+  public void playDrawFromBottomWithManyCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card drawFromBottom = new Card(CardType.DRAW_FROM_BOTTOM);
+    Card bottomCard = new Card(CardType.FAVOR);
+    currentPlayer.addCard(drawFromBottom);
+    game.addToDrawPile(bottomCard, game.getDrawPile().size());
+    int handSizeBefore = currentPlayer.getHand().size();
+    int drawPileSizeBefore = game.getDrawPile().size();
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    game.playCard(drawFromBottom);
+
+    assertEquals(handSizeBefore, currentPlayer.getHand().size());
+    assertTrue(currentPlayer.getHand().contains(bottomCard));
+    assertFalse(currentPlayer.getHand().contains(drawFromBottom));
+    assertEquals(drawPileSizeBefore - 1, game.getDrawPile().size());
+    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void playDrawFromBottomWithOneCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card drawFromBottom = new Card(CardType.DRAW_FROM_BOTTOM);
+    Card onlyCard = new Card(CardType.FAVOR);
+    currentPlayer.addCard(drawFromBottom);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+    game.addToDrawPile(onlyCard, 0);
+
+    game.playCard(drawFromBottom);
+
+    assertTrue(currentPlayer.getHand().contains(onlyCard));
+    assertEquals(EMPTY_HAND_SIZE, game.getDrawPile().size());
+  }
+
+  @Test
+  public void playDrawFromBottomWithEmptyDeckThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+
+    assertThrows(IllegalStateException.class, () -> game.playDrawFromBottom());
+  }
+
+  @Test
   public void playCardPlayableCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
