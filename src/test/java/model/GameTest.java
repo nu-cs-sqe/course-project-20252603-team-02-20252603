@@ -899,7 +899,6 @@ public class GameTest {
 
     assertEquals("cards cannot be null", e.getMessage());
   }
-  
 
   @Test
   public void playNekoCardsIsEmptyThrowsIllegalArgumentException() {
