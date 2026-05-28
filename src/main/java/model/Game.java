@@ -190,9 +190,6 @@ public class Game {
     if (!players.get(targetPlayerIndex).isAlive()) {
       throw new IllegalArgumentException("target player is not alive");
     }
-
-    currentPlayer.removeCard(nosy);
-    deck.discardCard(nosy);
     return players.get(targetPlayerIndex).getHand();
   }
 

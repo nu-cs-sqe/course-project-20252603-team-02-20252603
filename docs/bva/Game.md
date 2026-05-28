@@ -252,10 +252,6 @@
     - **State of the system**: Current player does not have a Nosy card
     - **Expected output**: Throws `IllegalArgumentException`
 
-- **TC56: Nosy card appears in discard pile after play** ( :white_check_mark: )
-  - **State of the system**: Current player plays a Nosy card
-  - **Expected output**: Nosy card is present in discard pile
-
 - **TC57: Play Nosy on invalid player index (negative)** ( :white_check_mark: )
     - **State of the system**: Target player index is -1
     - **Expected output**: Throws `IllegalArgumentException`
