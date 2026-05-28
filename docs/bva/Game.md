@@ -2,15 +2,15 @@
 
 
 ### Method under test: `startGame()`
-- **TC1: Start game with valid player count** (:white_check_mark:)
+- **TC1: Start game with valid player count** ( :white_check_mark: )
   - **State of the system**: Game has 4 players and has not launched yet
   - **Expected output**: Game is launched, players are created, deck is created, turn order is initialized
 
-- **TC2: Start game with lower boundary player count** (:white_check_mark:)
+- **TC2: Start game with lower boundary player count** ( :white_check_mark: )
   - **State of the system**: Game has 3 players
   - **Expected output**: Game starts successfully
 
-- **TC3: Start game with upper boundary player count** (:white_check_mark:)
+- **TC3: Start game with upper boundary player count** ( :white_check_mark: )
   - **State of the system**: Game has 5 players
   - **Expected output**: Game starts successfully
 
@@ -216,7 +216,49 @@
 
 - **TC50: No players alive** ( :white_check_mark: )
   - **State of the system**: 0 players are alive
-  - **Expected output**: Throws `IllegalStateException`
+  - **Expected output**: Throws `IllegalStateException`  
+
+### Method under test: `playBubonicPlague()`
+- **TC#: All other players have cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have at least 1 card in hand
+  - **Expected output**: Card removed from hand, discarded, one random card removed from each other player's hand and added to draw pile, draw pile shuffled, empty list returned
+
+- **TC#: One other player has no cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, one other player has no cards in hand
+  - **Expected output**: Card removed from hand, discarded, player with no cards is skipped, one random card removed from each other player with cards, draw pile shuffled, empty list returned
+
+- **TC#: All other players have no cards** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have empty hands
+  - **Expected output**: Card removed from hand, discarded, no cards moved to draw pile, draw pile shuffled, empty list returned
+
+- **TC#: Exactly one other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, exactly 1 other player alive with cards
+  - **Expected output**: Card removed from hand, discarded, one random card removed from that player's hand and added to draw pile, draw pile shuffled, empty list returned
+
+- **TC#: Current player is not affected** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Bubonic Plague card, all other players have cards
+  - **Expected output**: Current player's hand size unchanged, other players each lose one card
+
+### Method under test: `playTargetedAttack()`
+- **TC#: Targeted Attack, target is the next player in order** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is the next player in turn order, target is alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is not the next player in order** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is a player further ahead in turn order, target is alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player skipping players in between, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is the only other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, exactly 1 other player alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to target player, target player owes 2 turns, empty list returned
+
+- **TC#: Targeted Attack, target is a dead player** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target player is not alive
+  - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC#: Targeted Attack, target is the current player** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Targeted Attack card, target is themselves
+  - **Expected output**: Throws `IllegalArgumentException`
 
 ### Method under test: `playSeeTheFuture()`
 - **TC#51: Deck has 0 cards** ( :white_check_mark: )
@@ -403,7 +445,6 @@
   - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, exactly 1 target card transferred to current player, target hand size goes from 5 to 4, returns stolen card
 
 ### Method under test: `playThreeMatchingCats()`
-
 - **TC#94: target is null** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo, named card = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "target cannot be null or dead"
@@ -498,7 +539,6 @@
   - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
 
 ### Method under test: `playCatCards()`
-
 - **TC#118: game has not been launched** ( :white_check_mark: )
   - **State of the system**: gameLaunched = false, cards = [TACOCAT, TACOCAT], target = player2, named = null
   - **Expected output**: Throws `IllegalStateException`, "game has not started"
@@ -539,3 +579,101 @@
   - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has no `FAVOR`, named = `FAVOR`
   - **Expected output**: Throws `IllegalArgumentException`, "card type not in discard pile"
 
+### Method under test: `playNeko()`
+- **TC#: cards is null** ( :white_check_mark: )
+  - **State of the system**: cards = null
+  - **Expected output**: Throws `IllegalArgumentException`, "cards cannot be null"
+
+- **TC#: cards has 0 cards** ( :white_check_mark: )
+  - **State of the system**: cards = []
+  - **Expected output**: Throws `IllegalArgumentException`, "must play exactly 3 neko cards"
+
+- **TC#: cards has 1 NEKO** ( :white_check_mark: )
+  - **State of the system**: current player has 1 NEKO, cards = [NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "must play exactly 3 neko cards"
+
+- **TC#: cards has 2 NEKOs** ( :white_check_mark: )
+  - **State of the system**: current player has 2 NEKOs, cards = [NEKO, NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "must play exactly 3 neko cards"
+
+- **TC#: cards has exactly 3 NEKOs** ( :white_check_mark: )
+  - **State of the system**: current player has 3 NEKOs in hand
+  - **Expected output**: All 3 `NEKO`s discarded, all other players dead, `gameOver = true`
+
+- **TC#: cards has 4 NEKOs** ( :white_check_mark: )
+  - **State of the system**: current player has 4 NEKOs, cards = [NEKO, NEKO, NEKO, NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "must play exactly 3 neko cards"
+
+- **TC#: cards has 3 cards but one is null** ( :white_check_mark: )
+  - **State of the system**: cards = [NEKO, null, NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "all cards must be neko cards"
+
+- **TC#: cards has 3 cards but one is not NEKO** ( :white_check_mark: )
+  - **State of the system**: cards = [NEKO, NEKO, ATTACK]
+  - **Expected output**: Throws `IllegalArgumentException`, "all cards must be neko cards"
+
+- **TC#: cards has 3 NEKOs but current player only has 2 in hand** ( :white_check_mark: )
+  - **State of the system**: current player hand has only 2 NEKO cards, cards = [NEKO, NEKO, NEKO]
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#: cards has 3 NEKOs, current player has exactly 3 in hand, 2 other players alive** ( :white_check_mark: )
+  - **State of the system**: with 3 players, current player has 3 NEKOs
+  - **Expected output**: All 3 `NEKO`s discarded, both other players dead, `gameOver = true`, current player still alive
+
+- **TC#: cards has 3 NEKOs, current player has exactly 3 in hand, 4 other players alive** ( :white_check_mark: )
+  - **State of the system**: with 5 players, current player has 3 NEKOs
+  - **Expected output**: All 3 `NEKO`s discarded, all 4 other players dead, `gameOver = true`, current player still alive
+
+- **TC#: cards has 3 NEKOs, one other player is already dead** ( :white_check_mark: )
+  - **State of the system**: with 3 players, one opponent already dead, current player has 3 NEKOs
+  - **Expected output**: All 3 `NEKO`s discarded, remaining alive opponent now dead, `gameOver = true`, current player still alive
+
+### Method under test: `playFavor()`
+- **TC#: target is null** ( :white_check_mark: )
+  - **State of the system**: target = null, given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid target"
+
+- **TC#: target is dead** ( :white_check_mark: )
+  - **State of the system**: target.alive = false, given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid target"
+
+- **TC#: target is current player** ( :white_check_mark: )
+  - **State of the system**: target == currentPlayer, given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "cannot target yourself"
+
+- **TC#: given is null** ( :white_check_mark: )
+  - **State of the system**: valid target, given = null
+  - **Expected output**: Throws `IllegalArgumentException`, "given card cannot be null"
+
+- **TC#: target has empty hand** ( :white_check_mark: )
+  - **State of the system**: valid target with 0 cards, given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "target does not have that card"
+
+- **TC#: target has 1 card, given does not match** ( :white_check_mark: )
+  - **State of the system**: target hand = [ATTACK], given = SKIP
+  - **Expected output**: Throws `IllegalArgumentException`, "target does not have that card"
+
+- **TC#: target has exactly 1 card, given matches** ( :white_check_mark: )
+  - **State of the system**: target hand = [SKIP], given = SKIP
+  - **Expected output**: `SKIP` transferred to current player, target hand is now empty
+
+- **TC#: target has 2 cards, given matches one of them** ( :white_check_mark: )
+  - **State of the system**: target hand = [SKIP, ATTACK], given = SKIP
+  - **Expected output**: `SKIP` transferred to current player, target hand = [ATTACK]
+
+- **TC#: target has 2 copies of the given card** ( :white_check_mark: )
+  - **State of the system**: target hand = [SKIP, SKIP], given = SKIP
+  - **Expected output**: Exactly 1 `SKIP` transferred to current player, target hand still has 1 `SKIP`
+
+### Method under test: `playAttack()`
+- **TC#55: Attack, more than one other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Attack card, 2+ other players alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to next player, next player owes 2 turns, empty list returned
+
+- **TC#56: Attack, exactly one other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Attack card, exactly 1 other player alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to that player, that player owes 2 turns, empty list returned
+
+- **TC#57: Attack, current player owes 1 turn** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Attack card, current player owes 1 turn
+  - **Expected output**: Turn moves to next player, next player owes 2 turns, empty list returned

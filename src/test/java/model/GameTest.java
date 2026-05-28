@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,9 @@ public class GameTest {
   private static final int SECOND_PLAYER_INDEX = 1;
   private static final int THIRD_PLAYER_INDEX = 2;
   private static final int FOURTH_PLAYER_INDEX = 3;
+  private static final int TURNS_OWED = 2;
+  private static final int EXISTING_TURNS = 1;
+  private static final int EMPTY_HAND_SIZE = 0;
   private static final int NUM_CARDS_PEEKED = 3;
   private static final int THREE_CARDS = 3;
   private static final int FOUR_CARDS = 4;
@@ -602,6 +606,214 @@ public class GameTest {
   }
 
   @Test
+  void bubonicPlagueAllOtherPlayersHaveCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    List<Player> players = game.getPlayers();
+    int currentIndex = game.getCurrentPlayerIndex();
+
+    List<Integer> otherHandSizesBefore = new ArrayList<>();
+    for (int i = 0; i < players.size(); i++) {
+      if (i != currentIndex) {
+        otherHandSizesBefore.add(players.get(i).getHand().size());
+      }
+    }
+    int currentHandSizeBefore = currentPlayer.getHand().size();
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    // current player hand unchanged (minus the played card)
+    assertEquals(currentHandSizeBefore - 1, game.getCurrentPlayer().getHand().size());
+
+    // each other player lost exactly one card
+    int otherIndex = 0;
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      if (i != currentIndex) {
+        assertEquals(otherHandSizesBefore.get(otherIndex) - 1,
+                game.getPlayers().get(i).getHand().size());
+        otherIndex++;
+      }
+    }
+  }
+
+  @Test
+  void bubonicPlagueOneOtherPlayerHasNoCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    int currentIndex = game.getCurrentPlayerIndex();
+    int emptyPlayerIndex = (currentIndex + 1) % game.getPlayers().size();
+    int otherPlayerIndex = (currentIndex + 2) % game.getPlayers().size();
+
+    Player emptyPlayer = game.getPlayers().get(emptyPlayerIndex);
+    Player otherPlayer = game.getPlayers().get(otherPlayerIndex);
+
+    // drain one player's hand
+    List<Card> hand = new ArrayList<>(emptyPlayer.getHand());
+    for (Card card : hand) {
+      emptyPlayer.removeCard(card);
+    }
+
+    int otherHandSizeBefore = otherPlayer.getHand().size();
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    // empty player still has no cards
+    assertEquals(EMPTY_HAND_SIZE, emptyPlayer.getHand().size());
+    // other player lost one card
+    assertEquals(otherHandSizeBefore - 1, otherPlayer.getHand().size());
+  }
+
+  @Test
+  void bubonicPlagueAllOtherPlayersHaveNoCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    int currentIndex = game.getCurrentPlayerIndex();
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    // drain all other players' hands
+    for (int i = 0; i < game.getPlayers().size(); i++) {
+      if (i != currentIndex) {
+        Player player = game.getPlayers().get(i);
+        List<Card> hand = new ArrayList<>(player.getHand());
+        for (Card card : hand) {
+          player.removeCard(card);
+        }
+      }
+    }
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    // draw pile size unchanged (no cards moved)
+    assertEquals(drawPileSizeBefore, game.getDrawPile().size());
+  }
+
+  @Test
+  void bubonicPlagueExactlyOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    int currentIndex = game.getCurrentPlayerIndex();
+    int alivePlayerIndex = (currentIndex + 1) % game.getPlayers().size();
+    int deadPlayerIndex = (currentIndex + 2) % game.getPlayers().size();
+
+    Player alivePlayer = game.getPlayers().get(alivePlayerIndex);
+    game.getPlayers().get(deadPlayerIndex).die();
+
+    int aliveHandSizeBefore = alivePlayer.getHand().size();
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    assertEquals(aliveHandSizeBefore - 1, alivePlayer.getHand().size());
+  }
+
+  @Test
+  void bubonicPlagueCurrentPlayerNotAffected() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    int currentHandSizeBefore = currentPlayer.getHand().size();
+
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+
+    // minus 1 for the played card itself, no additional cards removed
+    assertEquals(currentHandSizeBefore - 1, game.getCurrentPlayer().getHand().size());
+  }
+  
+  @Test
+  void targetedAttackTargetIsNextPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player target = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void targetedAttackTargetIsNotNextPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    // target player 2 spots ahead
+    int targetIndex = (game.getCurrentPlayerIndex() + 2) % game.getPlayers().size();
+    Player target = game.getPlayers().get(targetIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(targetIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void targetedAttackOnlyOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    List<Player> players = game.getPlayers();
+    players.get(THIRD_PLAYER_INDEX).die();
+
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player target = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, target.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void targetedAttackTargetIsDeadPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    Player deadPlayer = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    deadPlayer.die();
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(new Card(CardType.TARGETED_ATTACK), deadPlayer));
+  }
+
+  @Test
+  void targetedAttackTargetIsCurrentPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(new Card(CardType.TARGETED_ATTACK), currentPlayer));
+  }
+  
+  @Test  
   void seeTheFutureEmptyDeck() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -1337,12 +1549,244 @@ public class GameTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
+  public void playNekoCardsIsNullThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(null));
+
+    assertEquals("cards cannot be null", e.getMessage());
+  }
+
+  @Test
+  public void playNekoCardsIsEmptyThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of()));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoOneCardThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card neko = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoTwoCardsThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko1, neko2)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoThreeNekosGameOver() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    List<Player> players = game.getPlayers();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(neko3);
+
+    game.playNeko(List.of(neko1, neko2, neko3));
+
+    assertTrue(game.isGameOver());
+    assertTrue(currentPlayer.isAlive());
+    assertFalse(players.get(SECOND_PLAYER_INDEX).isAlive());
+    assertFalse(players.get(THIRD_PLAYER_INDEX).isAlive());
+    assertTrue(game.getDiscardPile().contains(neko1));
+    assertTrue(game.getDiscardPile().contains(neko2));
+    assertTrue(game.getDiscardPile().contains(neko3));
+  }
+
+  @Test
+  public void playNekoFourCardsThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    Card neko4 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(neko3);
+    currentPlayer.addCard(neko4);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko1, neko2, neko3, neko4)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoOneCardIsNullThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+
+    List<Card> cards = new java.util.ArrayList<>();
+    cards.add(neko1);
+    cards.add(null);
+    cards.add(neko2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(cards));
+
+    assertEquals("all cards must be neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoOneCardIsNotNekoThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card attack = new Card(CardType.ATTACK);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(attack);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko1, neko2, attack)));
+
+    assertEquals("all cards must be neko cards", e.getMessage());
+  }
+
+  @Test
+  public void playNekoThreeNekosOnlyTwoInHandThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playNeko(List.of(neko1, neko2, neko3)));
+
+    assertEquals("cards not in hand", e.getMessage());
+  }
+
+  @Test
+  public void playNekoOneOpponentAlreadyDeadRemainingOpponentDies() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    List<Player> players = game.getPlayers();
+
+    players.get(SECOND_PLAYER_INDEX).die();
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(neko3);
+
+    game.playNeko(List.of(neko1, neko2, neko3));
+
+    assertTrue(game.isGameOver());
+    assertTrue(currentPlayer.isAlive());
+    assertFalse(players.get(THIRD_PLAYER_INDEX).isAlive());
+  }
+
+  @Test
+  public void playFavorTargetIsDeadThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    target.die();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
+
+    assertEquals("invalid target", e.getMessage());
+  }
+
+  @Test
+  public void playFavorTargetIsCurrentPlayerThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(currentPlayer, new Card(CardType.SKIP)));
+
+    assertEquals("cannot target yourself", e.getMessage());
+  }
+
+  @Test
+  public void playFavorGivenIsNullThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, null));
+
+    assertEquals("given card cannot be null", e.getMessage());
+  }
+
+  @Test
+  public void playFavorTargetHasEmptyHandThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
 
     while (!target.getHand().isEmpty()) {
       target.removeCard(target.getHand().get(0));
     }
+    
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
 
+    assertEquals("target does not have that card", e.getMessage());
+  }
+
+  @Test
+  public void playThreeMatchingCatsTargetHasOneNamedCardReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
     Card cat3 = new Card(CardType.TACOCAT);
@@ -1364,35 +1808,20 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCatsTargetHasOneNamedCardReturnsTrue() {
+  public void playFavorTargetHasOneCardGivenDoesNotMatchThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
-    Player currentPlayer = game.getCurrentPlayer();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
 
     while (!target.getHand().isEmpty()) {
       target.removeCard(target.getHand().get(0));
     }
+    target.addCard(new Card(CardType.ATTACK));
 
-    Card cat1 = new Card(CardType.TACOCAT);
-    Card cat2 = new Card(CardType.TACOCAT);
-    Card cat3 = new Card(CardType.TACOCAT);
-    Card favor = new Card(CardType.FAVOR);
-    currentPlayer.addCard(cat1);
-    currentPlayer.addCard(cat2);
-    currentPlayer.addCard(cat3);
-    target.addCard(favor);
-    int discardSizeBefore = game.getDiscardPile().size();
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
 
-    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
-
-    assertTrue(result);
-    assertTrue(currentPlayer.getHand().contains(favor));
-    assertFalse(currentPlayer.getHand().contains(cat1));
-    assertFalse(currentPlayer.getHand().contains(cat2));
-    assertFalse(currentPlayer.getHand().contains(cat3));
-    assertEquals(0, target.getHand().size());
-    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
+    assertEquals("target does not have that card", e.getMessage());
   }
 
   @Test
@@ -1463,6 +1892,18 @@ public class GameTest {
     assertTrue(target.getHand().contains(skip));
     assertEquals(2, target.getHand().size());
     assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
+  }
+
+  @Test
+  public void playFavorTargetHasOneMatchingCardTransfersCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
   }
 
   @Test
@@ -1941,4 +2382,119 @@ public class GameTest {
     assertEquals("discard pile is empty", e.getMessage());
   }
 
+  @Test
+  public void playFavorTargetHasTwoCardsGivenMatchesOneTransfersCorrectCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card skip = new Card(CardType.SKIP);
+    Card attack = new Card(CardType.ATTACK);
+
+    target.addCard(skip);
+    target.addCard(attack);
+
+    game.playFavor(target, skip);
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(target.getHand().contains(attack));
+    assertEquals(1, target.getHand().size());
+  }
+
+  @Test
+  public void playFavorTargetHasTwoCopiesOfGivenTransfersExactlyOne() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card skip1 = new Card(CardType.SKIP);
+    Card skip2 = new Card(CardType.SKIP);
+
+    target.addCard(skip1);
+    target.addCard(skip2);
+
+    game.playFavor(target, skip1);
+
+    assertEquals(1, countCards(currentPlayer, CardType.SKIP));
+    assertEquals(1, countCards(target, CardType.SKIP));
+  }
+  
+  public void playFavorTargetIsNullThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(null, new Card(CardType.SKIP)));
+
+    assertEquals("invalid target", e.getMessage());
+  }
+  
+  @Test
+  void attackMoreThanOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.ATTACK));
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void attackExactlyOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    // kill all players except current and next
+    List<Player> players = game.getPlayers();
+    players.get(THIRD_PLAYER_INDEX).die();
+
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.ATTACK));
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void attackCurrentPlayerOwesOneTurn() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    currentPlayer.addCard(new Card(CardType.ATTACK));
+
+    assertEquals(EXISTING_TURNS, currentPlayer.getTurnsOwed());
+
+    int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
+    Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
+
+    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+
+    assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
+    assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
+    assertEquals(Collections.emptyList(), result);
+  }
 }

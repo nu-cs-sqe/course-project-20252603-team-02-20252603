@@ -11,6 +11,7 @@ public class Game {
   private static final int TWO_CAT_COMBO_SIZE = 2;
   private static final int THREE_CAT_COMBO_SIZE = 3;
   private static final int FIVE_CAT_COMBO_SIZE = 5;
+  private static final int NUM_NEKO_CARDS = 3;
 
   private final int numberOfPlayers;
   private final Random random;
@@ -124,10 +125,82 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
-
+    
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
+    
+    else if (card.getType() == CardType.ATTACK) {
+      playAttack();
+    }
+    
+    else if (card.getType() == CardType.BUBONIC_PLAGUE) {
+      playBubonicPlague();
+      return Collections.emptyList();
+    }
+    
+
+    return Collections.emptyList();
+  }
+
+  public List<Card> playCard(Card card, Player target) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+
+    if (card.getType() == CardType.TARGETED_ATTACK) {
+      playTargetedAttack(target);
+      return Collections.emptyList();
+    }
+    return Collections.emptyList();
+  }
+
+  public List<Card> playCard(Card card, Player target, Card given) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    if (card.getType() != CardType.FAVOR) {
+      throw new IllegalArgumentException("card is not a favor card");
+    }
+
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+    playFavor(target, given);
+    return Collections.emptyList();
+  }
+
+  public List<Card> playCard(List<Card> cards) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (cards == null || cards.isEmpty()) {
+      throw new IllegalArgumentException("cards cannot be null or empty");
+    }
+    for (Card c : cards) {
+      if (c == null || c.getType() != CardType.NEKO) {
+        throw new IllegalArgumentException("all cards must be neko cards");
+      }
+    }
+    playNeko(cards);
     return Collections.emptyList();
   }
 
@@ -227,6 +300,37 @@ public class Game {
     return currentPlayerIndex;
   }
 
+  /** Bubonic Plague: Each player excl. the player who
+   * played the card loses a random card from their hand **/
+  public void playBubonicPlague() {
+    Player currentPlayer = getCurrentPlayer();
+    for (Player player : players) {
+      if (player == currentPlayer || !player.isAlive() || player.getHand().isEmpty()) {
+        continue;
+      }
+      List<Card> hand = player.getHand();
+      Card randomCard = hand.get(random.nextInt(hand.size()));
+      player.removeCard(randomCard);
+      deck.addToDrawPile(randomCard, random.nextInt(deck.getDeck().size() + 1));
+    }
+    deck.shuffle();
+  }
+  
+  public void playTargetedAttack(Player target) {
+    if (target == null) {
+      throw new IllegalArgumentException("target cannot be null");
+    }
+    if (target == getCurrentPlayer()) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (!target.isAlive()) {
+      throw new IllegalArgumentException("target is not alive");
+    }
+
+    currentPlayerIndex = players.indexOf(target);
+    getCurrentPlayer().addTurn();
+  }
+  
   public List<Card> playSeeTheFuture(){
     return deck.peekTopCards();
   }
@@ -265,7 +369,8 @@ public class Game {
         return true;
       }
       return a == b;
-    } else if (size == THREE_CAT_COMBO_SIZE) {
+    } 
+    else if (size == THREE_CAT_COMBO_SIZE) {
       long ferals = cards.stream()
               .filter(c -> c.getType() == CardType.FERAL_CAT).count();
       if (ferals == THREE_CAT_COMBO_SIZE) {
@@ -284,7 +389,8 @@ public class Game {
         }
       }
       return true;
-    } else if (size == FIVE_CAT_COMBO_SIZE) {
+    } 
+    else if (size == FIVE_CAT_COMBO_SIZE) {
       long distinctTypes = cards.stream()
               .map(Card::getType)
               .distinct()
@@ -306,7 +412,6 @@ public class Game {
     if (!isValidCatCombo(cards) || cards.size() != TWO_CAT_COMBO_SIZE) {
       throw new IllegalArgumentException("invalid two-cat combo");
     }
-
     List<Card> hand = new ArrayList<>(currentPlayer.getHand());
     for (Card c : cards) {
       if (!hand.remove(c)) {
@@ -318,12 +423,48 @@ public class Game {
       currentPlayer.removeCard(c);
       deck.discardCard(c);
     }
+    
     List<Card> targetHand = target.getHand();
     int index = random.nextInt(targetHand.size());
     Card stolenCard = targetHand.get(index);
     target.removeCard(stolenCard);
     currentPlayer.addCard(stolenCard);
     return stolenCard;
+  }
+
+  public void playNeko(List<Card> cards) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (cards == null) {
+      throw new IllegalArgumentException("cards cannot be null");
+    }
+    if (cards.size() != NUM_NEKO_CARDS) {
+      throw new IllegalArgumentException("must play exactly 3 neko cards");
+    }
+    for (Card c : cards) {
+      if (c == null || c.getType() != CardType.NEKO) {
+        throw new IllegalArgumentException("all cards must be neko cards");
+      }
+    }
+    Player currentPlayer = getCurrentPlayer();
+    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!hand.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+    
+    for (Player p : players) {
+      if (p != currentPlayer) {
+        p.die();
+      }
+    }
+    gameOver = true;
   }
 
   public boolean playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
@@ -364,6 +505,25 @@ public class Game {
     target.removeCard(namedCard);
     currentPlayer.addCard(namedCard);
     return true;
+  }
+  
+  public void playFavor(Player target, Card given) {
+    if (target == null || !target.isAlive()) {
+      throw new IllegalArgumentException("invalid target");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    if (target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (given == null) {
+      throw new IllegalArgumentException("given card cannot be null");
+    }
+    if (!target.getHand().contains(given)) {
+      throw new IllegalArgumentException("target does not have that card");
+    }
+
+    target.removeCard(given);
+    currentPlayer.addCard(given);
   }
 
   public Card playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
@@ -414,6 +574,10 @@ public class Game {
       playFiveDifferentCats(cards, named);
     }
   }
-
+  
+  public void playAttack() {
+    moveToNextPlayer();
+    getCurrentPlayer().addTurn();
+  }
 }
 
