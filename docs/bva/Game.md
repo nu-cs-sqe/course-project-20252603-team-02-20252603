@@ -2,15 +2,15 @@
 
 
 ### Method under test: `startGame()`
-- **TC1: Start game with valid player count** (:white_check_mark:)
+- **TC1: Start game with valid player count** ( :white_check_mark: )
   - **State of the system**: Game has 4 players and has not launched yet
   - **Expected output**: Game is launched, players are created, deck is created, turn order is initialized
 
-- **TC2: Start game with lower boundary player count** (:white_check_mark:)
+- **TC2: Start game with lower boundary player count** ( :white_check_mark: )
   - **State of the system**: Game has 3 players
   - **Expected output**: Game starts successfully
 
-- **TC3: Start game with upper boundary player count** (:white_check_mark:)
+- **TC3: Start game with upper boundary player count** ( :white_check_mark: )
   - **State of the system**: Game has 5 players
   - **Expected output**: Game starts successfully
 
@@ -215,7 +215,7 @@
 
 - **TC50: No players alive** ( :white_check_mark: )
   - **State of the system**: 0 players are alive
-  - **Expected output**: Throws `IllegalStateException`
+  - **Expected output**: Throws `IllegalStateException`  
 
 ### Method under test: `playBubonicPlague()`
 - **TC#: All other players have cards** ( :white_check_mark: )
@@ -275,3 +275,16 @@
 - **TC#54: Deck has more than 3 cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
   - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+### Method under test: `playAttack()`
+- **TC#55: Attack, more than one other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Attack card, 2+ other players alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to next player, next player owes 2 turns, empty list returned
+
+- **TC#56: Attack, exactly one other player alive** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Attack card, exactly 1 other player alive
+  - **Expected output**: Card removed from hand, discarded, turn moves to that player, that player owes 2 turns, empty list returned
+
+- **TC#57: Attack, current player owes 1 turn** ( :white_check_mark: )
+  - **State of the system**: Game is running, current player has Attack card, current player owes 1 turn
+  - **Expected output**: Turn moves to next player, next player owes 2 turns, empty list returned

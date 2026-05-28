@@ -126,6 +126,10 @@ public class Game {
       return playSeeTheFuture();
     }
     
+    else if (card.getType() == CardType.ATTACK) {
+      playAttack();
+    }
+    
     else if (card.getType() == CardType.BUBONIC_PLAGUE) {
       playBubonicPlague();
       return Collections.emptyList();
@@ -263,5 +267,10 @@ public class Game {
   
   public List<Card> playSeeTheFuture(){
     return deck.peekTopCards();
+  }
+  
+  public void playAttack() {
+    moveToNextPlayer();
+    getCurrentPlayer().addTurn();
   }
 }
