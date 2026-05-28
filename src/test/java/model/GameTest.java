@@ -888,6 +888,158 @@ public class GameTest {
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
   }
+
+  @Test
+  public void playFavorTargetIsNullThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(null, new Card(CardType.SKIP)));
+
+    assertEquals("invalid target", e.getMessage());
+  }
+
+  @Test
+  public void playFavorTargetIsDeadThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    target.die();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
+
+    assertEquals("invalid target", e.getMessage());
+  }
+
+  @Test
+  public void playFavorTargetIsCurrentPlayerThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(currentPlayer, new Card(CardType.SKIP)));
+
+    assertEquals("cannot target yourself", e.getMessage());
+  }
+
+  @Test
+  public void playFavorGivenIsNullThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, null));
+
+    assertEquals("given card cannot be null", e.getMessage());
+  }
+
+  @Test
+  public void playFavorTargetHasEmptyHandThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
+
+    assertEquals("target does not have that card", e.getMessage());
+  }
+
+  @Test
+  public void playFavorTargetHasOneCardGivenDoesNotMatchThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    target.addCard(new Card(CardType.ATTACK));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+            game.playFavor(target, new Card(CardType.SKIP)));
+
+    assertEquals("target does not have that card", e.getMessage());
+  }
+
+  @Test
+  public void playFavorTargetHasOneMatchingCardTransfersCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card skip = new Card(CardType.SKIP);
+    target.addCard(skip);
+
+    game.playFavor(target, skip);
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(target.getHand().isEmpty());
+  }
+
+  @Test
+  public void playFavorTargetHasTwoCardsGivenMatchesOneTransfersCorrectCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card skip = new Card(CardType.SKIP);
+    Card attack = new Card(CardType.ATTACK);
+
+    target.addCard(skip);
+    target.addCard(attack);
+
+    game.playFavor(target, skip);
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(target.getHand().contains(attack));
+    assertEquals(1, target.getHand().size());
+  }
+
+  @Test
+  public void playFavorTargetHasTwoCopiesOfGivenTransfersExactlyOne() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card skip1 = new Card(CardType.SKIP);
+    Card skip2 = new Card(CardType.SKIP);
+
+    target.addCard(skip1);
+    target.addCard(skip2);
+
+    game.playFavor(target, skip1);
+
+    assertEquals(1, countCards(currentPlayer, CardType.SKIP));
+    assertEquals(1, countCards(target, CardType.SKIP));
+  }
   
   @Test
   void attackMoreThanOneOtherPlayerAlive() {

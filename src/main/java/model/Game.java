@@ -160,6 +160,27 @@ public class Game {
     return Collections.emptyList();
   }
 
+  public List<Card> playCard(Card card, Player target, Card given) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    if (card.getType() != CardType.FAVOR) {
+      throw new IllegalArgumentException("card is not a favor card");
+    }
+
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+    playFavor(target, given);
+    return Collections.emptyList();
+  }
+
   private boolean isPlayableCard(Card card) {
     return card != null &&
             card.getType() != CardType.EXPLODING_KITTEN &&
@@ -267,6 +288,25 @@ public class Game {
   
   public List<Card> playSeeTheFuture(){
     return deck.peekTopCards();
+  }
+
+  public void playFavor(Player target, Card given) {
+    if (target == null || !target.isAlive()) {
+      throw new IllegalArgumentException("invalid target");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    if (target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (given == null) {
+      throw new IllegalArgumentException("given card cannot be null");
+    }
+    if (!target.getHand().contains(given)) {
+      throw new IllegalArgumentException("target does not have that card");
+    }
+
+    target.removeCard(given);
+    currentPlayer.addCard(given);
   }
   
   public void playAttack() {
