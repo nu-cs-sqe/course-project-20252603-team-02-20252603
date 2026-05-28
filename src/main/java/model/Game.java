@@ -124,8 +124,6 @@ public class Game {
 
     if (card.getType() == CardType.SKIP) {
       playSkip();
-      return Collections.emptyList();
-
     }
     return Collections.emptyList();
 
