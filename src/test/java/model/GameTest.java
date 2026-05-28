@@ -705,56 +705,34 @@ public class GameTest {
     assertThrows(IllegalArgumentException.class, () -> game.defuse(drawPileSize + 1));
   }
 
+  private void assertDefusePlacesKittenAtPosition(Game game, int position) {
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    game.defuse(position);
+
+    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(position).getType());
+    assertEquals(drawPileSizeBefore + 1, game.getDrawPile().size());
+  }
+
   @Test
   public void defuseWithPositionZero() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
-    Player currentPlayer = game.getCurrentPlayer();
-    int defuseCountBefore = countCards(currentPlayer, CardType.DEFUSE);
-    int drawPileSizeBefore = game.getDrawPile().size();
-    int discardSizeBefore = game.getDiscardPile().size();
-
-    game.defuse(0);
-
-    assertEquals(defuseCountBefore - 1, countCards(currentPlayer, CardType.DEFUSE));
-    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
-    assertEquals(CardType.DEFUSE, game.getDiscardPile().get(discardSizeBefore).getType());
-    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(0).getType());
-    assertEquals(drawPileSizeBefore + 1, game.getDrawPile().size());
+    assertDefusePlacesKittenAtPosition(game, 0);
   }
 
   @Test
   public void defuseWithPositionAtBottom() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
-    Player currentPlayer = game.getCurrentPlayer();
-    int drawPileSize = game.getDrawPile().size();
-    int defuseCountBefore = countCards(currentPlayer, CardType.DEFUSE);
-    int discardSizeBefore = game.getDiscardPile().size();
+    assertDefusePlacesKittenAtPosition(game, game.getDrawPile().size());
 
-    game.defuse(drawPileSize);
-
-    assertEquals(defuseCountBefore - 1, countCards(currentPlayer, CardType.DEFUSE));
-    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
-    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(drawPileSize).getType());
-    assertEquals(drawPileSize + 1, game.getDrawPile().size());
   }
 
   @Test
   public void defuseWithPositionInMiddle() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
-    Player currentPlayer = game.getCurrentPlayer();
-    int drawPileSize = game.getDrawPile().size();
-    int middlePosition = drawPileSize / 2;
-    int defuseCountBefore = countCards(currentPlayer, CardType.DEFUSE);
-    int discardSizeBefore = game.getDiscardPile().size();
-
-    game.defuse(middlePosition);
-
-    assertEquals(defuseCountBefore - 1, countCards(currentPlayer, CardType.DEFUSE));
-    assertEquals(discardSizeBefore + 1, game.getDiscardPile().size());
-    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(middlePosition).getType());
-    assertEquals(drawPileSize + 1, game.getDrawPile().size());
+    assertDefusePlacesKittenAtPosition(game, game.getDrawPile().size() / 2);
   }
 }
