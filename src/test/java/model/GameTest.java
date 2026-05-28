@@ -1068,9 +1068,6 @@ public class GameTest {
     assertTrue(game.isGameOver());
     assertTrue(currentPlayer.isAlive());
     assertFalse(players.get(THIRD_PLAYER_INDEX).isAlive());
-            game.playFavor(null, new Card(CardType.SKIP)));
-
-    assertEquals("invalid target", e.getMessage());
   }
 
   @Test
