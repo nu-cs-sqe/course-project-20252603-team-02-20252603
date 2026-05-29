@@ -29,6 +29,7 @@ public class GameTest {
   private static final int EXISTING_TURNS = 1;
   private static final int EMPTY_HAND_SIZE = 0;
   private static final int NUM_CARDS_PEEKED = 3;
+  private static final int TWO_DEFUSE_CARDS = 2;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -1077,6 +1078,89 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () ->
             game.playCard(alterFuture, reorderedCards));
+  }
+
+  @Test
+  void curseNextPlayerHasNoDefuse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player nextPlayer = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card curse = new Card(CardType.CURSE);
+    currentPlayer.addCard(curse);
+    while (nextPlayer.hasDefuse()) {
+      nextPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    List<Card> result = game.playCard(curse);
+
+    assertEquals(Collections.emptyList(), result);
+    assertFalse(nextPlayer.hasDefuse());
+    assertEquals(drawPileSizeBefore, game.getDrawPile().size());
+  }
+
+  @Test
+  void curseNextPlayerHasOneDefuse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player nextPlayer = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card curse = new Card(CardType.CURSE);
+    currentPlayer.addCard(curse);
+    while (nextPlayer.hasDefuse()) {
+      nextPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+    nextPlayer.addCard(new Card(CardType.DEFUSE));
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    game.playCard(curse);
+
+    assertFalse(nextPlayer.hasDefuse());
+    assertEquals(drawPileSizeBefore + EXISTING_TURNS, game.getDrawPile().size());
+  }
+
+  @Test
+  void curseNextPlayerHasMultipleDefuses() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player nextPlayer = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card curse = new Card(CardType.CURSE);
+    currentPlayer.addCard(curse);
+    while (nextPlayer.hasDefuse()) {
+      nextPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+    nextPlayer.addCard(new Card(CardType.DEFUSE));
+    nextPlayer.addCard(new Card(CardType.DEFUSE));
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    game.playCard(curse);
+
+    assertFalse(nextPlayer.hasDefuse());
+    assertEquals(drawPileSizeBefore + TWO_DEFUSE_CARDS, game.getDrawPile().size());
+  }
+
+  @Test
+  void curseOnlyOneOtherPlayerAlive() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player nextPlayer = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Player deadPlayer = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    Card curse = new Card(CardType.CURSE);
+    currentPlayer.addCard(curse);
+    deadPlayer.die();
+    while (nextPlayer.hasDefuse()) {
+      nextPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+    nextPlayer.addCard(new Card(CardType.DEFUSE));
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    game.playCard(curse);
+
+    assertFalse(nextPlayer.hasDefuse());
+    assertEquals(drawPileSizeBefore + EXISTING_TURNS, game.getDrawPile().size());
   }
   
   @Test

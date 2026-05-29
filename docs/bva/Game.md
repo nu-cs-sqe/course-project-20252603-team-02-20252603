@@ -221,6 +221,23 @@
   - **State of the system**: Current player plays `ALTER_FUTURE` and reordered cards do not match the visible top cards
   - **Expected output**: Throws `IllegalArgumentException`
 
+### Method under test: `playCurse()`
+- **TC#: Curse next player with no Defuse cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has 0 Defuse cards
+  - **Expected output**: Played card is discarded, next player's hand is unchanged, draw pile size is unchanged, and empty list is returned
+
+- **TC#: Curse next player with exactly 1 Defuse card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has exactly 1 Defuse card
+  - **Expected output**: Defuse is removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
+
+- **TC#: Curse next player with multiple Defuse cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has more than 1 Defuse card
+  - **Expected output**: All Defuse cards are removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
+
+- **TC#: Curse when exactly one other player is alive** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE`, one other player is alive, and remaining player has a Defuse card
+  - **Expected output**: Defuse is removed from the only other alive player, returned to draw pile, draw pile is shuffled, and empty list is returned
+
 ### Method under test: `playCard()`
 - **TC43: Player plays a playable card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a playable card
