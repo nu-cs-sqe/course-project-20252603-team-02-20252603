@@ -277,6 +277,7 @@ public class Game {
       throw new IllegalArgumentException("position cannot be negative");
     }
     deck.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), position);
+  }
   private void playSkip() {
     completeOneTurn();
   }
