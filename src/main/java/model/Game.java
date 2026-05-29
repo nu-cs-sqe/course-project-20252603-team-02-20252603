@@ -278,6 +278,7 @@ public class Game {
     }
     deck.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), position);
   }
+  
   private void playSkip() {
     completeOneTurn();
   }
