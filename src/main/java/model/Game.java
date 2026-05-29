@@ -125,6 +125,10 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
+
+    if (card.getType() == CardType.SKIP) {
+      playSkip();
+    }
     
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
@@ -144,7 +148,6 @@ public class Game {
       playBubonicPlague();
       return Collections.emptyList();
     }
-    
     return Collections.emptyList();
   }
 
@@ -263,6 +266,10 @@ public class Game {
     if (getCurrentPlayer().getTurnsOwed() == 0) {
       getCurrentPlayer().addTurn();
     }
+  }
+
+  private void playSkip() {
+    completeOneTurn();
   }
 
   public List<Player> getPlayers() {
@@ -589,4 +596,3 @@ public class Game {
     getCurrentPlayer().addTurn();
   }
 }
-
