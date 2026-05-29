@@ -114,6 +114,35 @@ public class Deck {
     return new ArrayList<>(deck.subList(0, count));
   }
 
+  /* Swap first and last cards */
+  public void swapTopBottomCards() {
+    if (deck.size() < 2) {
+      return;
+    }
+
+    Collections.swap(deck, 0, deck.size() - 1);
+  }
+  
+  /* Remove a specific card from discard pile */
+  public Card takeFromDiscard(CardType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("invalid card type");
+    }
+
+    if (discard.isEmpty()) {
+      throw new IllegalStateException("discard pile is empty");
+    }
+    for (int i = 0; i < discard.size(); i++) {
+      Card curr = discard.get(i);
+
+      if (curr.getType() == type) {
+        return discard.remove(i);
+      }
+    }
+
+    throw new IllegalArgumentException("card type not in discard pile");
+  }
+
   /* Getters */
   public List<Card> getDeck() {
     return new ArrayList<>(deck);
