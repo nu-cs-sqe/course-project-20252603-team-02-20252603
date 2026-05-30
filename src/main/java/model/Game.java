@@ -268,6 +268,17 @@ public class Game {
     }
   }
 
+  public void defuse(int position) {
+    Player currentPlayer = getCurrentPlayer();
+    if (!currentPlayer.hasDefuse()) {
+      throw new IllegalStateException("player does not have a defuse card");
+    }
+    if (position < 0 || position > deck.getDeck().size()) {
+      throw new IllegalArgumentException("position cannot be negative");
+    }
+    deck.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), position);
+  }
+  
   private void playSkip() {
     completeOneTurn();
   }

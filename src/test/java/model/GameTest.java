@@ -898,7 +898,7 @@ public class GameTest {
     }
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(new Card(CardType.SEE_THE_FUTURE)));
+        game.playCard(new Card(CardType.SEE_THE_FUTURE)));
   }
 
   @Test
@@ -966,6 +966,65 @@ public class GameTest {
   }
 
   @Test
+  public void defuseWithoutDefuseCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.hasDefuse()) {
+      currentPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+
+    assertThrows(IllegalStateException.class, () -> game.defuse(0));
+  }
+
+  @Test
+  public void defuseWithNegativePositionThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.defuse(-1));
+  }
+
+  @Test
+  public void defuseWithPositionTooLargeThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    int drawPileSize = game.getDrawPile().size();
+
+    assertThrows(IllegalArgumentException.class, () -> game.defuse(drawPileSize + 1));
+  }
+
+  private void assertDefusePlacesKittenAtPosition(Game game, int position) {
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    game.defuse(position);
+
+    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(position).getType());
+    assertEquals(drawPileSizeBefore + 1, game.getDrawPile().size());
+  }
+
+  @Test
+  public void defuseWithPositionZero() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    assertDefusePlacesKittenAtPosition(game, 0);
+  }
+
+  @Test
+  public void defuseWithPositionAtBottom() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    assertDefusePlacesKittenAtPosition(game, game.getDrawPile().size());
+
+  }
+
+  @Test
+  public void defuseWithPositionInMiddle() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    assertDefusePlacesKittenAtPosition(game, game.getDrawPile().size() / 2);
+  }
+
   void playSwapEmptyDeck() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
