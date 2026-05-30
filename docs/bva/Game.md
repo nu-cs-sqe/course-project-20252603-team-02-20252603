@@ -355,7 +355,6 @@
     - **Expected output**: Defuse removed from hand, Defuse added to discard, Exploding Kitten inserted at given
       position
       
-
 ### Method under test: `playSwap()`
 - **TC75: Swap when draw pile has no cards** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has Swap, Draw pile has no cards
@@ -774,3 +773,20 @@
   - **State of the system**: Game is running, current player has Attack card, current player owes 1 turn
   - **Expected output**: Turn moves to next player, next player owes 2 turns, empty list returned
 
+### Method under test: `playSuperSkipCard()`
+
+- **TC177: Player plays `Super Skip` but does not have one in hand** ( :white_check_mark: )
+    - **State of the system**: Game is started, current player does not have a Super Skip card
+    - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC178: Super Skip card appears in discard pile after play** ( :white_check_mark: )
+    - **State of the system**: Game is started, current player plays a Super Skip card
+    - **Expected output**: Super Skip card is present in discard pile
+
+- **TC179: Player plays `Super Skip` card with turnsOwed = 1 (not targetted)** ( :white_check_mark: )
+    - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 1
+    - **Expected output**: turnsOwed decreases by 1 to 0, turn moves to next player
+
+- **TC180:  Player plays` Super Skip` with turnsOwed = 2 (targeted)** ( :white_check_mark: )
+    - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 2
+    - **Expected output**:  turnsOwed decreases by 2 to 0, turn moves to next player

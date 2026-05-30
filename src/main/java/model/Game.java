@@ -129,7 +129,12 @@ public class Game {
     if (card.getType() == CardType.SKIP) {
       playSkip();
     }
-    
+
+    if (card.getType() == CardType.SUPER_SKIP) {
+      playSuperSkip();
+      return Collections.emptyList();
+    }
+
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
@@ -169,6 +174,7 @@ public class Game {
       playTargetedAttack(target);
       return Collections.emptyList();
     }
+
     return Collections.emptyList();
   }
 
@@ -265,6 +271,20 @@ public class Game {
     } while (!getCurrentPlayer().isAlive());
     if (getCurrentPlayer().getTurnsOwed() == 0) {
       getCurrentPlayer().addTurn();
+    }
+  }
+
+  private void playSuperSkip() {
+    Player currentPlayer = getCurrentPlayer();
+    int turnsOwed = currentPlayer.getTurnsOwed();
+    if (turnsOwed > 1) {
+      currentPlayer.removeTurn();
+      currentPlayer.removeTurn();
+    } else {
+      currentPlayer.removeTurn();
+    }
+    if (currentPlayer.getTurnsOwed() == 0) {
+      moveToNextPlayer();
     }
   }
 
