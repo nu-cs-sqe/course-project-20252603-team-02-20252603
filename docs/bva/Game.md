@@ -761,7 +761,7 @@
   - **Expected output**: Exactly 1 `SKIP` transferred to current player, target hand still has 1 `SKIP`
 
 ### Method under test: `playAttack()`
-- **TC#1744: Attack, more than one other player alive** ( :white_check_mark: )
+- **TC#174: Attack, more than one other player alive** ( :white_check_mark: )
   - **State of the system**: Game is running, current player has Attack card, 2+ other players alive
   - **Expected output**: Card removed from hand, discarded, turn moves to next player, next player owes 2 turns, empty list returned
 
@@ -790,3 +790,49 @@
 - **TC180:  Player plays` Super Skip` with turnsOwed = 2 (targeted)** ( :white_check_mark: )
     - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 2
     - **Expected output**:  turnsOwed decreases by 2 to 0, turn moves to next player
+
+
+### Method under test: `playSeeTheFuture()`
+
+- **TC#189: Deck has 0 cards** ( :white_check_mark: )
+    - **State of the system**: Game is running, current player has See the Future, deck is empty
+    - **Expected output**: Card removed from hand, discarded, throws `IllegalStateException`
+
+- **TC#190: Deck has 1 card** ( :white_check_mark: )
+    - **State of the system**: Game is running, current player has See the Future, deck has 1 card
+    - **Expected output**: Card removed from hand, discarded, list of 1 card returned
+
+- **TC#191: Deck has exactly 3 cards** ( :white_check_mark: )
+    - **State of the system**: Game is running, current player has See the Future, deck has exactly 3 cards
+    - **Expected output**: Card removed from hand, discarded, list of 3 cards returned
+
+- **TC#192: Deck has more than 3 cards** ( :white_check_mark: )
+    - **State of the system**: Game is running, current player has See the Future, deck has more than 3 cards
+    - **Expected output**: Card removed from hand, discarded, list of exactly 3 cards returned
+
+### Method under test: `playNosy(int targetPlayerIndex)`
+
+- **TC193: Play Nosy but does not have one in hand** ( :white_check_mark: )
+    - **State of the system**: Current player does not have a Nosy card
+    - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC194: Play Nosy on invalid player index (negative)** ( :white_check_mark: )
+    - **State of the system**: Target player index is -1
+    - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC195: Play Nosy on invalid player index (too large)** ( :white_check_mark: )
+    - **State of the system**: Target player index is >= number of players
+    - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC196: Play Nosy on self** ( :white_check_mark: )
+    - **State of the system**: Game is started, current player targets themselves
+    - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC197: Play Nosy on dead player** ( :white_check_mark: )
+    - **State of the system**: Game is started, target player is dead
+    - **Expected output**: Throws `IllegalArgumentException`
+
+- **TC198: Play Nosy on valid target player** ( :white_check_mark: )
+    - **State of the system**: Game is started, current player has a Nosy card, target is a different alive player
+    - **Expected output**: Card removed from hand, card added to discard, target player's hand is returned
+

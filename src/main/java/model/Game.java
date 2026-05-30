@@ -307,6 +307,25 @@ public class Game {
     return new ArrayList<>(players);
   }
 
+  public List<Card> playNosy(int targetPlayerIndex) {
+    Player currentPlayer = getCurrentPlayer();
+    Card nosy = new Card(CardType.NOSY);
+
+    if (!currentPlayer.getHand().contains(nosy)) {
+      throw new IllegalArgumentException("card is not in player's hand");
+    }
+    if (targetPlayerIndex < 0 || targetPlayerIndex >= players.size()) {
+      throw new IllegalArgumentException("invalid player index");
+    }
+    if (targetPlayerIndex == currentPlayerIndex) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (!players.get(targetPlayerIndex).isAlive()) {
+      throw new IllegalArgumentException("target player is not alive");
+    }
+    return players.get(targetPlayerIndex).getHand();
+  }
+
   public List<Card> getDrawPile() {
     return deck.getDeck();
   }
