@@ -1023,6 +1023,8 @@ public class GameTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     assertDefusePlacesKittenAtPosition(game, game.getDrawPile().size() / 2);
+  }
+
   void playSwapEmptyDeck() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
