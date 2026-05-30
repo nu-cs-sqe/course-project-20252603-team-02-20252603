@@ -744,6 +744,9 @@ public class GameTest {
 
     assertEquals(0, currentPlayer.getTurnsOwed());
     assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
+
+  @Test
   void bubonicPlagueAllOtherPlayersHaveCards() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -1090,6 +1093,7 @@ public class GameTest {
     assertDefusePlacesKittenAtPosition(game, game.getDrawPile().size() / 2);
   }
 
+  @Test
   void playSwapEmptyDeck() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -2756,7 +2760,8 @@ public class GameTest {
     assertEquals(1, countCards(currentPlayer, CardType.SKIP));
     assertEquals(1, countCards(target, CardType.SKIP));
   }
-  
+
+  @Test
   public void playFavorTargetIsNullThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();

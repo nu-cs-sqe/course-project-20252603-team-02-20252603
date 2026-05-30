@@ -129,7 +129,12 @@ public class Game {
     if (card.getType() == CardType.SKIP) {
       playSkip();
     }
-    
+
+    if (card.getType() == CardType.SUPER_SKIP) {
+      playSuperSkip();
+      return Collections.emptyList();
+    }
+
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
@@ -170,9 +175,6 @@ public class Game {
       return Collections.emptyList();
     }
 
-    if (card.getType() == CardType.SUPER_SKIP) {
-      playSuperSkip();
-    }
     return Collections.emptyList();
   }
 
