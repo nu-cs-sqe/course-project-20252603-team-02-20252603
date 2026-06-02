@@ -125,6 +125,17 @@ public class Deck {
   /* Reorder top 3 cards */
   public void reorderTopCards(List<Card> reorderedCards) {
     List<Card> topCards = peekTopCards();
+    if (reorderedCards.size() != topCards.size()) {
+      throw new IllegalArgumentException("must reorder all visible cards");
+    }
+
+    List<Card> remainingCards = new ArrayList<>(topCards);
+    for (Card card : reorderedCards) {
+      if (!remainingCards.remove(card)) {
+        throw new IllegalArgumentException("invalid reordered cards");
+      }
+    }
+
     for (int i = 0; i < topCards.size(); i++) {
       deck.remove(0);
     }

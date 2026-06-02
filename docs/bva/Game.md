@@ -243,6 +243,10 @@
     - **State of the system**: Current player plays `ALTER_FUTURE` and draw pile has 0 cards
     - **Expected output**: Throws `IllegalStateException`
 
+- **TC#: Alter the Future with invalid order** ( :white_check_mark: )
+    - **State of the system**: Current player plays `ALTER_FUTURE` and reordered cards do not match the visible top cards
+    - **Expected output**: Throws `IllegalArgumentException`
+
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )

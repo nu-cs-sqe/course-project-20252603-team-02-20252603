@@ -663,6 +663,32 @@ public class GameTest {
   }
 
   @Test
+  public void alterFutureInvalidOrder() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    Card firstCard = new Card(CardType.FAVOR);
+    Card secondCard = new Card(CardType.SHUFFLE);
+    Card thirdCard = new Card(CardType.NOPE);
+    Card wrongCard = new Card(CardType.ATTACK);
+    currentPlayer.addCard(alterFuture);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+    game.addToDrawPile(thirdCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(secondCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(firstCard, FIRST_PLAYER_INDEX);
+    List<Card> reorderedCards = new ArrayList<>();
+    reorderedCards.add(wrongCard);
+    reorderedCards.add(firstCard);
+    reorderedCards.add(secondCard);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(alterFuture, reorderedCards));
+  }
+
+  @Test
   public void playCardPlayableCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
