@@ -732,6 +732,28 @@ public class GameTest {
   }
 
   @Test
+  public void curseNextPlayerHasMultipleDefuses() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player nextPlayer = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card curse = new Card(CardType.CURSE);
+    currentPlayer.addCard(curse);
+    while (nextPlayer.hasDefuse()) {
+      nextPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+    nextPlayer.addCard(new Card(CardType.DEFUSE));
+    nextPlayer.addCard(new Card(CardType.DEFUSE));
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    List<Card> result = game.playCard(curse);
+
+    assertEquals(Collections.emptyList(), result);
+    assertFalse(nextPlayer.hasDefuse());
+    assertEquals(drawPileSizeBefore + TURNS_OWED, game.getDrawPile().size());
+  }
+
+  @Test
   public void playCardPlayableCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
