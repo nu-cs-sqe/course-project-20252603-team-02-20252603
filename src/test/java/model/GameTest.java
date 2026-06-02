@@ -648,6 +648,21 @@ public class GameTest {
   }
 
   @Test
+  public void alterFutureEmptyDeck() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    currentPlayer.addCard(alterFuture);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(alterFuture, Collections.emptyList()));
+  }
+
+  @Test
   public void playCardPlayableCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
