@@ -122,6 +122,17 @@ public class Deck {
     return new ArrayList<>(deck.subList(0, count));
   }
 
+  /* Reorder top 3 cards */
+  public void reorderTopCards(List<Card> reorderedCards) {
+    List<Card> topCards = peekTopCards();
+    for (int i = 0; i < topCards.size(); i++) {
+      deck.remove(0);
+    }
+    for (int i = reorderedCards.size() - 1; i >= 0; i--) {
+      deck.add(0, reorderedCards.get(i));
+    }
+  }
+
   /* Swap first and last cards */
   public void swapTopBottomCards() {
     if (deck.size() < 2) {

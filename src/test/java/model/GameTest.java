@@ -564,6 +564,39 @@ public class GameTest {
   }
 
   @Test
+  public void alterFutureMoreThanThreeCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    Card firstCard = new Card(CardType.FAVOR);
+    Card secondCard = new Card(CardType.SHUFFLE);
+    Card thirdCard = new Card(CardType.NOPE);
+    Card fourthCard = new Card(CardType.SKIP);
+    currentPlayer.addCard(alterFuture);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+    game.addToDrawPile(fourthCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(thirdCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(secondCard, FIRST_PLAYER_INDEX);
+    game.addToDrawPile(firstCard, FIRST_PLAYER_INDEX);
+    List<Card> reorderedCards = new ArrayList<>();
+    reorderedCards.add(thirdCard);
+    reorderedCards.add(firstCard);
+    reorderedCards.add(secondCard);
+
+    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    List<Card> drawPile = game.getDrawPile();
+
+    assertEquals(Collections.emptyList(), result);
+    assertEquals(thirdCard, drawPile.get(FIRST_PLAYER_INDEX));
+    assertEquals(firstCard, drawPile.get(SECOND_PLAYER_INDEX));
+    assertEquals(secondCard, drawPile.get(THIRD_PLAYER_INDEX));
+    assertEquals(fourthCard, drawPile.get(FOURTH_PLAYER_INDEX));
+  }
+
+  @Test
   public void playCardPlayableCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
