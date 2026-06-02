@@ -261,6 +261,10 @@
     - **State of the system**: Current player plays `CURSE` and next player has more than 1 Defuse card
     - **Expected output**: All Defuse cards are removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
 
+- **TC#: Curse when exactly one other player is alive** ( :white_check_mark: )
+    - **State of the system**: Current player plays `CURSE`, one other player is alive, and remaining player has a Defuse card
+    - **Expected output**: Defuse is removed from the only other alive player, returned to draw pile, draw pile is shuffled, and empty list is returned
+
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )
