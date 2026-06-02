@@ -211,6 +211,20 @@
     - **State of the system**: Current player draws `EXPLODING_KITTEN` and has no `DEFUSE`
     - **Expected output**: Current player dies and game checks for winner
 
+### Method under test: `playDrawFromBottom()`
+
+- **TC#: Draw from bottom with many cards** ( :white_check_mark: )
+    - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has more than 1 card
+    - **Expected output**: Bottom card is added to current player's hand, played card is discarded, one turn is completed, and empty list is returned
+
+- **TC#: Draw from bottom with exactly 1 card** ( :white_check_mark: )
+    - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has exactly 1 card
+    - **Expected output**: Only card is added to current player's hand, draw pile becomes empty, one turn is completed, and empty list is returned
+
+- **TC#: Draw from bottom with empty draw pile** ( :white_check_mark: )
+    - **State of the system**: Current player resolves `DRAW_FROM_BOTTOM` and draw pile has 0 cards
+    - **Expected output**: Throws `IllegalStateException`
+
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )
@@ -835,4 +849,3 @@
 - **TC198: Play Nosy on valid target player** ( :white_check_mark: )
     - **State of the system**: Game is started, current player has a Nosy card, target is a different alive player
     - **Expected output**: Card removed from hand, card added to discard, target player's hand is returned
-

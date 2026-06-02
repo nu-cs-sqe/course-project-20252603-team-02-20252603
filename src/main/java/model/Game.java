@@ -153,6 +153,11 @@ public class Game {
       playBubonicPlague();
       return Collections.emptyList();
     }
+
+    if (card.getType() == CardType.DRAW_FROM_BOTTOM) {
+      playDrawFromBottom();
+      return Collections.emptyList();
+    }
     return Collections.emptyList();
   }
 
@@ -399,6 +404,12 @@ public class Game {
 
   public void playSwap() {
     deck.swapTopBottomCards();
+  }
+
+  public void playDrawFromBottom() {
+    Card card = deck.drawFromBottom();
+    getCurrentPlayer().addCard(card);
+    completeOneTurn();
   }
   
   public boolean isCatCard(CardType type) {
