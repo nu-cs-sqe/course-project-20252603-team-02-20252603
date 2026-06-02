@@ -532,6 +532,27 @@ public class GameTest {
   }
 
   @Test
+  public void playDrawFromBottomWithOneCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card drawFromBottom = new Card(CardType.DRAW_FROM_BOTTOM);
+    Card onlyCard = new Card(CardType.FAVOR);
+    currentPlayer.addCard(drawFromBottom);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+    game.addToDrawPile(onlyCard, FIRST_PLAYER_INDEX);
+
+    List<Card> result = game.playCard(drawFromBottom);
+
+    assertEquals(Collections.emptyList(), result);
+    assertTrue(currentPlayer.getHand().contains(onlyCard));
+    assertEquals(EMPTY_HAND_SIZE, game.getDrawPile().size());
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
+
+  @Test
   public void playCardPlayableCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();

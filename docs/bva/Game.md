@@ -217,6 +217,10 @@
     - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has more than 1 card
     - **Expected output**: Bottom card is added to current player's hand, played card is discarded, one turn is completed, and empty list is returned
 
+- **TC#: Draw from bottom with exactly 1 card** ( :white_check_mark: )
+    - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has exactly 1 card
+    - **Expected output**: Only card is added to current player's hand, draw pile becomes empty, one turn is completed, and empty list is returned
+
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )
