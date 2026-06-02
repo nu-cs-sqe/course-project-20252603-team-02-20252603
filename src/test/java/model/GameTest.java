@@ -627,6 +627,27 @@ public class GameTest {
   }
 
   @Test
+  public void alterFutureWithOneCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    Card onlyCard = new Card(CardType.FAVOR);
+    currentPlayer.addCard(alterFuture);
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+    game.addToDrawPile(onlyCard, FIRST_PLAYER_INDEX);
+    List<Card> reorderedCards = new ArrayList<>();
+    reorderedCards.add(onlyCard);
+
+    List<Card> result = game.playCard(alterFuture, reorderedCards);
+
+    assertEquals(Collections.emptyList(), result);
+    assertEquals(onlyCard, game.getDrawPile().get(FIRST_PLAYER_INDEX));
+  }
+
+  @Test
   public void playCardPlayableCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();

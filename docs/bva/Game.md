@@ -235,6 +235,10 @@
     - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 3 cards, and player gives a valid order for all 3 cards
     - **Expected output**: Played card is discarded, all 3 draw pile cards are reordered, and empty list is returned
 
+- **TC#: Alter the Future with exactly 1 card** ( :white_check_mark: )
+    - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 1 card, and player gives that card back
+    - **Expected output**: Played card is discarded, the only draw pile card remains on top, and empty list is returned
+
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )
