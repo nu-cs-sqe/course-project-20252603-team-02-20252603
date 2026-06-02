@@ -221,6 +221,10 @@
     - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has exactly 1 card
     - **Expected output**: Only card is added to current player's hand, draw pile becomes empty, one turn is completed, and empty list is returned
 
+- **TC#: Draw from bottom with empty draw pile** ( :white_check_mark: )
+    - **State of the system**: Current player resolves `DRAW_FROM_BOTTOM` and draw pile has 0 cards
+    - **Expected output**: Throws `IllegalStateException`
+
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )

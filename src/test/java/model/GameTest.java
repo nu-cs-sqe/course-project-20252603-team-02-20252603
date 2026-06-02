@@ -553,6 +553,17 @@ public class GameTest {
   }
 
   @Test
+  public void playDrawFromBottomWithEmptyDeckThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+
+    assertThrows(IllegalStateException.class, () -> game.playDrawFromBottom());
+  }
+
+  @Test
   public void playCardPlayableCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
