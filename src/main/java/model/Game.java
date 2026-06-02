@@ -158,6 +158,11 @@ public class Game {
       playDrawFromBottom();
       return Collections.emptyList();
     }
+
+    if (card.getType() == CardType.CURSE) {
+      playCurse();
+      return Collections.emptyList();
+    }
     return Collections.emptyList();
   }
 
@@ -435,6 +440,16 @@ public class Game {
 
   public void playAlterTheFuture(List<Card> reorderedCards) {
     deck.reorderTopCards(reorderedCards);
+  }
+
+  public void playCurse() {
+    Player nextPlayer = getNextActivePlayer();
+    while (nextPlayer.hasDefuse()) {
+      Card defuse = new Card(CardType.DEFUSE);
+      nextPlayer.removeCard(defuse);
+      deck.addToDrawPile(defuse, 0);
+    }
+    deck.shuffle();
   }
   
   public boolean isCatCard(CardType type) {

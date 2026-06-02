@@ -247,6 +247,12 @@
     - **State of the system**: Current player plays `ALTER_FUTURE` and reordered cards do not match the visible top cards
     - **Expected output**: Throws `IllegalArgumentException`
 
+### Method under test: `playCurse()`
+
+- **TC#: Curse next player with no Defuse cards** ( :white_check_mark: )
+    - **State of the system**: Current player plays `CURSE` and next player has 0 Defuse cards
+    - **Expected output**: Played card is discarded, next player's hand is unchanged, draw pile size is unchanged, and empty list is returned
+
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )
