@@ -253,6 +253,10 @@
     - **State of the system**: Current player plays `CURSE` and next player has 0 Defuse cards
     - **Expected output**: Played card is discarded, next player's hand is unchanged, draw pile size is unchanged, and empty list is returned
 
+- **TC#: Curse next player with exactly 1 Defuse card** ( :white_check_mark: )
+    - **State of the system**: Current player plays `CURSE` and next player has exactly 1 Defuse card
+    - **Expected output**: Defuse is removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
+
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )
