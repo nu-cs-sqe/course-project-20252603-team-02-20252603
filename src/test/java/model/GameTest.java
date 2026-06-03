@@ -1554,7 +1554,7 @@ public class GameTest {
   
     while (game.getDrawPile().size() > 2) {
       game.drawFromDeck();
-    }
+    }
   
     Card originalTop = game.getDrawPile().get(0);
     Card originalBottom = game.getDrawPile().get(1);
