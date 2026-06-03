@@ -79,14 +79,6 @@ public class Deck {
     }
   }
 
-  public Deck(Deck other) {
-    this.numPlayers = other.numPlayers;
-    this.random = other.random;
-
-    this.deck = new ArrayList<>(other.deck);
-    this.discard = new ArrayList<>(other.discard);
-  }
-
   /* Shuffle the deck */
   public void shuffle() {
     Collections.shuffle(deck, random);
