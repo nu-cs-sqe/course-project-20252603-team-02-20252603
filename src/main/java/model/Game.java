@@ -31,7 +31,7 @@ public class Game {
   public Game(List<Player> players, Deck deck, Random random) {
     this.players = new ArrayList<>(players);
     this.numberOfPlayers = players.size();
-    this.deck = deck;
+    this.deck = new Deck(deck);
     this.random = new Random(random.nextLong());
     this.currentPlayerIndex = 0;
   }
