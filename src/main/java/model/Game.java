@@ -1,5 +1,6 @@
 package model;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +29,10 @@ public class Game {
     this.currentPlayerIndex = 0;
   }
 
+  @SuppressFBWarnings(
+    value = "EI_EXPOSE_REP2", 
+    justification = "Random and Deck are intentionally shared with the caller for deterministic testing."
+  )
   public Game(List<Player> players, Deck deck, Random random) {
     this.players = players;
     this.numberOfPlayers = players.size();
