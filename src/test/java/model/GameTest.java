@@ -1488,7 +1488,7 @@ public class GameTest {
     currentPlayer.addCard(shuffleCard);
     
     while (game.getDrawPile().size() > 1) {
-      game.drawFromDeck();
+      game.drawFromDeck();
     }
     
     List<Card> result = game.playCard(shuffleCard);
@@ -1499,23 +1499,23 @@ public class GameTest {
   @Test
   void playSwapOneCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-    game.startGame();
-    Player currentPlayer = game.getCurrentPlayer();
-    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
-    currentPlayer.addCard(swapCard);
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
+    currentPlayer.addCard(swapCard);
   
-    while (game.getDrawPile().size() > 1) {
-      game.drawFromDeck();
-    }
+    while (game.getDrawPile().size() > 1) {
+      game.drawFromDeck();
+    }
   
-    Card onlyCard = game.getDrawPile().get(0);
-    int handSizeBefore = currentPlayer.getHand().size();
+    Card onlyCard = game.getDrawPile().get(0);
+    int handSizeBefore = currentPlayer.getHand().size();
   
-    game.playCard(swapCard);
+    game.playCard(swapCard);
   
-    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
-    assertEquals(1, game.getDrawPile().size());
-    assertEquals(onlyCard, game.getDrawPile().get(0));
+    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
+    assertEquals(1, game.getDrawPile().size());
+    assertEquals(onlyCard, game.getDrawPile().get(0));
   }
 
   @Test
@@ -1547,25 +1547,25 @@ public class GameTest {
   @Test
   void playSwapTwoCards() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-    game.startGame();
-    Player currentPlayer = game.getCurrentPlayer();
-    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
-    currentPlayer.addCard(swapCard);
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
+    currentPlayer.addCard(swapCard);
   
-    while (game.getDrawPile().size() > 2) {
-      game.drawFromDeck();
-    }
+    while (game.getDrawPile().size() > 2) {
+      game.drawFromDeck();
+    }
   
-    Card originalTop = game.getDrawPile().get(0);
-    Card originalBottom = game.getDrawPile().get(1);
-    int handSizeBefore = currentPlayer.getHand().size();
+    Card originalTop = game.getDrawPile().get(0);
+    Card originalBottom = game.getDrawPile().get(1);
+    int handSizeBefore = currentPlayer.getHand().size();
   
-    game.playCard(swapCard);
+    game.playCard(swapCard);
   
-    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
-    assertEquals(2, game.getDrawPile().size());
-    assertEquals(originalBottom, game.getDrawPile().get(0));
-    assertEquals(originalTop, game.getDrawPile().get(1));
+    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
+    assertEquals(2, game.getDrawPile().size());
+    assertEquals(originalBottom, game.getDrawPile().get(0));
+    assertEquals(originalTop, game.getDrawPile().get(1));
   }
 
   @Test
