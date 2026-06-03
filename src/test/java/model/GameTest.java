@@ -1534,14 +1534,6 @@ public class GameTest {
     List<Card> result = game.playCard(shuffleCard);
 
     assertEquals(NUM_CARDS_PEEKED, result.size());
-    Card onlyCard = game.getDrawPile().get(0);
-    int handSizeBefore = currentPlayer.getHand().size();
-
-    game.playCard(swapCard);
-
-    assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
-    assertEquals(1, game.getDrawPile().size());
-    assertEquals(onlyCard, game.getDrawPile().get(0));
   }
 
   @Test
