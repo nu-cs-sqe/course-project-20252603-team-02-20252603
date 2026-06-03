@@ -92,6 +92,14 @@ public class Deck {
     return deck.remove(0);
   }
 
+  /* Draw from bottom of draw pile */
+  public Card drawFromBottom() {
+    if (deck.isEmpty()) {
+      throw new IllegalStateException("Draw pile is empty");
+    }
+    return deck.remove(deck.size() - 1);
+  }
+
   /* Add card to discard pile */
   public void discardCard(Card card) {
     discard.add(card);
@@ -112,6 +120,57 @@ public class Deck {
     }
     int count = Math.min(SEE_THE_FUTURE_CARD_COUNT, deck.size());
     return new ArrayList<>(deck.subList(0, count));
+  }
+
+  /* Reorder top 3 cards */
+  public void reorderTopCards(List<Card> reorderedCards) {
+    List<Card> topCards = peekTopCards();
+    if (reorderedCards.size() != topCards.size()) {
+      throw new IllegalArgumentException("must reorder all visible cards");
+    }
+
+    List<Card> remainingCards = new ArrayList<>(topCards);
+    for (Card card : reorderedCards) {
+      if (!remainingCards.remove(card)) {
+        throw new IllegalArgumentException("invalid reordered cards");
+      }
+    }
+
+    for (int i = 0; i < topCards.size(); i++) {
+      deck.remove(0);
+    }
+    for (int i = reorderedCards.size() - 1; i >= 0; i--) {
+      deck.add(0, reorderedCards.get(i));
+    }
+  }
+
+  /* Swap first and last cards */
+  public void swapTopBottomCards() {
+    if (deck.size() < 2) {
+      return;
+    }
+
+    Collections.swap(deck, 0, deck.size() - 1);
+  }
+  
+  /* Remove a specific card from discard pile */
+  public Card takeFromDiscard(CardType type) {
+    if (type == null) {
+      throw new IllegalArgumentException("invalid card type");
+    }
+
+    if (discard.isEmpty()) {
+      throw new IllegalStateException("discard pile is empty");
+    }
+    for (int i = 0; i < discard.size(); i++) {
+      Card curr = discard.get(i);
+
+      if (curr.getType() == type) {
+        return discard.remove(i);
+      }
+    }
+
+    throw new IllegalArgumentException("card type not in discard pile");
   }
 
   /* Getters */
