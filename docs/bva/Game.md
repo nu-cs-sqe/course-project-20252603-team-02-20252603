@@ -204,6 +204,10 @@
   - **State of the system**: Game is over
   - **Expected output**: Throws `IllegalStateException`
 
+- **TC47: Player tries to play Blessing card** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, and current player has a Blessing card
+  - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn
+
 ### Method under test: `checkWinner()`
 - **TC48: More than one player alive** ( :white_check_mark: )
   - **State of the system**: 2 or more players are alive

@@ -9,8 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
+import org.easymock.EasyMock;
 
 public class GameTest {
   private static final int RANDOM_SEED = 42;
@@ -674,5 +676,48 @@ public class GameTest {
     assertEquals(expectedFirst, result.get(0));
     assertEquals(expectedSecond, result.get(1));
     assertEquals(expectedThird, result.get(2));
+  }
+
+  @Test
+  public void testPlayBlessingCard_TC47() {
+    Player currentPlayerMock = EasyMock.createMock(Player.class);
+    Player targetPlayerMock = EasyMock.createMock(Player.class);
+
+    Player dummyPlayer1 = EasyMock.createMock(Player.class);
+    Player dummyPlayer2 = EasyMock.createMock(Player.class);
+
+    Deck deckMock = EasyMock.createMock(Deck.class);
+    Card blessingCardMock = EasyMock.createMock(Card.class);
+
+    EasyMock.expect(blessingCardMock.getType()).andReturn(CardType.BLESSING).anyTimes();
+    EasyMock.expect(currentPlayerMock.isAlive()).andReturn(true).anyTimes();
+    EasyMock.expect(targetPlayerMock.isAlive()).andReturn(true).anyTimes();
+
+    EasyMock.expect(dummyPlayer1.isAlive()).andReturn(true).anyTimes();
+    EasyMock.expect(dummyPlayer2.isAlive()).andReturn(true).anyTimes();
+
+    currentPlayerMock.removeCard(blessingCardMock);
+    deckMock.discardCard(blessingCardMock);
+    targetPlayerMock.removeTurn();
+
+    EasyMock.replay(
+            currentPlayerMock, targetPlayerMock, dummyPlayer1, dummyPlayer2,
+            deckMock, blessingCardMock
+    );
+
+    List<Player> mockPlayers = Arrays.asList(
+            currentPlayerMock, targetPlayerMock, dummyPlayer1, dummyPlayer2
+    );
+
+    Game game = new Game(mockPlayers, deckMock, new Random());
+
+    game.startGame();
+
+    game.playCard(blessingCardMock, targetPlayerMock);
+
+    EasyMock.verify(
+            currentPlayerMock, targetPlayerMock, dummyPlayer1, dummyPlayer2,
+            deckMock, blessingCardMock
+    );
   }
 }

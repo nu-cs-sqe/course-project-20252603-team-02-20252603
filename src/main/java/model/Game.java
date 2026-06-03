@@ -24,18 +24,30 @@ public class Game {
     this.currentPlayerIndex = 0;
   }
 
+  public Game(List<Player> players, Deck deck, Random random) {
+    this.players = players;
+    this.numberOfPlayers = players.size();
+    this.deck = deck;
+    this.random = random;
+    this.currentPlayerIndex = 0;
+  }
+
   public void startGame() {
     if (gameLaunched) {
       throw new IllegalStateException("game already started");
     }
     validatePlayerCount();
 
-    players = new ArrayList<>();
-    for (int i = 0; i < numberOfPlayers; i++) {
-      players.add(new Player());
+    if (this.players == null || this.players.isEmpty()) {
+      this.players = new ArrayList<>();
+      for (int i = 0; i < numberOfPlayers; i++) {
+        this.players.add(new Player());
+      }
+    }
+    if (this.deck == null) {
+      this.deck = new Deck(players, random);
     }
 
-    deck = new Deck(players, random);
     initializeTurnOrder();
     gameLaunched = true;
     gameOver = false;
@@ -125,6 +137,28 @@ public class Game {
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
+    return Collections.emptyList();
+  }
+
+  public List<Card> playCard(Card card, Player target) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+
+    if (card.getType() == CardType.BLESSING) {
+      target.removeTurn();
+      return Collections.emptyList();
+    }
+
     return Collections.emptyList();
   }
 
