@@ -300,4 +300,156 @@ public class DeckTests {
 
     assertThrows(IllegalStateException.class, () -> deck.peekTopCards());
   }
+
+  @Test
+  public void swapTopBottomEmptyDeck() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (!deck.getDeck().isEmpty()) {
+      deck.drawCard();
+    }
+
+    assertDoesNotThrow(() -> deck.swapTopBottomCards());
+    assertEquals(0, deck.getDeck().size());
+  }
+
+  @Test
+  public void swapTopBottomOneCard() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (deck.getDeck().size() > 1) {
+      deck.drawCard();
+    }
+
+    Card remainingCard = deck.getDeck().get(0);
+
+    assertDoesNotThrow(() -> deck.swapTopBottomCards());
+    assertEquals(1, deck.getDeck().size());
+    assertEquals(remainingCard, deck.getDeck().get(0));
+  }
+
+  @Test
+  public void swapTopBottomTwoCards() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    while (deck.getDeck().size() > 2) {
+      deck.drawCard();
+    }
+
+    Card originalTop = deck.getDeck().get(0);
+    Card originalBottom = deck.getDeck().get(1);
+
+    deck.swapTopBottomCards();
+
+    assertEquals(2, deck.getDeck().size());
+    assertEquals(originalBottom, deck.getDeck().get(0));
+    assertEquals(originalTop, deck.getDeck().get(1));
+  }
+
+  @Test
+  public void swapTopBottomMoreThanTwoCards() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    int sizeBefore = deck.getDeck().size();
+
+    Card originalTop = deck.getDeck().get(0);
+    Card originalBottom = deck.getDeck().get(sizeBefore - 1);
+
+    deck.swapTopBottomCards();
+
+    assertEquals(sizeBefore, deck.getDeck().size());
+    assertEquals(originalBottom, deck.getDeck().get(0));
+    assertEquals(originalTop, deck.getDeck().get(sizeBefore - 1));
+  }
+  
+  public void testTakeFromDiscardTypeIsNull() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    deck.discardCard(new Card(CardType.FAVOR));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      deck.takeFromDiscard(null);
+    });
+
+    assertEquals("invalid card type", e.getMessage());
+  }
+
+  @Test
+  public void testTakeFromDiscardDiscardPileIsEmpty() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    Exception e = assertThrows(IllegalStateException.class, () -> {
+      deck.takeFromDiscard(CardType.FAVOR);
+    });
+
+    assertEquals("discard pile is empty", e.getMessage());
+  }
+
+  @Test
+  public void testTakeFromDiscardOneCardTypeDoesNotMatch() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    deck.discardCard(new Card(CardType.ATTACK));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      deck.takeFromDiscard(CardType.FAVOR);
+    });
+
+    assertEquals("card type not in discard pile", e.getMessage());
+  }
+
+  @Test
+  public void testTakeFromDiscardOneCardTypeMatches() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card favor = new Card(CardType.FAVOR);
+    deck.discardCard(favor);
+
+    Card result = deck.takeFromDiscard(CardType.FAVOR);
+
+    assertEquals(favor, result);
+    assertTrue(deck.getDiscard().isEmpty());
+  }
+
+  @Test
+  public void testTakeFromDiscardTwoCardsOnlyLastMatches() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card attack = new Card(CardType.ATTACK);
+    Card favor = new Card(CardType.FAVOR);
+
+    deck.discardCard(attack);
+    deck.discardCard(favor);
+
+    Card result = deck.takeFromDiscard(CardType.FAVOR);
+
+    assertEquals(favor, result);
+    assertEquals(List.of(attack), deck.getDiscard());
+  }
+
+  @Test
+  public void testTakeFromDiscardTwoMatchingCardsTakesOnlyFirst() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+    Card favor1 = new Card(CardType.FAVOR);
+    Card favor2 = new Card(CardType.FAVOR);
+
+    deck.discardCard(favor1);
+    deck.discardCard(favor2);
+
+    Card result = deck.takeFromDiscard(CardType.FAVOR);
+
+    assertEquals(favor1, result);
+    assertEquals(List.of(favor2), deck.getDiscard());
+  }
+
+  @Test
+  public void testTakeFromDiscardManyCardsNoneMatch() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    deck.discardCard(new Card(CardType.ATTACK));
+    deck.discardCard(new Card(CardType.SKIP));
+    deck.discardCard(new Card(CardType.NOPE));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      deck.takeFromDiscard(CardType.FAVOR);
+    });
+
+    assertEquals("card type not in discard pile", e.getMessage());
+  }
 }
