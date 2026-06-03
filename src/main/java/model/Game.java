@@ -125,7 +125,16 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
-    
+
+    if (card.getType() == CardType.SKIP) {
+      playSkip();
+    }
+
+    if (card.getType() == CardType.SUPER_SKIP) {
+      playSuperSkip();
+      return Collections.emptyList();
+    }
+
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
@@ -148,7 +157,16 @@ public class Game {
       playBubonicPlague();
       return Collections.emptyList();
     }
-    
+
+    if (card.getType() == CardType.DRAW_FROM_BOTTOM) {
+      playDrawFromBottom();
+      return Collections.emptyList();
+    }
+
+    if (card.getType() == CardType.CURSE) {
+      playCurse();
+      return Collections.emptyList();
+    }
     return Collections.emptyList();
   }
 
@@ -168,6 +186,28 @@ public class Game {
 
     if (card.getType() == CardType.TARGETED_ATTACK) {
       playTargetedAttack(target);
+      return Collections.emptyList();
+    }
+
+    return Collections.emptyList();
+  }
+
+  public List<Card> playCard(Card card, List<Card> reorderedCards) {
+    if (!gameLaunched) {
+      throw new IllegalStateException("game has not started");
+    }
+    if (gameOver) {
+      throw new IllegalStateException("game is over");
+    }
+    if (!isPlayableCard(card)) {
+      throw new IllegalArgumentException("card is not playable");
+    }
+    Player currentPlayer = getCurrentPlayer();
+    currentPlayer.removeCard(card);
+    deck.discardCard(card);
+
+    if (card.getType() == CardType.ALTER_FUTURE) {
+      playAlterTheFuture(reorderedCards);
       return Collections.emptyList();
     }
     return Collections.emptyList();
@@ -269,8 +309,56 @@ public class Game {
     }
   }
 
+  private void playSuperSkip() {
+    Player currentPlayer = getCurrentPlayer();
+    int turnsOwed = currentPlayer.getTurnsOwed();
+    if (turnsOwed > 1) {
+      currentPlayer.removeTurn();
+      currentPlayer.removeTurn();
+    } else {
+      currentPlayer.removeTurn();
+    }
+    if (currentPlayer.getTurnsOwed() == 0) {
+      moveToNextPlayer();
+    }
+  }
+
+  public void defuse(int position) {
+    Player currentPlayer = getCurrentPlayer();
+    if (!currentPlayer.hasDefuse()) {
+      throw new IllegalStateException("player does not have a defuse card");
+    }
+    if (position < 0 || position > deck.getDeck().size()) {
+      throw new IllegalArgumentException("position cannot be negative");
+    }
+    deck.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), position);
+  }
+  
+  private void playSkip() {
+    completeOneTurn();
+  }
+
   public List<Player> getPlayers() {
     return new ArrayList<>(players);
+  }
+
+  public List<Card> playNosy(int targetPlayerIndex) {
+    Player currentPlayer = getCurrentPlayer();
+    Card nosy = new Card(CardType.NOSY);
+
+    if (!currentPlayer.getHand().contains(nosy)) {
+      throw new IllegalArgumentException("card is not in player's hand");
+    }
+    if (targetPlayerIndex < 0 || targetPlayerIndex >= players.size()) {
+      throw new IllegalArgumentException("invalid player index");
+    }
+    if (targetPlayerIndex == currentPlayerIndex) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+    if (!players.get(targetPlayerIndex).isAlive()) {
+      throw new IllegalArgumentException("target player is not alive");
+    }
+    return players.get(targetPlayerIndex).getHand();
   }
 
   public List<Card> getDrawPile() {
@@ -351,6 +439,26 @@ public class Game {
   
   public void playSwap() {
     deck.swapTopBottomCards();
+  }
+
+  public void playDrawFromBottom() {
+    Card card = deck.drawFromBottom();
+    getCurrentPlayer().addCard(card);
+    completeOneTurn();
+  }
+
+  public void playAlterTheFuture(List<Card> reorderedCards) {
+    deck.reorderTopCards(reorderedCards);
+  }
+
+  public void playCurse() {
+    Player nextPlayer = getNextActivePlayer();
+    while (nextPlayer.hasDefuse()) {
+      Card defuse = new Card(CardType.DEFUSE);
+      nextPlayer.removeCard(defuse);
+      deck.addToDrawPile(defuse, 0);
+    }
+    deck.shuffle();
   }
   
   public boolean isCatCard(CardType type) {
@@ -598,4 +706,3 @@ public class Game {
     getCurrentPlayer().addTurn();
   }
 }
-
