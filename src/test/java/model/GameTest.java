@@ -1553,7 +1553,7 @@ public class GameTest {
     currentPlayer.addCard(swapCard);
   
     while (game.getDrawPile().size() > 2) {
-      game.drawFromDeck();
+      game.drawFromDeck();
     }
   
     Card originalTop = game.getDrawPile().get(0);
