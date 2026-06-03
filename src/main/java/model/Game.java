@@ -32,7 +32,7 @@ public class Game {
     this.players = new ArrayList<>(players);
     this.numberOfPlayers = players.size();
     this.deck = deck;
-    this.random = random;
+    this.random = new Random(random.nextLong());
     this.currentPlayerIndex = 0;
   }
 
