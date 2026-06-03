@@ -29,7 +29,7 @@ public class Game {
   }
 
   public Game(List<Player> players, Deck deck, Random random) {
-    this.players = players;
+    this.players = new ArrayList<>(players);
     this.numberOfPlayers = players.size();
     this.deck = deck;
     this.random = random;
