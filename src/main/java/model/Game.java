@@ -31,7 +31,7 @@ public class Game {
 
   @SuppressFBWarnings(
           value = "EI_EXPOSE_REP2",
-          justification = "Dependencies (Deck, Random) injected directly to allow mocking during unit tests."
+          justification = "Needed for mocking."
   )
   public Game(List<Player> players, Deck deck, Random random) {
     this.players = new ArrayList<>(players);
