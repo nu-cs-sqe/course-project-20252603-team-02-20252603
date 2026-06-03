@@ -197,6 +197,11 @@ public class Game {
       return Collections.emptyList();
     }
 
+    if (card.getType() == CardType.BLESSING) {
+      target.removeTurn();
+      return Collections.emptyList();
+    }
+
     return Collections.emptyList();
   }
 
@@ -272,28 +277,6 @@ public class Game {
       throw new IllegalArgumentException("invalid cat combo");
     }
     playCatCards(cards, target, named);
-    return Collections.emptyList();
-  }
-
-  public List<Card> playCard(Card card, Player target) {
-    if (!gameLaunched) {
-      throw new IllegalStateException("game has not started");
-    }
-    if (gameOver) {
-      throw new IllegalStateException("game is over");
-    }
-    if (!isPlayableCard(card)) {
-      throw new IllegalArgumentException("card is not playable");
-    }
-    Player currentPlayer = getCurrentPlayer();
-    currentPlayer.removeCard(card);
-    deck.discardCard(card);
-
-    if (card.getType() == CardType.BLESSING) {
-      target.removeTurn();
-      return Collections.emptyList();
-    }
-
     return Collections.emptyList();
   }
 
