@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Arrays;
 import java.util.Random;
-import org.junit.jupiter.api.Test;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.Test;
 
 public class GameTest {
   private static final int RANDOM_SEED = 42;
@@ -3180,7 +3180,7 @@ public class GameTest {
   }
 
   @Test
-  public void testPlayBlessingCard_TC47() {
+  public void testPlayBlessingCard() {
     Player currentPlayerMock = EasyMock.createMock(Player.class);
     Player targetPlayerMock = EasyMock.createMock(Player.class);
 
