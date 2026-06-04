@@ -941,4 +941,36 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void drawCardNormalCard() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+    Card mockCard = createMock(Card.class);
+
+    expect(mockDeck.drawCard()).andReturn(mockCard).once();
+    expect(mockCard.getType()).andReturn(CardType.SKIP).anyTimes();
+    mockPlayer1.addCard(mockCard);
+    mockPlayer1.removeTurn();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.drawCard();
+
+    assertEquals(1, game.getCurrentPlayerIndex());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+  }
 }
