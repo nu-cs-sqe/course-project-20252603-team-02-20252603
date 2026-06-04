@@ -497,4 +497,38 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
   }
+
+  @Test
+  public void handleTurnNormalCurrentPlayer() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    // current player is alive,
+    // turnsOwed = 1 → completeOneTurn →
+    // turnsOwed hits 0 → moveToNextPlayer
+    expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(1).once();  // handleTurn check
+    mockPlayer1.removeTurn();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();  // completeOneTurn check → triggers moveToNextPlayer
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.handleTurn();
+
+    assertEquals(1, game.getCurrentPlayerIndex());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
 }
