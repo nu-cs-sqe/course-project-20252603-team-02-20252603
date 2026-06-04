@@ -695,4 +695,30 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void getNextActivePlayerMultipleDeadPlayersInARow() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Player mockPlayer4 = createMock(Player.class);
+    Player mockPlayer5 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    expect(mockPlayer2.isAlive()).andReturn(false).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(false).anyTimes();
+    expect(mockPlayer4.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    assertEquals(mockPlayer4, game.getNextActivePlayer());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
+  }
 }
