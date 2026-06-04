@@ -22,7 +22,7 @@ public class GameTest {
   private static final int MAX_PLAYERS = 5;
   private static final int TOO_FEW_PLAYERS = 2;
   private static final int TOO_MANY_PLAYERS = 6;
-
+  private static final int RANDOM_SEED = 42;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -37,7 +37,7 @@ public class GameTest {
     Game game = new Game(
         List.of(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4),
         mockDeck,
-        new Random(42)
+        new Random(RANDOM_SEED)
     );
 
     game.startGame();
@@ -63,13 +63,14 @@ public class GameTest {
     Game game = new Game(
         List.of(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5),
         mockDeck,
-        new Random(42)
+        new Random(RANDOM_SEED)
     );
 
     game.startGame();
 
     assertTrue(game.isGameLaunched());
     assertFalse(game.isGameOver());
+    assertEquals(MAX_PLAYERS, game.getPlayers().size());
     assertEquals(0, game.getCurrentPlayerIndex());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
@@ -87,7 +88,7 @@ public class GameTest {
     Game game = new Game(
         List.of(mockPlayer1, mockPlayer2, mockPlayer3),
         mockDeck,
-        new Random(42)
+        new Random(RANDOM_SEED)
     );
 
     game.startGame();
@@ -98,5 +99,24 @@ public class GameTest {
     assertEquals(0, game.getCurrentPlayerIndex());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void startGameTooFewPlayersThrowException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    assertThrows(IllegalArgumentException.class, () -> game.startGame());
+
+    verify(mockPlayer1, mockPlayer2, mockDeck);
   }
 }
