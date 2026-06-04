@@ -505,9 +505,6 @@ public class GameTest {
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
-    // current player is alive,
-    // turnsOwed = 1 → completeOneTurn →
-    // turnsOwed hits 0 → moveToNextPlayer
     expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer1.getTurnsOwed()).andReturn(1).once();
     mockPlayer1.removeTurn();
@@ -538,9 +535,6 @@ public class GameTest {
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
-    // current player is alive,
-    // turnsOwed = 2 → completeOneTurn →
-    // turnsOwed still 1 → stays current
     expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer1.getTurnsOwed()).andReturn(2).once();
     mockPlayer1.removeTurn();
@@ -569,8 +563,6 @@ public class GameTest {
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
-    // current player is alive,
-    // turnsOwed = 0 → skip to next
     expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
@@ -599,7 +591,6 @@ public class GameTest {
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
-    // TC24: current player is not alive → move to next
     expect(mockPlayer1.isAlive()).andReturn(false).anyTimes();
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer2.getTurnsOwed()).andReturn(1).anyTimes();
@@ -649,7 +640,6 @@ public class GameTest {
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
-    // TC26: player 0 is dead (current), player 1 is alive → still returns player 1
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
@@ -672,7 +662,6 @@ public class GameTest {
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
-    // TC29: current player is player 2 (index 2), player 0 is alive → wraps around, returns player 0
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer2.getTurnsOwed()).andReturn(1).anyTimes();
     expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
@@ -687,7 +676,6 @@ public class GameTest {
         new Random(RANDOM_SEED)
     );
 
-    // advance to player 2 (index 2)
     game.moveToNextPlayer();
     game.moveToNextPlayer();
 
@@ -720,5 +708,28 @@ public class GameTest {
     assertEquals(mockPlayer4, game.getNextActivePlayer());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
+  }
+
+  @Test
+  public void getNextActivePlayerNextPlayerIsEliminated() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    expect(mockPlayer2.isAlive()).andReturn(false).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    assertEquals(mockPlayer3, game.getNextActivePlayer());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 }
