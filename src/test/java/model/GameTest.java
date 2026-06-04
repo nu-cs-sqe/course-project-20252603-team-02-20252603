@@ -48,4 +48,30 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockDeck);
   }
+
+  @Test
+  public void startGameUpperBoundaryPlayerCount() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Player mockPlayer4 = createMock(Player.class);
+    Player mockPlayer5 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5),
+        mockDeck,
+        new Random(42)
+    );
+
+    game.startGame();
+
+    assertTrue(game.isGameLaunched());
+    assertFalse(game.isGameOver());
+    assertEquals(0, game.getCurrentPlayerIndex());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
+  }
 }
