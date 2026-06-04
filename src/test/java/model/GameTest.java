@@ -182,4 +182,26 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void validatePlayerCountFivePlayers() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Player mockPlayer4 = createMock(Player.class);
+    Player mockPlayer5 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+    assertEquals(MAX_PLAYERS, game.getPlayers().size());
+    assertDoesNotThrow(() -> game.validatePlayerCount());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
+  }
 }
