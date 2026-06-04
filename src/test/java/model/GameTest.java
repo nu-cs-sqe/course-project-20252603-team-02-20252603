@@ -627,7 +627,29 @@ public class GameTest {
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
-    // TC25: player 0 is current, player 1 is alive → returns player 1
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    assertEquals(mockPlayer2, game.getNextActivePlayer());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void getNextActivePlayerCurrentPlayerIsDead() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    // TC26: player 0 is dead (current), player 1 is alive → still returns player 1
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
