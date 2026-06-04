@@ -393,7 +393,7 @@ public class GameTest {
     expect(mockDeck.drawCard()).andReturn(mockCard).once();
     mockPlayer1.addCard(mockCard);
     mockPlayer1.removeTurn();
-    expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();  // after removeTurn → triggers moveToNextPlayer
+    expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer2.getTurnsOwed()).andReturn(1).anyTimes();
     expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
@@ -446,4 +446,23 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
+  @Test
+  public void runGameBeforeStartGameThrowsException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    assertThrows(IllegalStateException.class, () -> game.runGame());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
