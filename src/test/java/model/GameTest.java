@@ -204,4 +204,24 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
   }
+
+  @Test
+  public void validatePlayerCountTooFewPlayersThrowException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    assertThrows(IllegalArgumentException.class, () -> game.validatePlayerCount());
+
+    verify(mockPlayer1, mockPlayer2, mockDeck);
+  }
+
 }
