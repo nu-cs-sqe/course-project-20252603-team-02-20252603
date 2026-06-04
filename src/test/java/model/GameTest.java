@@ -973,6 +973,7 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
   }
+
   @Test
   public void drawCardLastCardInDeck() {
     Player mockPlayer1 = createMock(Player.class);
@@ -1005,5 +1006,29 @@ public class GameTest {
     assertTrue(game.getDrawPile().isEmpty());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+  }
+
+  @Test
+  public void drawCardEmptyDeckThrowsException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    expect(mockDeck.drawCard()).andThrow(new IllegalStateException("Draw pile is empty")).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    assertThrows(IllegalStateException.class, () -> game.drawCard());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 }
