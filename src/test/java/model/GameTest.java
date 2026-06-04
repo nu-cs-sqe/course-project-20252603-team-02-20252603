@@ -781,4 +781,36 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void moveToNextPlayerFromLastToFirst() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.getTurnsOwed()).andReturn(1).anyTimes();
+    expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(1).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.moveToNextPlayer();
+    game.moveToNextPlayer();
+    game.moveToNextPlayer();
+
+    assertEquals(0, game.getCurrentPlayerIndex());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
 }
