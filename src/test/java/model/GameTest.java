@@ -894,4 +894,29 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
+  @Test
+  public void completeOneTurnTwoOwed() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    mockPlayer1.removeTurn();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(1).times(2);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.completeOneTurn();
+
+    assertEquals(0, game.getCurrentPlayerIndex());
+    assertEquals(1, game.getPlayers().get(0).getTurnsOwed());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
