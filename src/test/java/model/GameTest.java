@@ -664,4 +664,35 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void getNextActivePlayerWrapAroundToFirstPlayer() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    // TC29: current player is player 2 (index 2), player 0 is alive → wraps around, returns player 0
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.getTurnsOwed()).andReturn(1).anyTimes();
+    expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    // advance to player 2 (index 2)
+    game.moveToNextPlayer();
+    game.moveToNextPlayer();
+
+    assertEquals(mockPlayer1, game.getNextActivePlayer());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
