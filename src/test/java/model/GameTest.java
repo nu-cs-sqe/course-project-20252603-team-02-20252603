@@ -319,4 +319,11 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockDeck);
   }
+
+  @Test
+  public void initializeTurnOrderBeforePlayersExistThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () -> game.initializeTurnOrder());
+  }
 }
