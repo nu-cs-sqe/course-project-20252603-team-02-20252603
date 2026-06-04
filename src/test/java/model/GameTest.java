@@ -380,4 +380,38 @@ public class GameTest {
 
     assertThrows(IllegalStateException.class, () -> game.getCurrentPlayer());
   }
+
+  @Test
+  public void runGameWhileGameIsNotOver() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+    Card mockCard = createMock(Card.class);
+
+    expect(mockCard.getType()).andReturn(CardType.SKIP).anyTimes();
+    expect(mockDeck.drawCard()).andReturn(mockCard).once();
+    mockPlayer1.addCard(mockCard);
+    mockPlayer1.removeTurn();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();  // after removeTurn → triggers moveToNextPlayer
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.getTurnsOwed()).andReturn(1).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.runGame();
+
+    assertFalse(game.isGameOver());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+  }
 }
