@@ -20,8 +20,6 @@ import org.junit.jupiter.api.Test;
 public class GameTest {
   private static final int MIN_PLAYERS = 3;
   private static final int MAX_PLAYERS = 5;
-  private static final int TOO_FEW_PLAYERS = 2;
-  private static final int TOO_MANY_PLAYERS = 6;
   private static final int RANDOM_SEED = 42;
 
   @Test
@@ -118,5 +116,28 @@ public class GameTest {
     assertThrows(IllegalArgumentException.class, () -> game.startGame());
 
     verify(mockPlayer1, mockPlayer2, mockDeck);
+  }
+
+  @Test
+  public void startGameTooManyPlayersThrowException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Player mockPlayer4 = createMock(Player.class);
+    Player mockPlayer5 = createMock(Player.class);
+    Player mockPlayer6 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockPlayer6, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockPlayer6),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    assertThrows(IllegalArgumentException.class, () -> game.startGame());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockPlayer5, mockPlayer6, mockDeck);
   }
 }
