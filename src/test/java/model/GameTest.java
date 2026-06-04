@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 public class GameTest {
   private static final int MIN_PLAYERS = 3;
+  private static final int VALID_PLAYER_COUNT = 4;
   private static final int MAX_PLAYERS = 5;
   private static final int RANDOM_SEED = 42;
 
@@ -268,5 +269,29 @@ public class GameTest {
     assertEquals(MIN_PLAYERS, game.getPlayers().size());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void initializeTurnOrderFourPlayers() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Player mockPlayer4 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.initializeTurnOrder();
+
+    assertEquals(0, game.getCurrentPlayerIndex());
+    assertEquals(VALID_PLAYER_COUNT, game.getPlayers().size());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockPlayer4, mockDeck);
   }
 }
