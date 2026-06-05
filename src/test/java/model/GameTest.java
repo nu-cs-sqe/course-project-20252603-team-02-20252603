@@ -1032,4 +1032,41 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
+  @Test
+  public void drawCardExplodingKittenWithDefuse() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+    Card mockCard = createMock(Card.class);
+
+    expect(mockDeck.drawCard()).andReturn(mockCard).once();
+    expect(mockCard.getType()).andReturn(CardType.EXPLODING_KITTEN).anyTimes();
+    expect(mockPlayer1.hasDefuse()).andReturn(true).once();
+    mockPlayer1.removeCard(new Card(CardType.DEFUSE));
+    mockDeck.discardCard(new Card(CardType.DEFUSE));
+    expect(mockDeck.getDeck()).andReturn(List.of()).once(); // bounds check in defuse()
+    mockDeck.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), 0);
+    mockPlayer1.removeTurn();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).once();
+    expect(mockDeck.getDeck()).andReturn(List.of(new Card(CardType.EXPLODING_KITTEN))).once(); // assertion
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.drawCard(0);
+
+    assertEquals(1, game.getCurrentPlayerIndex());
+    assertEquals(CardType.EXPLODING_KITTEN, game.getDrawPile().get(0).getType());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+  }
 }

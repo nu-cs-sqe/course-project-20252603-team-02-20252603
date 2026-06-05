@@ -188,9 +188,9 @@
     - **State of the system**: Current player draws `EXPLODING_KITTEN` and has a `DEFUSE`
     - **Expected output**: Defuse is used, player stays alive, and Exploding Kitten returns to draw pile
 
-- **TC42: Draw Exploding Kitten without Defuse** ( :white_check_mark: )
+~~- **TC42: Draw Exploding Kitten without Defuse** ( :white_check_mark: )
     - **State of the system**: Current player draws `EXPLODING_KITTEN` and has no `DEFUSE`
-    - **Expected output**: Current player dies and game checks for winner
+    - **Expected output**: Current player dies and game checks for winner~~
 
 ### Method under test: `playDrawFromBottom()`
 
