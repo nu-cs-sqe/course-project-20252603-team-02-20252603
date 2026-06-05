@@ -1381,4 +1381,38 @@ public class GameTest {
     assertEquals(1, game.getCurrentPlayerIndex());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void playCardDrawFromBottomAddsCardAndAdvancesTurn() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card drawFromBottomCard = new Card(CardType.DRAW_FROM_BOTTOM);
+    Card bottomCard = new Card(CardType.SKIP);
+    mockPlayer1.removeCard(drawFromBottomCard);
+    mockDeck.discardCard(drawFromBottomCard);
+    expectLastCall().once();
+    expect(mockDeck.drawFromBottom()).andReturn(bottomCard).once();
+    mockPlayer1.addCard(bottomCard);
+    // completeOneTurn() -> removeTurn(), then moveToNextPlayer()
+    mockPlayer1.removeTurn();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).once();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.playCard(drawFromBottomCard);
+
+    assertEquals(1, game.getCurrentPlayerIndex());
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
