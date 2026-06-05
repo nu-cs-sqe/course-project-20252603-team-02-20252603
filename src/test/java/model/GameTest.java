@@ -1396,7 +1396,6 @@ public class GameTest {
     expectLastCall().once();
     expect(mockDeck.drawFromBottom()).andReturn(bottomCard).once();
     mockPlayer1.addCard(bottomCard);
-    // completeOneTurn() -> removeTurn(), then moveToNextPlayer()
     mockPlayer1.removeTurn();
     expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
@@ -1413,6 +1412,39 @@ public class GameTest {
     game.playCard(drawFromBottomCard);
 
     assertEquals(1, game.getCurrentPlayerIndex());
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playCardCurseNextPlayerLosesAllDefuse() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card curseCard = new Card(CardType.CURSE);
+    Card defuseCard = new Card(CardType.DEFUSE);
+    mockPlayer1.removeCard(curseCard);
+    mockDeck.discardCard(curseCard);
+    expectLastCall().once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.hasDefuse()).andReturn(true).once();
+    mockPlayer2.removeCard(defuseCard);
+    mockDeck.addToDrawPile(defuseCard, 0);
+    expect(mockPlayer2.hasDefuse()).andReturn(false).once();
+    mockDeck.shuffle();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.playCard(curseCard);
+
+    assertEquals(0, game.getCurrentPlayerIndex());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 }

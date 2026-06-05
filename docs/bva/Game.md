@@ -242,6 +242,10 @@
   - **State of the system**: Game is started, game is not over, current player has a `DRAW_FROM_BOTTOM` card, current player owes one turn, and the deck has a bottom card available to draw
   - **Expected output**: Card is removed from hand, card is discarded, the bottom card is drawn and added to the current player's hand, current player's owed turns decreases to 0, and the turn advances to the next alive player
 
+- **TC47.8: Player plays a Curse card and next player loses one Defuse card** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `CURSE` card, the next active player is alive, and the next active player has exactly one `DEFUSE` card
+  - **Expected output**: Curse card is removed from hand, Curse card is discarded, the next active player loses their one Defuse card, that Defuse card is added back into the draw pile, the deck is shuffled, and the current player index stays the same
+
 - **TC47: Player tries to play Blessing card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a Blessing card
   - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn
