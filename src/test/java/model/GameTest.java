@@ -1174,4 +1174,31 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
+  @Test
+  public void playCardAfterGameOverThrowsException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    expect(mockPlayer1.isAlive()).andReturn(false).anyTimes();
+    expect(mockPlayer2.isAlive()).andReturn(false).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.checkWinner();
+
+    Card skipCard = new Card(CardType.SKIP);
+    assertThrows(IllegalStateException.class, () -> game.playCard(skipCard));
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
