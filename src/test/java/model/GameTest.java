@@ -1152,4 +1152,26 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void playCardBeforeGameStartThrowsException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    Card skipCard = new Card(CardType.SKIP);
+    assertThrows(IllegalStateException.class, () -> game.playCard(skipCard));
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
 }
