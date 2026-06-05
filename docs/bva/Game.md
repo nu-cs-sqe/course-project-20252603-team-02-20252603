@@ -192,60 +192,6 @@
     - **State of the system**: Current player draws `EXPLODING_KITTEN` and has no `DEFUSE`
     - **Expected output**: Current player dies and game checks for winner~~
 
-### Method under test: `playDrawFromBottom()`
-
-- **TC#: Draw from bottom with many cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has more than 1 card
-    - **Expected output**: Bottom card is added to current player's hand, played card is discarded, one turn is completed, and empty list is returned
-
-- **TC#: Draw from bottom with exactly 1 card** ( :white_check_mark: )
-    - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has exactly 1 card
-    - **Expected output**: Only card is added to current player's hand, draw pile becomes empty, one turn is completed, and empty list is returned
-
-- **TC#: Draw from bottom with empty draw pile** ( :white_check_mark: )
-    - **State of the system**: Current player resolves `DRAW_FROM_BOTTOM` and draw pile has 0 cards
-    - **Expected output**: Throws `IllegalStateException`
-
-### Method under test: `playAlterTheFuture()`
-
-- **TC#: Alter the Future with more than 3 cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has more than 3 cards, and player gives a valid order for the top 3 cards
-    - **Expected output**: Played card is discarded, top 3 draw pile cards are reordered, cards after the top 3 stay in place, and empty list is returned
-
-- **TC#: Alter the Future with exactly 3 cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 3 cards, and player gives a valid order for all 3 cards
-    - **Expected output**: Played card is discarded, all 3 draw pile cards are reordered, and empty list is returned
-
-- **TC#: Alter the Future with exactly 1 card** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 1 card, and player gives that card back
-    - **Expected output**: Played card is discarded, the only draw pile card remains on top, and empty list is returned
-
-- **TC#: Alter the Future with empty draw pile** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE` and draw pile has 0 cards
-    - **Expected output**: Throws `IllegalStateException`
-
-- **TC#: Alter the Future with invalid order** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE` and reordered cards do not match the visible top cards
-    - **Expected output**: Throws `IllegalArgumentException`
-
-### Method under test: `playCurse()`
-
-- **TC#: Curse next player with no Defuse cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `CURSE` and next player has 0 Defuse cards
-    - **Expected output**: Played card is discarded, next player's hand is unchanged, draw pile size is unchanged, and empty list is returned
-
-- **TC#: Curse next player with exactly 1 Defuse card** ( :white_check_mark: )
-    - **State of the system**: Current player plays `CURSE` and next player has exactly 1 Defuse card
-    - **Expected output**: Defuse is removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
-
-- **TC#: Curse next player with multiple Defuse cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `CURSE` and next player has more than 1 Defuse card
-    - **Expected output**: All Defuse cards are removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
-
-- **TC#: Curse when exactly one other player is alive** ( :white_check_mark: )
-    - **State of the system**: Current player plays `CURSE`, one other player is alive, and remaining player has a Defuse card
-    - **Expected output**: Defuse is removed from the only other alive player, returned to draw pile, draw pile is shuffled, and empty list is returned
-
 ### Method under test: `playCard()`
 
 - **TC43: Player plays a playable card** ( :white_check_mark: )
@@ -874,3 +820,57 @@
 - **TC198: Play Nosy on valid target player** ( :white_check_mark: )
     - **State of the system**: Game is started, current player has a Nosy card, target is a different alive player
     - **Expected output**: Card removed from hand, card added to discard, target player's hand is returned
+
+### Method under test: `playDrawFromBottom()`
+
+- **TC#199: Draw from bottom with many cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has more than 1 card
+  - **Expected output**: Bottom card is added to current player's hand, played card is discarded, one turn is completed, and empty list is returned
+
+- **TC#200: Draw from bottom with exactly 1 card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has exactly 1 card
+  - **Expected output**: Only card is added to current player's hand, draw pile becomes empty, one turn is completed, and empty list is returned
+
+- **TC#201: Draw from bottom with empty draw pile** ( :white_check_mark: )
+  - **State of the system**: Current player resolves `DRAW_FROM_BOTTOM` and draw pile has 0 cards
+  - **Expected output**: Throws `IllegalStateException`
+
+### Method under test: `playAlterTheFuture()`
+
+- **TC#202: Alter the Future with more than 3 cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has more than 3 cards, and player gives a valid order for the top 3 cards
+  - **Expected output**: Played card is discarded, top 3 draw pile cards are reordered, cards after the top 3 stay in place, and empty list is returned
+
+- **TC#203: Alter the Future with exactly 3 cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 3 cards, and player gives a valid order for all 3 cards
+  - **Expected output**: Played card is discarded, all 3 draw pile cards are reordered, and empty list is returned
+
+- **TC#204: Alter the Future with exactly 1 card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 1 card, and player gives that card back
+  - **Expected output**: Played card is discarded, the only draw pile card remains on top, and empty list is returned
+
+- **TC#205: Alter the Future with empty draw pile** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE` and draw pile has 0 cards
+  - **Expected output**: Throws `IllegalStateException`
+
+- **TC#206: Alter the Future with invalid order** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE` and reordered cards do not match the visible top cards
+  - **Expected output**: Throws `IllegalArgumentException`
+
+### Method under test: `playCurse()`
+
+- **TC#207: Curse next player with no Defuse cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has 0 Defuse cards
+  - **Expected output**: Played card is discarded, next player's hand is unchanged, draw pile size is unchanged, and empty list is returned
+
+- **TC#208: Curse next player with exactly 1 Defuse card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has exactly 1 Defuse card
+  - **Expected output**: Defuse is removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
+
+- **TC#209: Curse next player with multiple Defuse cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has more than 1 Defuse card
+  - **Expected output**: All Defuse cards are removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
+
+- **TC#210: Curse when exactly one other player is alive** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE`, one other player is alive, and remaining player has a Defuse card
+  - **Expected output**: Defuse is removed from the only other alive player, returned to draw pile, draw pile is shuffled, and empty list is returned
