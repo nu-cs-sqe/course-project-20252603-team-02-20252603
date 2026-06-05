@@ -1051,7 +1051,7 @@ public class GameTest {
     expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer2.getTurnsOwed()).andReturn(1).once();
-    expect(mockDeck.getDeck()).andReturn(List.of(new Card(CardType.EXPLODING_KITTEN))).once(); // assertion
+    expect(mockDeck.getDeck()).andReturn(List.of(new Card(CardType.EXPLODING_KITTEN))).once();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
 
@@ -1445,6 +1445,32 @@ public class GameTest {
     game.playCard(curseCard);
 
     assertEquals(0, game.getCurrentPlayerIndex());
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void checkWinnerMoreThanOnePlayerAlive() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.checkWinner();
+
+    assertFalse(game.isGameOver());
+
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 }

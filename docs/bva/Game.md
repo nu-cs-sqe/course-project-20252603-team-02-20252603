@@ -246,9 +246,9 @@
   - **State of the system**: Game is started, game is not over, current player has a `CURSE` card, the next active player is alive, and the next active player has exactly one `DEFUSE` card
   - **Expected output**: Curse card is removed from hand, Curse card is discarded, the next active player loses their one Defuse card, that Defuse card is added back into the draw pile, the deck is shuffled, and the current player index stays the same
 
-- **TC47: Player tries to play Blessing card** ( :white_check_mark: )
-  - **State of the system**: Game is started, game is not over, and current player has a Blessing card
-  - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn
+~~- **TC47: Player tries to play Blessing card** ( :white_check_mark: )~~
+  ~~- **State of the system**: Game is started, game is not over, and current player has a Blessing card~~
+  ~~- **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn~~~~
 
 ### Method under test: `checkWinner()`
 
