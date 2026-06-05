@@ -1837,7 +1837,9 @@ public class GameTest {
     mockPlayer1.removeCard(seeTheFutureCard);
     mockDeck.discardCard(seeTheFutureCard);
     expectLastCall().once();
-    expect(mockDeck.peekTopCards()).andThrow(new IllegalStateException("Draw pile is empty")).once();
+    expect(mockDeck.peekTopCards())
+        .andThrow(new IllegalStateException("Draw pile is empty"))
+        .once();
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
     Game game = new Game(
@@ -1879,6 +1881,37 @@ public class GameTest {
 
     assertEquals(1, result.size());
     assertEquals(topCard, result.get(0));
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playSeeTheFutureExactlyThreeDeckCardsReturnsThree() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card seeTheFutureCard = new Card(CardType.SEE_THE_FUTURE);
+    Card topCard1 = new Card(CardType.SKIP);
+    Card topCard2 = new Card(CardType.ATTACK);
+    Card topCard3 = new Card(CardType.NOPE);
+    mockPlayer1.removeCard(seeTheFutureCard);
+    mockDeck.discardCard(seeTheFutureCard);
+    expectLastCall().once();
+    expect(mockDeck.peekTopCards()).andReturn(List.of(topCard1, topCard2, topCard3)).once();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    List<Card> result = game.playCard(seeTheFutureCard);
+
+    assertEquals(3, result.size());
+    assertEquals(List.of(topCard1, topCard2, topCard3), result);
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 }
