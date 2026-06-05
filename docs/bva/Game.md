@@ -214,6 +214,10 @@
     - **State of the system**: Game is over
     - **Expected output**: Throws `IllegalStateException`
 
+- **TC47.1: Player plays a Skip card while owing exactly one turn** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `SKIP` card, and current player owes exactly one turn
+  - **Expected output**: Card is removed from hand, card is discarded, current player's owed turns decreases to 0, and the turn advances to the next alive player
+
 - **TC47: Player tries to play Blessing card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a Blessing card
   - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn
