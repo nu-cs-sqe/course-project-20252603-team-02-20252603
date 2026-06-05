@@ -2067,4 +2067,32 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void playCardSwapTopBottomEmptyDeck() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card swapCard = new Card(CardType.SWAP_TOP_BOTTOM);
+    mockPlayer1.removeCard(swapCard);
+    mockDeck.discardCard(swapCard);
+    expectLastCall().once();
+    mockDeck.swapTopBottomCards();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.playCard(swapCard);
+
+    assertEquals(0, game.getCurrentPlayerIndex());
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
