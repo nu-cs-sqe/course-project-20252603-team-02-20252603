@@ -234,6 +234,10 @@
   - **State of the system**: Game is started, game is not over, current player has a `SWAP_TOP_BOTTOM` card, and the deck has cards that can be swapped
   - **Expected output**: Card is removed from hand, card is discarded, the deck’s top and bottom cards are swapped, and the current player index stays the same
 
+- **TC47.6: Player plays an Attack card and gives the next player an extra turn** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has an `ATTACK` card, and the next player is alive with one turn owed
+  - **Expected output**: Card is removed from hand, card is discarded, the game advances to the next alive player, and that player receives one additional turn
+
 - **TC47: Player tries to play Blessing card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a Blessing card
   - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn

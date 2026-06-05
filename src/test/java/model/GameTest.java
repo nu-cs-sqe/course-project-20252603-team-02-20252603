@@ -1352,4 +1352,33 @@ public class GameTest {
     assertEquals(0, game.getCurrentPlayerIndex());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void playCardAttackMovesToNextPlayerWithExtraTurn() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card attackCard = new Card(CardType.ATTACK);
+    mockPlayer1.removeCard(attackCard);
+    mockDeck.discardCard(attackCard);
+    expectLastCall().once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).once();
+    mockPlayer2.addTurn();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.playCard(attackCard);
+
+    assertEquals(1, game.getCurrentPlayerIndex());
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
