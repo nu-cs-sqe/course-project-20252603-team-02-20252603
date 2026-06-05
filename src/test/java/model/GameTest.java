@@ -1852,4 +1852,33 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void playSeeTheFutureOneDeckCardReturnsOne() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card seeTheFutureCard = new Card(CardType.SEE_THE_FUTURE);
+    Card topCard = new Card(CardType.SKIP);
+    mockPlayer1.removeCard(seeTheFutureCard);
+    mockDeck.discardCard(seeTheFutureCard);
+    expectLastCall().once();
+    expect(mockDeck.peekTopCards()).andReturn(List.of(topCard)).once();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    List<Card> result = game.playCard(seeTheFutureCard);
+
+    assertEquals(1, result.size());
+    assertEquals(topCard, result.get(0));
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
