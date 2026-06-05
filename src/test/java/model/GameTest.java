@@ -15,12 +15,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class GameTest {
   private static final int MIN_PLAYERS = 3;
   private static final int VALID_PLAYER_COUNT = 4;
   private static final int MAX_PLAYERS = 5;
   private static final int RANDOM_SEED = 42;
+  private static final int SEE_THE_FUTURE_CARD_COUNT = 3;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -1910,7 +1913,7 @@ public class GameTest {
     game.startGame();
     List<Card> result = game.playCard(seeTheFutureCard);
 
-    assertEquals(3, result.size());
+    assertEquals(SEE_THE_FUTURE_CARD_COUNT, result.size());
     assertEquals(List.of(topCard1, topCard2, topCard3), result);
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
@@ -1941,7 +1944,7 @@ public class GameTest {
     game.startGame();
     List<Card> result = game.playCard(seeTheFutureCard);
 
-    assertEquals(3, result.size());
+    assertEquals(SEE_THE_FUTURE_CARD_COUNT, result.size());
     assertEquals(List.of(topCard1, topCard2, topCard3), result);
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
@@ -2178,5 +2181,33 @@ public class GameTest {
 
     assertEquals(0, game.getCurrentPlayerIndex());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+      "TACOCAT, true",
+      "RAINBOW_RALPHING_CAT, true",
+      "BEARD_CAT, true",
+      "CATTERMELON, true",
+      "FERAL_CAT, true",
+      "ATTACK, false",
+      "EXPLODING_KITTEN, false",
+      "DEFUSE, false"
+  })
+  public void isCatCard(CardType type, boolean expected) {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertEquals(expected, game.isCatCard(type));
+  }
+
+  @Test
+  public void isCatCardTypeIsNull() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.isCatCard(null);
+    });
+
+    assertEquals("invalid card", e.getMessage());
   }
 }
