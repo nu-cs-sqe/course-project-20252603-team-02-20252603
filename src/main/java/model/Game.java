@@ -24,7 +24,7 @@ public class Game {
 
   public Game(int numberOfPlayers, Random random) {
     this.numberOfPlayers = numberOfPlayers;
-    this.random = new Random(random.nextLong());
+    this.random = random;
     this.players = new ArrayList<>();
     this.currentPlayerIndex = 0;
   }
@@ -37,7 +37,7 @@ public class Game {
     this.players = new ArrayList<>(players);
     this.numberOfPlayers = players.size();
     this.deck = deck;
-    this.random = new Random(random.nextLong());
+    this.random = random;
     this.currentPlayerIndex = 0;
   }
 

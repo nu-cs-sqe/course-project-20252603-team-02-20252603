@@ -515,7 +515,13 @@ public class GameIntegrationTest {
     Card drawFromBottom = new Card(CardType.DRAW_FROM_BOTTOM);
     Card topCard = new Card(CardType.SKIP);
     Card bottomCard = new Card(CardType.FAVOR);
+
+    while (currentPlayer.getHand().contains(new Card(CardType.DRAW_FROM_BOTTOM))) {
+      currentPlayer.removeCard(new Card(CardType.DRAW_FROM_BOTTOM));
+    }
+
     currentPlayer.addCard(drawFromBottom);
+
     while (!game.getDrawPile().isEmpty()) {
       game.drawFromDeck();
     }

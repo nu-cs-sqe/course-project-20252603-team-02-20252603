@@ -1636,4 +1636,48 @@ public class GameTest {
     assertEquals(0, game.getCurrentPlayerIndex());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+  @Test
+  public void playBubonicPlagueAllOtherPlayersHaveCards() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+    Random mockRandom = createMock(Random.class);
+
+    Card card2 = new Card(CardType.SKIP);
+    Card card3 = new Card(CardType.ATTACK);
+
+    // mockPlayer2: alive and has one card
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getHand()).andReturn(List.of(card2)).times(2);
+    expect(mockRandom.nextInt(1)).andReturn(0).once();
+    mockPlayer2.removeCard(card2);
+    expect(mockDeck.getDeck()).andReturn(List.of()).once();
+    expect(mockRandom.nextInt(1)).andReturn(0).once();
+    mockDeck.addToDrawPile(card2, 0);
+
+    // mockPlayer3: alive and has one card
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.getHand()).andReturn(List.of(card3)).times(2);
+    expect(mockRandom.nextInt(1)).andReturn(0).once();
+    mockPlayer3.removeCard(card3);
+    expect(mockDeck.getDeck()).andReturn(List.of(card2)).once();
+    expect(mockRandom.nextInt(2)).andReturn(1).once();
+    mockDeck.addToDrawPile(card3, 1);
+
+    mockDeck.shuffle();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        mockRandom
+    );
+
+    game.startGame();
+    game.playBubonicPlague();
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
+  }
 }
