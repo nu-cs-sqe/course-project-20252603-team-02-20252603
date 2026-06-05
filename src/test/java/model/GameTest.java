@@ -14,9 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class GameTest {
   private static final int MIN_PLAYERS = 3;
@@ -2209,5 +2213,146 @@ public class GameTest {
     });
 
     assertEquals("invalid card", e.getMessage());
+  }
+
+  @Test
+  public void isValidCatComboNullListThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.isValidCatCombo(null));
+
+    assertEquals("cards cannot be null or empty", e.getMessage());
+  }
+
+  @Test
+  public void isValidCatComboEmptyListThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.isValidCatCombo(List.of()));
+
+    assertEquals("cards cannot be null or empty", e.getMessage());
+  }
+
+  static Stream<Arguments> isValidCatComboProvider() {
+    return Stream.of(
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT)),
+            false),
+        // TC91: 2 same real cats
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.BEARD_CAT)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.FERAL_CAT),
+                new Card(CardType.TACOCAT)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.FERAL_CAT),
+                new Card(CardType.FERAL_CAT)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.ATTACK)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.FERAL_CAT)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.FERAL_CAT),
+                new Card(CardType.FERAL_CAT)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.FERAL_CAT),
+                new Card(CardType.FERAL_CAT),
+                new Card(CardType.FERAL_CAT)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.BEARD_CAT),
+                new Card(CardType.CATTERMELON)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.BEARD_CAT),
+                new Card(CardType.FERAL_CAT)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.ATTACK)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.HAIRY_POTATO_CAT),
+                new Card(CardType.RAINBOW_RALPHING_CAT),
+                new Card(CardType.BEARD_CAT),
+                new Card(CardType.CATTERMELON)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.HAIRY_POTATO_CAT),
+                new Card(CardType.RAINBOW_RALPHING_CAT),
+                new Card(CardType.BEARD_CAT),
+                new Card(CardType.FERAL_CAT)),
+            true),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.RAINBOW_RALPHING_CAT),
+                new Card(CardType.BEARD_CAT),
+                new Card(CardType.CATTERMELON)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.HAIRY_POTATO_CAT),
+                new Card(CardType.RAINBOW_RALPHING_CAT),
+                new Card(CardType.FERAL_CAT),
+                new Card(CardType.FERAL_CAT)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.HAIRY_POTATO_CAT),
+                new Card(CardType.RAINBOW_RALPHING_CAT),
+                new Card(CardType.BEARD_CAT),
+                new Card(CardType.ATTACK)),
+            false),
+        Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT),
+                new Card(CardType.TACOCAT)),
+            false)
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("isValidCatComboProvider")
+  public void isValidCatCombo(List<Card> cards, boolean expected) {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertEquals(expected, game.isValidCatCombo(cards));
   }
 }
