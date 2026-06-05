@@ -1274,7 +1274,6 @@ public class GameTest {
     mockPlayer1.removeCard(superSkipCard);
     mockDeck.discardCard(superSkipCard);
     expectLastCall().once();
-    // playSuperSkip(): turnsOwed > 1 -> removeTurn() twice, then moveToNextPlayer()
     expect(mockPlayer1.getTurnsOwed()).andReturn(2).once();
     mockPlayer1.removeTurn();
     mockPlayer1.removeTurn();
@@ -1293,6 +1292,37 @@ public class GameTest {
     game.playCard(superSkipCard);
 
     assertEquals(1, game.getCurrentPlayerIndex());
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playCardSeeTheFutureReturnsTopThreeCards() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card seeTheFutureCard = new Card(CardType.SEE_THE_FUTURE);
+    Card topCard1 = new Card(CardType.SKIP);
+    Card topCard2 = new Card(CardType.ATTACK);
+    Card topCard3 = new Card(CardType.NOPE);
+    mockPlayer1.removeCard(seeTheFutureCard);
+    mockDeck.discardCard(seeTheFutureCard);
+    expectLastCall().once();
+    expect(mockDeck.peekTopCards()).andReturn(List.of(topCard1, topCard2, topCard3)).once();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    List<Card> result = game.playCard(seeTheFutureCard);
+
+    assertEquals(List.of(topCard1, topCard2, topCard3), result);
+    assertEquals(0, game.getCurrentPlayerIndex());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 }

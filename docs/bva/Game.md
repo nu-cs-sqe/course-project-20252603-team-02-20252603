@@ -222,9 +222,13 @@
   - **State of the system**: Game is started, game is not over, current player has a `SUPER_SKIP` card, and current player owes exactly one turn
   - **Expected output**: Card is removed from hand, card is discarded, current player's owed turns decreases from 1 to 0, and the turn advances to the next alive player
 
-- **TC45: Player plays a Super Skip card while owing two turns** ( :white_check_mark: )
+- **TC47.3: Player plays a Super Skip card while owing two turns** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, current player has a `SUPER_SKIP` card, and current player owes exactly two turns
   - **Expected output**: Card is removed from hand, card is discarded, current player's owed turns decreases from 2 to 0, and the turn advances to the next alive player
+
+  - **TC47.4: Player plays a See the Future card when deck has at least three cards** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `SEE_THE_FUTURE` card, and the deck has at least three cards to reveal
+  - **Expected output**: Card is removed from hand, card is discarded, the top three cards of the deck are returned, and the current player index stays the same
 
 - **TC47: Player tries to play Blessing card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a Blessing card
