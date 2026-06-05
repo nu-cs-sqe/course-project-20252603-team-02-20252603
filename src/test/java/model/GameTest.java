@@ -1078,6 +1078,38 @@ public class GameTest {
   }
 
   @Test
+  public void drawCardExplodingKittenWithoutDefuse() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+    Card mockCard = createMock(Card.class);
+
+    expect(mockCard.getType()).andReturn(CardType.EXPLODING_KITTEN).anyTimes();
+    expect(mockDeck.drawCard()).andReturn(mockCard).once();
+    expect(mockPlayer1.hasDefuse()).andReturn(false).once();
+    mockPlayer1.die();
+    expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.drawCard(0);
+
+    assertFalse(game.isGameOver());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockCard);
+  }
+
+  @Test
   public void playCardPlayableCardSkip() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
