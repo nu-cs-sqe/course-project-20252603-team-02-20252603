@@ -347,9 +347,9 @@
 
 ### Method under test: `defuse(int position)`
 
-- **TC69: Defuse when player has no Defuse card** ( :white_check_mark: )
+~~- **TC69: Defuse when player has no Defuse card** ( :white_check_mark: )
     - **State of the system**: Current player does not have a Defuse card
-    - **Expected output**: Throws `IllegalStateException`
+    - **Expected output**: Throws `IllegalStateException`~~
 
 - **TC70: Defuse with position out of bounds (negative)** ( :white_check_mark: )
     - **State of the system**: Position is -1
