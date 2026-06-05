@@ -277,8 +277,8 @@
 
 - **TC53: Player plays Skip card and owes 1 turns** ( :white_check_mark: )
     - **State of the system**: Game is started, game is not over, current player has a Skip card, turnsOwed = 1
-    - **Expected output**: turnsOwed decreases to 1, card removed from hand, card added to discard pile, turn does not
-      move to next player
+    - **Expected output**: turnsOwed decreases to 0, card removed from hand, card added to discard pile, turn moves to
+    next player
 
 - **TC54: Player plays Skip card and owes 2 turns** ( :white_check_mark: )
     - **State of the system**: Game is started, game is not over, current player has a Skip card, turnsOwed = 2
