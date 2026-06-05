@@ -22,6 +22,10 @@ public class Game {
   private boolean gameOver;
   private int currentPlayerIndex;
 
+  @SuppressFBWarnings(
+      value = "EI_EXPOSE_REP2",
+      justification = "Random is intentionally injected to make game behavior testable."
+  )
   public Game(int numberOfPlayers, Random random) {
     this.numberOfPlayers = numberOfPlayers;
     this.random = random;
