@@ -87,7 +87,7 @@ public class Game {
       throw new IllegalStateException("game has not started");
     }
     if (!gameOver) {
-      drawCard();
+      drawCard(0);
     }
   }
 
@@ -109,14 +109,14 @@ public class Game {
     }
   }
 
-  public void drawCard() {
+  public void drawCard(int position) {
     Player currentPlayer = getCurrentPlayer();
     Card card = deck.drawCard();
     if (card.getType() == CardType.EXPLODING_KITTEN && currentPlayer.hasDefuse()) {
       Card defuse = new Card(CardType.DEFUSE);
       currentPlayer.removeCard(defuse);
       deck.discardCard(defuse);
-      deck.addToDrawPile(card, 0);
+      defuse(position);
       completeOneTurn();
       return;
     }
@@ -342,10 +342,7 @@ public class Game {
   }
 
   public void defuse(int position) {
-    Player currentPlayer = getCurrentPlayer();
-    if (!currentPlayer.hasDefuse()) {
-      throw new IllegalStateException("player does not have a defuse card");
-    }
+
     if (position < 0 || position > deck.getDeck().size()) {
       throw new IllegalArgumentException("position cannot be negative");
     }

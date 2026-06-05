@@ -967,7 +967,7 @@ public class GameTest {
     );
 
     game.startGame();
-    game.drawCard();
+    game.drawCard(0);
 
     assertEquals(1, game.getCurrentPlayerIndex());
 
@@ -1000,7 +1000,7 @@ public class GameTest {
     );
 
     game.startGame();
-    game.drawCard();
+    game.drawCard(0);
 
     assertEquals(1, game.getCurrentPlayerIndex());
     assertTrue(game.getDrawPile().isEmpty());
@@ -1027,8 +1027,9 @@ public class GameTest {
 
     game.startGame();
 
-    assertThrows(IllegalStateException.class, () -> game.drawCard());
+    assertThrows(IllegalStateException.class, () -> game.drawCard(0));
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
 }
