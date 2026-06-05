@@ -230,6 +230,10 @@
   - **State of the system**: Game is started, game is not over, current player has a `SEE_THE_FUTURE` card, and the deck has at least three cards to reveal
   - **Expected output**: Card is removed from hand, card is discarded, the top three cards of the deck are returned, and the current player index stays the same
 
+- **TC47.5: Player plays a Swap Top Bottom card** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `SWAP_TOP_BOTTOM` card, and the deck has cards that can be swapped
+  - **Expected output**: Card is removed from hand, card is discarded, the deck’s top and bottom cards are swapped, and the current player index stays the same
+
 - **TC47: Player tries to play Blessing card** ( :white_check_mark: )
   - **State of the system**: Game is started, game is not over, and current player has a Blessing card
   - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn
