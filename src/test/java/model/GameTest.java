@@ -2399,7 +2399,6 @@ public class GameTest {
     Card firstCard = new Card(CardType.FAVOR);
     Card secondCard = new Card(CardType.SHUFFLE);
     Card thirdCard = new Card(CardType.NOPE);
-    Card fourthCard = new Card(CardType.SKIP);
 
     List<Card> reorderedCards = List.of(thirdCard, firstCard, secondCard);
 
@@ -2411,9 +2410,9 @@ public class GameTest {
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
     Game game = new Game(
-            List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-            mockDeck,
-            new Random(RANDOM_SEED)
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
     );
 
     game.startGame();
@@ -2529,7 +2528,6 @@ public class GameTest {
     Card alterFuture = new Card(CardType.ALTER_FUTURE);
     Card firstCard = new Card(CardType.FAVOR);
     Card secondCard = new Card(CardType.SHUFFLE);
-    Card thirdCard = new Card(CardType.NOPE);
     Card wrongCard = new Card(CardType.ATTACK);
 
     List<Card> reorderedCards = List.of(wrongCard, firstCard, secondCard);
