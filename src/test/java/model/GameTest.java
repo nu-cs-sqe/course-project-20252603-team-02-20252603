@@ -3335,4 +3335,330 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
   }
+
+  @Test
+  public void playThreeMatchingCatsNullTargetThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(List.of(cat1, cat2, cat3), null, CardType.FAVOR));
+
+    assertEquals("target cannot be null or dead", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsDeadTargetThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    expect(mockPlayer2.isAlive()).andReturn(false).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR));
+
+    assertEquals("target cannot be null or dead", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsSelfTargetThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(List.of(cat1, cat2, cat3), mockPlayer1, CardType.FAVOR));
+
+    assertEquals("cannot target yourself", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsNullNamedCardThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(List.of(cat1, cat2, cat3), mockPlayer2, null));
+
+    assertEquals("invalid wanted card type", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsExplodingKittenNamedCardThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(
+            List.of(cat1, cat2, cat3), mockPlayer2, CardType.EXPLODING_KITTEN));
+
+    assertEquals("invalid wanted card type", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsNonMatchingCatsThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.BEARD_CAT);
+    Card cat3 = new Card(CardType.CATTERMELON);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR));
+
+    assertEquals("invalid three-cat combo", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsTwoCardsThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(List.of(cat1, cat2), mockPlayer2, CardType.FAVOR));
+
+    assertEquals("invalid three-cat combo", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsCardsNotInHandThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer1.getHand()).andReturn(Collections.emptyList()).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR));
+
+    assertEquals("cards not in hand", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsTargetHasNoNamedCardReturnsFalse() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer1.getHand()).andReturn(List.of(cat1, cat2, cat3)).anyTimes();
+    mockPlayer1.removeCard(cat1);
+    mockPlayer1.removeCard(cat2);
+    mockPlayer1.removeCard(cat3);
+    mockDeck.discardCard(cat1);
+    mockDeck.discardCard(cat2);
+    mockDeck.discardCard(cat3);
+    expect(mockPlayer2.getHand()).andReturn(List.of(new Card(CardType.ATTACK))).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    boolean result = game.playThreeMatchingCats(
+        List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR);
+
+    assertFalse(result);
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsTargetHasOneNamedCardReturnsTrue() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    Card favor = new Card(CardType.FAVOR);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer1.getHand()).andReturn(List.of(cat1, cat2, cat3)).anyTimes();
+    mockPlayer1.removeCard(cat1);
+    mockPlayer1.removeCard(cat2);
+    mockPlayer1.removeCard(cat3);
+    mockDeck.discardCard(cat1);
+    mockDeck.discardCard(cat2);
+    mockDeck.discardCard(cat3);
+    expect(mockPlayer2.getHand()).andReturn(List.of(favor)).anyTimes();
+    mockPlayer2.removeCard(favor);
+    mockPlayer1.addCard(favor);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    boolean result = game.playThreeMatchingCats(
+        List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR);
+
+    assertTrue(result);
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
