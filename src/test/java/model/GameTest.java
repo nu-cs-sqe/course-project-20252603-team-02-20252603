@@ -2444,7 +2444,8 @@ public class GameTest {
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
-    Game game = new Game(List.of(mockPlayer1, mockPlayer2, mockPlayer3), mockDeck, new Random(RANDOM_SEED));
+    Game game = new Game(List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck, new Random(RANDOM_SEED));
 
     game.startGame();
     List<Card> result = game.playCard(alterFuture, reorderedCards);
