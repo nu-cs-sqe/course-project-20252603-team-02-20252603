@@ -2736,4 +2736,41 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void playDrawFromBottomWithOneCard() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card drawFromBottom = new Card(CardType.DRAW_FROM_BOTTOM);
+    Card onlyCard = new Card(CardType.FAVOR);
+
+    mockPlayer1.removeCard(drawFromBottom);
+    mockDeck.discardCard(drawFromBottom);
+    expectLastCall().once();
+    expect(mockDeck.drawFromBottom()).andReturn(onlyCard).once();
+    mockPlayer1.addCard(onlyCard);
+    mockPlayer1.removeTurn();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(0).once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getTurnsOwed()).andReturn(1).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    List<Card> result = game.playCard(drawFromBottom);
+
+    assertEquals(Collections.emptyList(), result);
+    assertEquals(1, game.getCurrentPlayerIndex());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
