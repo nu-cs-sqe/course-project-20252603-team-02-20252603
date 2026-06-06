@@ -2487,4 +2487,35 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void alterFutureEmptyDeck() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+
+    mockPlayer1.removeCard(alterFuture);
+    mockDeck.discardCard(alterFuture);
+    expectLastCall().once();
+    mockDeck.reorderTopCards(Collections.emptyList());
+    expectLastCall().andThrow(new IllegalStateException("deck is empty")).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(alterFuture, Collections.emptyList()));
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
