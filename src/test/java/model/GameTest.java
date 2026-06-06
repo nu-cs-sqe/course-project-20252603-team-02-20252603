@@ -3028,4 +3028,61 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void playNosyOnDeadPlayerThrowException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card nosyCard = new Card(CardType.NOSY);
+    expect(mockPlayer1.getHand()).andReturn(List.of(nosyCard)).anyTimes();
+    expect(mockPlayer2.isAlive()).andReturn(false).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playNosy(1));
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNosyOnValidTarget() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card nosyCard = new Card(CardType.NOSY);
+    Card targetCard = new Card(CardType.SKIP);
+    List<Card> targetHand = List.of(targetCard);
+
+    expect(mockPlayer1.getHand()).andReturn(List.of(nosyCard)).anyTimes();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getHand()).andReturn(targetHand).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    List<Card> result = game.playNosy(1);
+
+    assertEquals(targetHand, result);
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
