@@ -2662,4 +2662,41 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void curseOnlyOneOtherPlayerAlive() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card curseCard = new Card(CardType.CURSE);
+    Card defuseCard = new Card(CardType.DEFUSE);
+
+    mockPlayer1.removeCard(curseCard);
+    mockDeck.discardCard(curseCard);
+    expectLastCall().once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(false).anyTimes();
+    expect(mockPlayer2.hasDefuse()).andReturn(true).once();
+    mockPlayer2.removeCard(defuseCard);
+    mockDeck.addToDrawPile(defuseCard, 0);
+    expect(mockPlayer2.hasDefuse()).andReturn(false).once();
+    mockDeck.shuffle();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    List<Card> result = game.playCard(curseCard);
+
+    assertEquals(Collections.emptyList(), result);
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
