@@ -91,6 +91,17 @@
    
    Group: Work on individual card implementation work for the next milestone and review.
 
+
+# Week 9 (05/25/2026-XX/XX/2026)
+1. [done]
+   Group: Each persons' assigned playCard actions (4 each)
+
+2. [not started]
+   Kevin: Terminal UI
+   Kaitlyn: i18n
+   Ana + Clarissa: integration tests/refactoring game controller
+   Ben: mocking for unit tests
+
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
 1. [done] Person: Task (Links to PR)
