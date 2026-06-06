@@ -3661,4 +3661,306 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void playNekoCardsIsNullThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playNeko(null));
+
+    assertEquals("cards cannot be null", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoCardsIsEmptyThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playNeko(List.of()));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoOneCardThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card neko = new Card(CardType.NEKO);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playNeko(List.of(neko)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoTwoCardsThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playNeko(List.of(neko1, neko2)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoFourCardsThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    Card neko4 = new Card(CardType.NEKO);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playNeko(List.of(neko1, neko2, neko3, neko4)));
+
+    assertEquals("must play exactly 3 neko cards", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoOneCardIsNullThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+
+    List<Card> cards = new java.util.ArrayList<>();
+    cards.add(neko1);
+    cards.add(null);
+    cards.add(neko2);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playNeko(cards));
+
+    assertEquals("all cards must be neko cards", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoOneCardIsNotNekoThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card attack = new Card(CardType.ATTACK);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playNeko(List.of(neko1, neko2, attack)));
+
+    assertEquals("all cards must be neko cards", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoThreeNekosOnlyTwoInHandThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+
+    expect(mockPlayer1.getHand()).andReturn(List.of(neko1, neko2)).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playNeko(List.of(neko1, neko2, neko3)));
+
+    assertEquals("cards not in hand", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoThreeNekosGameOver() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+
+    expect(mockPlayer1.getHand()).andReturn(List.of(neko1, neko2, neko3)).anyTimes();
+    mockPlayer1.removeCard(neko1);
+    mockPlayer1.removeCard(neko2);
+    mockPlayer1.removeCard(neko3);
+    mockDeck.discardCard(neko1);
+    mockDeck.discardCard(neko2);
+    mockDeck.discardCard(neko3);
+    mockPlayer2.die();
+    mockPlayer3.die();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.playNeko(List.of(neko1, neko2, neko3));
+
+    assertTrue(game.isGameOver());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playNekoOneOpponentAlreadyDeadRemainingOpponentDies() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+
+    expect(mockPlayer1.getHand()).andReturn(List.of(neko1, neko2, neko3)).anyTimes();
+    mockPlayer1.removeCard(neko1);
+    mockPlayer1.removeCard(neko2);
+    mockPlayer1.removeCard(neko3);
+    mockDeck.discardCard(neko1);
+    mockDeck.discardCard(neko2);
+    mockDeck.discardCard(neko3);
+    mockPlayer2.die();
+    mockPlayer3.die();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.playNeko(List.of(neko1, neko2, neko3));
+
+    assertTrue(game.isGameOver());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
