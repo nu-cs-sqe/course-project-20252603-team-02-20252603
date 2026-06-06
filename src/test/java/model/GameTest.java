@@ -2518,4 +2518,41 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void alterFutureInvalidOrder() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card alterFuture = new Card(CardType.ALTER_FUTURE);
+    Card firstCard = new Card(CardType.FAVOR);
+    Card secondCard = new Card(CardType.SHUFFLE);
+    Card thirdCard = new Card(CardType.NOPE);
+    Card wrongCard = new Card(CardType.ATTACK);
+
+    List<Card> reorderedCards = List.of(wrongCard, firstCard, secondCard);
+
+    mockPlayer1.removeCard(alterFuture);
+    mockDeck.discardCard(alterFuture);
+    expectLastCall().once();
+    mockDeck.reorderTopCards(reorderedCards);
+    expectLastCall().andThrow(new IllegalArgumentException("invalid reorder")).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () ->
+        game.playCard(alterFuture, reorderedCards));
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
