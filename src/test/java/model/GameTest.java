@@ -2831,4 +2831,37 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
+
+  @Test
+  public void targetedAttackTargetIsNotNextPlayer() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card targetedAttack = new Card(CardType.TARGETED_ATTACK);
+
+    mockPlayer1.removeCard(targetedAttack);
+    mockDeck.discardCard(targetedAttack);
+    expectLastCall().once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+    mockPlayer3.addTurn();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    List<Card> result = game.playCard(targetedAttack, mockPlayer3);
+
+    assertEquals(2, game.getCurrentPlayerIndex());
+    assertEquals(Collections.emptyList(), result);
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
