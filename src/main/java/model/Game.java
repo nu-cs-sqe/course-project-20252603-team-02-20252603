@@ -1,5 +1,6 @@
 package model;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,18 +29,34 @@ public class Game {
     this.currentPlayerIndex = 0;
   }
 
+  @SuppressFBWarnings(
+          value = "EI_EXPOSE_REP2",
+          justification = "Needed for mocking."
+  )
+  public Game(List<Player> players, Deck deck, Random random) {
+    this.players = new ArrayList<>(players);
+    this.numberOfPlayers = players.size();
+    this.deck = deck;
+    this.random = new Random(random.nextLong());
+    this.currentPlayerIndex = 0;
+  }
+
   public void startGame() {
     if (gameLaunched) {
       throw new IllegalStateException("game already started");
     }
     validatePlayerCount();
 
-    players = new ArrayList<>();
-    for (int i = 0; i < numberOfPlayers; i++) {
-      players.add(new Player());
+    if (this.players == null || this.players.isEmpty()) {
+      this.players = new ArrayList<>();
+      for (int i = 0; i < numberOfPlayers; i++) {
+        this.players.add(new Player());
+      }
+    }
+    if (this.deck == null) {
+      this.deck = new Deck(players, random);
     }
 
-    deck = new Deck(players, random);
     initializeTurnOrder();
     gameLaunched = true;
     gameOver = false;
@@ -186,6 +203,11 @@ public class Game {
 
     if (card.getType() == CardType.TARGETED_ATTACK) {
       playTargetedAttack(target);
+      return Collections.emptyList();
+    }
+
+    if (card.getType() == CardType.BLESSING) {
+      target.removeTurn();
       return Collections.emptyList();
     }
 
