@@ -155,6 +155,10 @@ public class Game {
     if (card.getType() == CardType.SEE_THE_FUTURE) {
       return playSeeTheFuture();
     }
+
+    if (card.getType() == CardType.SHUFFLE) {
+      return playShuffle();
+    }
     
     if (card.getType() == CardType.SWAP_TOP_BOTTOM) {
       playSwap();
@@ -450,6 +454,11 @@ public class Game {
     return deck.peekTopCards();
   }
 
+  public List<Card> playShuffle() {
+    deck.shuffle();
+    return deck.getDeck();
+  }
+  
   public void playSwap() {
     deck.swapTopBottomCards();
   }
