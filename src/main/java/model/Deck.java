@@ -20,8 +20,21 @@ public class Deck {
     this.numPlayers = players.size();
     this.random = new Random(random.nextLong());
 
-    // set up deck
-    for (int i = 0; i < STANDARD_CARD_COUNT; i++) { // 4 of each
+    setupStandardCards();
+    setupSpecialCards();
+    setupRareCards();
+    setupSingletonCards();
+    setupExtraDefuseCards();
+
+    shuffle();
+
+    dealStartingHands(players);
+    dealDefuseCards(players);
+    addExplodingKittens();
+  }
+  
+  private void setupStandardCards() {
+    for (int i = 0; i < STANDARD_CARD_COUNT; i++) {
       deck.add(new Card(CardType.FAVOR));
       deck.add(new Card(CardType.SHUFFLE));
       deck.add(new Card(CardType.NOPE));
@@ -33,53 +46,61 @@ public class Deck {
       deck.add(new Card(CardType.DRAW_FROM_BOTTOM));
       deck.add(new Card(CardType.ALTER_FUTURE));
       deck.add(new Card(CardType.FERAL_CAT));
-
     }
-    for (int i = 0; i < SPECIAL_CARD_COUNT; i++) { // 3 of each
+  }
+  
+  private void setupSpecialCards() {
+    for (int i = 0; i < SPECIAL_CARD_COUNT; i++) {
       deck.add(new Card(CardType.ATTACK));
       deck.add(new Card(CardType.TARGETED_ATTACK));
       deck.add(new Card(CardType.SEE_THE_FUTURE));
       deck.add(new Card(CardType.SWAP_TOP_BOTTOM));
       deck.add(new Card(CardType.NEKO));
     }
-    for (int i = 0; i < 2; i++) { // 2 of each
+  }
+  
+  private void setupRareCards() {
+    for (int i = 0; i < 2; i++) {
       deck.add(new Card(CardType.BUBONIC_PLAGUE));
       deck.add(new Card(CardType.BLESSING));
       deck.add(new Card(CardType.CURSE));
       deck.add(new Card(CardType.NOSY));
     }
-
+  }
+  
+  private void setupSingletonCards() {
     deck.add(new Card(CardType.SUPER_SKIP));
-    deck.add(new Card(CardType.NOPE)); // 5th nope card
-    deck.add(new Card(CardType.SKIP)); // 5th skip card
-
-    for (int i = 0; i < DEFUSE_CARD_COUNT - numPlayers; i++) { // extra defuse cards
+    deck.add(new Card(CardType.NOPE));  // 5th nope card
+    deck.add(new Card(CardType.SKIP));  // 5th skip card
+  }
+  
+  private void setupExtraDefuseCards() {
+    for (int i = 0; i < DEFUSE_CARD_COUNT - numPlayers; i++) {
       deck.add(new Card(CardType.DEFUSE));
     }
-
-    // shuffle deck
-    shuffle();
-
-    // deal hands of 7 cards to each player
+  }
+  
+  private void dealStartingHands(List<Player> players) {
     for (int i = 0; i < STARTING_HAND_SIZE; i++) {
       for (Player p : players) {
         p.addCard(deck.get(0));
         deck.remove(0);
       }
     }
-
-    // give each a defuse card
+  }
+  
+  private void dealDefuseCards(List<Player> players) {
     for (Player p : players) {
       p.addCard(new Card(CardType.DEFUSE));
     }
-
-    // put exploding kittens into deck
+  }
+  
+  private void addExplodingKittens() {
     for (int i = 0; i < numPlayers - 1; i++) {
       deck.add(new Card(CardType.EXPLODING_KITTEN));
     }
   }
-
-  /* Shuffle the deck */
+  
   public void shuffle() {
     Collections.shuffle(deck, random);
   }
