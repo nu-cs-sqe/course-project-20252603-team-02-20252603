@@ -95,12 +95,12 @@
 # Week 9 (05/25/2026-XX/XX/2026)
 1. [done]
    Group: Each persons' assigned playCard actions (4 each)
+   Ana + Clarissa: mocking for unit tests (waiting for review)
 
-2. [not started]
+3. [not started]
    Kevin: Terminal UI
    Kaitlyn: i18n
-   Ana + Clarissa: integration tests/refactoring game controller
-   Ben: mocking for unit tests
+   Ben: integration tests/refactoring game controller
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
