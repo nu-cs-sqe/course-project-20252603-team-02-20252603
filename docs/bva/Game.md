@@ -396,6 +396,19 @@
     - **State of the system**: Position is -1
     - **Expected output**: Throws `IllegalArgumentException`
 
+### Method under test: `playShuffle()`
+- **TC55: Shuffle an empty deck** ( :white_check_mark: )
+  - **State of system** Game is running, current player has Shuffle, deck has 0 cards
+  - **Expected output** Card removed from hand, discarded, list of 0 cards returned
+
+- **TC56: Shuffle a deck with one element** ( :white_check_mark: )
+  - **State of system** Game is running, current player has Shuffle, deck has 1 card
+  - **Expected output** Card removed from hand, discarded, list of 1 card returned
+
+- **TC57: Shuffle a deck with more than one element** ( :white_check_mark: )
+  - **State of system** Game is running, current player has Shuffle, deck has 3 cards
+  - **Expected output** Card removed from hand, discarded, list of 3 cards returned
+  
 - **TC71: Defuse with position out of bounds (too large)** ( :white_check_mark: )
     - **State of the system**: Position is greater than drawPile.size()
     - **Expected output**: Throws `IllegalArgumentException`
