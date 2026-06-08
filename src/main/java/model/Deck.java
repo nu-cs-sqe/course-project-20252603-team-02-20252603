@@ -31,75 +31,76 @@ public class Deck {
     dealStartingHands(players);
     dealDefuseCards(players);
     addExplodingKittens();
-}
-
-private void setupStandardCards() {
-    for (int i = 0; i < STANDARD_CARD_COUNT; i++) { 
-        deck.add(new Card(CardType.FAVOR));
-        deck.add(new Card(CardType.SHUFFLE));
-        deck.add(new Card(CardType.NOPE));
-        deck.add(new Card(CardType.BEARD_CAT));
-        deck.add(new Card(CardType.CATTERMELON));
-        deck.add(new Card(CardType.HAIRY_POTATO_CAT));
-        deck.add(new Card(CardType.TACOCAT));
-        deck.add(new Card(CardType.RAINBOW_RALPHING_CAT));
-        deck.add(new Card(CardType.DRAW_FROM_BOTTOM));
-        deck.add(new Card(CardType.ALTER_FUTURE));
-        deck.add(new Card(CardType.FERAL_CAT));
-    }
-}
-
-private void setupSpecialCards() {
-    for (int i = 0; i < SPECIAL_CARD_COUNT; i++) { 
-        deck.add(new Card(CardType.ATTACK));
-        deck.add(new Card(CardType.TARGETED_ATTACK));
-        deck.add(new Card(CardType.SEE_THE_FUTURE));
-        deck.add(new Card(CardType.SWAP_TOP_BOTTOM));
-        deck.add(new Card(CardType.NEKO));
-    }
-}
-
-private void setupRareCards() {
-    for (int i = 0; i < 2; i++) { 
-        deck.add(new Card(CardType.BUBONIC_PLAGUE));
-        deck.add(new Card(CardType.BLESSING));
-        deck.add(new Card(CardType.CURSE));
-        deck.add(new Card(CardType.NOSY));
-    }
-}
-
-private void setupSingletonCards() {
-    deck.add(new Card(CardType.SUPER_SKIP));
-    deck.add(new Card(CardType.NOPE));  // 5th nope card
-    deck.add(new Card(CardType.SKIP));  // 5th skip card
-}
-
-private void setupExtraDefuseCards() {
-    for (int i = 0; i < DEFUSE_CARD_COUNT - numPlayers; i++) {
-        deck.add(new Card(CardType.DEFUSE));
-    }
-}
-
-private void dealStartingHands(List<Player> players) {
-    for (int i = 0; i < STARTING_HAND_SIZE; i++) {
-        for (Player p : players) {
-            p.addCard(deck.get(0));
-            deck.remove(0);
-        }
-    }
-}
-
-private void dealDefuseCards(List<Player> players) {
-    for (Player p : players) {
-        p.addCard(new Card(CardType.DEFUSE));
-    }
-}
-
-private void addExplodingKittens() {
-    for (int i = 0; i < numPlayers - 1; i++) {
-        deck.add(new Card(CardType.EXPLODING_KITTEN));
-    }
-}
+  }
+  
+  private void setupStandardCards() {
+      for (int i = 0; i < STANDARD_CARD_COUNT; i++) { 
+          deck.add(new Card(CardType.FAVOR));
+          deck.add(new Card(CardType.SHUFFLE));
+          deck.add(new Card(CardType.NOPE));
+          deck.add(new Card(CardType.BEARD_CAT));
+          deck.add(new Card(CardType.CATTERMELON));
+          deck.add(new Card(CardType.HAIRY_POTATO_CAT));
+          deck.add(new Card(CardType.TACOCAT));
+          deck.add(new Card(CardType.RAINBOW_RALPHING_CAT));
+          deck.add(new Card(CardType.DRAW_FROM_BOTTOM));
+          deck.add(new Card(CardType.ALTER_FUTURE));
+          deck.add(new Card(CardType.FERAL_CAT));
+      }
+  }
+  
+  private void setupSpecialCards() {
+      for (int i = 0; i < SPECIAL_CARD_COUNT; i++) { 
+          deck.add(new Card(CardType.ATTACK));
+          deck.add(new Card(CardType.TARGETED_ATTACK));
+          deck.add(new Card(CardType.SEE_THE_FUTURE));
+          deck.add(new Card(CardType.SWAP_TOP_BOTTOM));
+          deck.add(new Card(CardType.NEKO));
+      }
+  }
+  
+  private void setupRareCards() {
+      for (int i = 0; i < 2; i++) { 
+          deck.add(new Card(CardType.BUBONIC_PLAGUE));
+          deck.add(new Card(CardType.BLESSING));
+          deck.add(new Card(CardType.CURSE));
+          deck.add(new Card(CardType.NOSY));
+      }
+  }
+  
+  private void setupSingletonCards() {
+      deck.add(new Card(CardType.SUPER_SKIP));
+      deck.add(new Card(CardType.NOPE));  // 5th nope card
+      deck.add(new Card(CardType.SKIP));  // 5th skip card
+  }
+  
+  private void setupExtraDefuseCards() {
+      for (int i = 0; i < DEFUSE_CARD_COUNT - numPlayers; i++) {
+          deck.add(new Card(CardType.DEFUSE));
+      }
+  }
+  
+  private void dealStartingHands(List<Player> players) {
+      for (int i = 0; i < STARTING_HAND_SIZE; i++) {
+          for (Player p : players) {
+              p.addCard(deck.get(0));
+              deck.remove(0);
+          }
+      }
+  }
+  
+  private void dealDefuseCards(List<Player> players) {
+      for (Player p : players) {
+          p.addCard(new Card(CardType.DEFUSE));
+      }
+  }
+  
+  private void addExplodingKittens() {
+      for (int i = 0; i < numPlayers - 1; i++) {
+          deck.add(new Card(CardType.EXPLODING_KITTEN));
+      }
+  }
+  
   public void shuffle() {
     Collections.shuffle(deck, random);
   }
