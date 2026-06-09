@@ -190,7 +190,7 @@ public class Game {
     }
   }
 
-  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required but needed for checkstyle.")
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required checkstyle.")
   public void playCard(Card card, Player target) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
@@ -240,7 +240,7 @@ public class Game {
     }
   }
 
-  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required but needed for checkstyle.")
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required checkstyle.")
   public void playCard(Card card, Player target, Card given) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
@@ -284,7 +284,7 @@ public class Game {
     this.pendingCardList = new ArrayList<>(cards);
   }
 
-  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required but needed for checkstyle.")
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required checkstyle.")
   public void playCard(List<Card> cards, Player target, CardType named) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
