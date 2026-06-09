@@ -3347,4 +3347,17 @@ public class GameTest {
     assertEquals(player1, game.getCurrentPlayer(),
             "The Skip was Noped, so it should still be Player 1's turn.");
   }
+
+  @Test
+  void nopeWhenNoActionPending() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player = game.getCurrentPlayer();
+    Card nopeCard = new Card(CardType.NOPE);
+    player.addCard(nopeCard);
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playNope(player, nopeCard), "Cannot play Nope when pendingAction is NONE");
+  }
 }
