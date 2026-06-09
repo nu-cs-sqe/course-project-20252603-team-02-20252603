@@ -647,7 +647,8 @@ public class GameTest {
     List<Card> reorderedCards = new ArrayList<>();
     reorderedCards.add(onlyCard);
 
-    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    game.playCard(alterFuture, reorderedCards);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertEquals(onlyCard, game.getDrawPile().get(FIRST_PLAYER_INDEX));
@@ -1351,7 +1352,8 @@ public class GameTest {
       game.drawFromDeck();
     }
     
-    List<Card> result = game.playCard(shuffleCard);
+    game.playCard(shuffleCard);
+    List<Card> result = game.resolvePendingAction();
 
     assertTrue(result.isEmpty());
   }

@@ -138,7 +138,7 @@ public class Game {
     completeOneTurn();
   }
 
-  public List<Card> playCard(Card card) {
+  public void playCard(Card card) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -189,12 +189,10 @@ public class Game {
     if (card.getType() == CardType.CURSE) {
       this.pendingAction = ActionType.CURSE;
     }
-
-    return Collections.emptyList();
   }
 
   @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
-  public List<Card> playCard(Card card, Player target) {
+  public void playCard(Card card, Player target) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -219,11 +217,9 @@ public class Game {
       this.pendingAction = ActionType.BLESSING;
       this.pendingTarget = target;
     }
-
-    return Collections.emptyList();
   }
 
-  public List<Card> playCard(Card card, List<Card> reorderedCards) {
+  public void playCard(Card card, List<Card> reorderedCards) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -243,12 +239,10 @@ public class Game {
       this.pendingAction = ActionType.ALTER_FUTURE;
       this.pendingCardList = new ArrayList<>(reorderedCards);
     }
-
-    return Collections.emptyList();
   }
 
   @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
-  public List<Card> playCard(Card card, Player target, Card given) {
+  public void playCard(Card card, Player target, Card given) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -269,11 +263,9 @@ public class Game {
     this.pendingAction = ActionType.FAVOR;
     this.pendingTarget = target;
     this.pendingGivenCard = given;
-
-    return Collections.emptyList();
   }
 
-  public List<Card> playCard(List<Card> cards) {
+  public void playCard(List<Card> cards) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -291,12 +283,10 @@ public class Game {
 
     this.pendingAction = ActionType.NEKO_COMBO;
     this.pendingCardList = new ArrayList<>(cards);
-
-    return Collections.emptyList();
   }
 
   @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
-  public List<Card> playCard(List<Card> cards, Player target, CardType named) {
+  public void playCard(List<Card> cards, Player target, CardType named) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
     }
@@ -311,8 +301,6 @@ public class Game {
     this.pendingCardList = new ArrayList<>(cards);
     this.pendingTarget = target;
     this.pendingWantedCardType = named;
-
-    return Collections.emptyList();
   }
 
   public void playNope(Player player, Card nopeCard) {
