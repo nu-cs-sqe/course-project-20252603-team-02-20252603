@@ -523,7 +523,8 @@ public class GameTest {
     game.addToDrawPile(bottomCard, game.getDrawPile().size());
     int discardSizeBefore = game.getDiscardPile().size();
 
-    List<Card> result = game.playCard(drawFromBottom);
+    game.playCard(drawFromBottom);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertTrue(currentPlayer.getHand().contains(bottomCard));
@@ -546,7 +547,8 @@ public class GameTest {
     }
     game.addToDrawPile(onlyCard, FIRST_PLAYER_INDEX);
 
-    List<Card> result = game.playCard(drawFromBottom);
+    game.playCard(drawFromBottom);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertTrue(currentPlayer.getHand().contains(onlyCard));
@@ -588,7 +590,8 @@ public class GameTest {
     reorderedCards.add(firstCard);
     reorderedCards.add(secondCard);
 
-    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    game.playCard(alterFuture, reorderedCards);
+    List<Card> result = game.resolvePendingAction();
     List<Card> drawPile = game.getDrawPile();
 
     assertEquals(Collections.emptyList(), result);
@@ -619,7 +622,8 @@ public class GameTest {
     reorderedCards.add(thirdCard);
     reorderedCards.add(firstCard);
 
-    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    game.playCard(alterFuture, reorderedCards);
+    List<Card> result = game.resolvePendingAction();
     List<Card> drawPile = game.getDrawPile();
 
     assertEquals(Collections.emptyList(), result);
@@ -643,7 +647,8 @@ public class GameTest {
     List<Card> reorderedCards = new ArrayList<>();
     reorderedCards.add(onlyCard);
 
-    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    game.playCard(alterFuture, reorderedCards);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertEquals(onlyCard, game.getDrawPile().get(FIRST_PLAYER_INDEX));
@@ -660,8 +665,10 @@ public class GameTest {
       game.drawFromDeck();
     }
 
-    assertThrows(IllegalStateException.class, () ->
-            game.playCard(alterFuture, Collections.emptyList()));
+    assertThrows(IllegalStateException.class, () -> {
+      game.playCard(alterFuture, Collections.emptyList());
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -686,8 +693,10 @@ public class GameTest {
     reorderedCards.add(firstCard);
     reorderedCards.add(secondCard);
 
-    assertThrows(IllegalArgumentException.class, () ->
-            game.playCard(alterFuture, reorderedCards));
+    assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(alterFuture, reorderedCards);
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -704,7 +713,8 @@ public class GameTest {
     int drawPileSizeBefore = game.getDrawPile().size();
     int discardSizeBefore = game.getDiscardPile().size();
 
-    List<Card> result = game.playCard(curse);
+    game.playCard(curse);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(nextPlayer.hasDefuse());
@@ -726,7 +736,8 @@ public class GameTest {
     nextPlayer.addCard(new Card(CardType.DEFUSE));
     int drawPileSizeBefore = game.getDrawPile().size();
 
-    List<Card> result = game.playCard(curse);
+    game.playCard(curse);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(nextPlayer.hasDefuse());
@@ -748,7 +759,8 @@ public class GameTest {
     nextPlayer.addCard(new Card(CardType.DEFUSE));
     int drawPileSizeBefore = game.getDrawPile().size();
 
-    List<Card> result = game.playCard(curse);
+    game.playCard(curse);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(nextPlayer.hasDefuse());
@@ -771,7 +783,8 @@ public class GameTest {
     nextPlayer.addCard(new Card(CardType.DEFUSE));
     int drawPileSizeBefore = game.getDrawPile().size();
 
-    List<Card> result = game.playCard(curse);
+    game.playCard(curse);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(nextPlayer.hasDefuse());
@@ -929,6 +942,7 @@ public class GameTest {
     currentPlayer.addCard(skip);
 
     game.playCard(skip);
+    game.resolvePendingAction();
 
     assertEquals(0, currentPlayer.getTurnsOwed());
     assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
@@ -947,6 +961,7 @@ public class GameTest {
     currentPlayer.addTurn();
 
     game.playCard(skip);
+    game.resolvePendingAction();
 
     assertEquals(1, currentPlayer.getTurnsOwed());
     assertEquals(FIRST_PLAYER_INDEX, game.getCurrentPlayerIndex());
@@ -996,6 +1011,7 @@ public class GameTest {
     currentPlayer.addCard(superSkip);
 
     game.playCard(superSkip);
+    game.resolvePendingAction();
 
     assertEquals(0, currentPlayer.getTurnsOwed());
     assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
@@ -1014,6 +1030,7 @@ public class GameTest {
     currentPlayer.addTurn();
 
     game.playCard(superSkip);
+    game.resolvePendingAction();
 
     assertEquals(0, currentPlayer.getTurnsOwed());
     assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
@@ -1038,6 +1055,7 @@ public class GameTest {
     int currentHandSizeBefore = currentPlayer.getHand().size();
 
     game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
 
     // current player hand unchanged (minus the played card)
     assertEquals(currentHandSizeBefore - 1, game.getCurrentPlayer().getHand().size());
@@ -1076,6 +1094,7 @@ public class GameTest {
     int otherHandSizeBefore = otherPlayer.getHand().size();
 
     game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
 
     // empty player still has no cards
     assertEquals(EMPTY_HAND_SIZE, emptyPlayer.getHand().size());
@@ -1105,6 +1124,7 @@ public class GameTest {
     }
 
     game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
 
     // draw pile size unchanged (no cards moved)
     assertEquals(drawPileSizeBefore, game.getDrawPile().size());
@@ -1127,6 +1147,7 @@ public class GameTest {
     int aliveHandSizeBefore = alivePlayer.getHand().size();
 
     game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
 
     assertEquals(aliveHandSizeBefore - 1, alivePlayer.getHand().size());
   }
@@ -1156,7 +1177,8 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player target = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, target.getTurnsOwed());
@@ -1170,11 +1192,11 @@ public class GameTest {
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
 
-    // target player 2 spots ahead
     int targetIndex = (game.getCurrentPlayerIndex() + 2) % game.getPlayers().size();
     Player target = game.getPlayers().get(targetIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(targetIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, target.getTurnsOwed());
@@ -1195,7 +1217,9 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player target = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, target.getTurnsOwed());
@@ -1212,8 +1236,10 @@ public class GameTest {
     Player deadPlayer = game.getPlayers().get(THIRD_PLAYER_INDEX);
     deadPlayer.die();
 
-    assertThrows(IllegalArgumentException.class, () ->
-        game.playCard(new Card(CardType.TARGETED_ATTACK), deadPlayer));
+    assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(new Card(CardType.TARGETED_ATTACK), deadPlayer);
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -1223,8 +1249,10 @@ public class GameTest {
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
 
-    assertThrows(IllegalArgumentException.class, () ->
-        game.playCard(new Card(CardType.TARGETED_ATTACK), currentPlayer));
+    assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(new Card(CardType.TARGETED_ATTACK), currentPlayer);
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -1238,8 +1266,10 @@ public class GameTest {
       game.drawFromDeck();
     }
 
-    assertThrows(IllegalStateException.class, () ->
-        game.playCard(new Card(CardType.SEE_THE_FUTURE)));
+    assertThrows(IllegalStateException.class, () -> {
+      game.playCard(new Card(CardType.SEE_THE_FUTURE));
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -1256,7 +1286,8 @@ public class GameTest {
     List<Card> drawPile = game.getDrawPile();
     Card expectedFirst = drawPile.get(0);
 
-    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(1, result.size());
     assertEquals(expectedFirst, result.get(0));
@@ -1274,7 +1305,8 @@ public class GameTest {
     Card expectedSecond = drawPile.get(1);
     Card expectedThird = drawPile.get(2);
 
-    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(NUM_CARDS_PEEKED, result.size());
     assertEquals(expectedFirst, result.get(0));
@@ -1298,7 +1330,8 @@ public class GameTest {
     Card expectedSecond = drawPile.get(1);
     Card expectedThird = drawPile.get(2);
 
-    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(NUM_CARDS_PEEKED, result.size());
     assertEquals(expectedFirst, result.get(0));
@@ -1319,7 +1352,8 @@ public class GameTest {
       game.drawFromDeck();
     }
     
-    List<Card> result = game.playCard(shuffleCard);
+    game.playCard(shuffleCard);
+    List<Card> result = game.resolvePendingAction();
 
     assertTrue(result.isEmpty());
   }
@@ -1493,7 +1527,8 @@ public class GameTest {
       game.drawFromDeck();
     }
     
-    List<Card> result = game.playCard(shuffleCard);
+    game.playCard(shuffleCard);
+    List<Card> result = game.resolvePendingAction();
     
     assertEquals(1, result.size());
   }
@@ -1514,6 +1549,7 @@ public class GameTest {
     int handSizeBefore = currentPlayer.getHand().size();
   
     game.playCard(swapCard);
+    game.resolvePendingAction();
   
     assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
     assertEquals(1, game.getDrawPile().size());
@@ -1533,7 +1569,8 @@ public class GameTest {
       game.drawFromDeck();
     }
 
-    List<Card> result = game.playCard(shuffleCard);
+    game.playCard(shuffleCard);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(NUM_CARDS_PEEKED, result.size());
   }
@@ -1555,6 +1592,7 @@ public class GameTest {
     int handSizeBefore = currentPlayer.getHand().size();
   
     game.playCard(swapCard);
+    game.resolvePendingAction();
   
     assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
     assertEquals(2, game.getDrawPile().size());
@@ -1576,6 +1614,7 @@ public class GameTest {
     int handSizeBefore = currentPlayer.getHand().size();
 
     game.playCard(swapCard);
+    game.resolvePendingAction();
 
     assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
 
@@ -1878,10 +1917,11 @@ public class GameTest {
     currentPlayer.addCard(cat2);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), null);
+      game.playCard(List.of(cat1, cat2), null, CardType.TACOCAT);
+      game.resolvePendingAction();
     });
 
-    assertEquals("target cannot be null or dead", e.getMessage());
+    assertEquals("invalid target for 2-cat combo", e.getMessage());
   }
 
   @Test
@@ -1897,10 +1937,11 @@ public class GameTest {
     currentPlayer.addCard(cat2);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+      game.playCard(List.of(cat1, cat2), target, CardType.TACOCAT);
+      game.resolvePendingAction();
     });
 
-    assertEquals("target cannot be null or dead", e.getMessage());
+    assertEquals("invalid target for 2-cat combo", e.getMessage());
   }
 
   @Test
@@ -1914,10 +1955,11 @@ public class GameTest {
     currentPlayer.addCard(cat2);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), currentPlayer);
+      game.playCard(List.of(cat1, cat2), currentPlayer, CardType.TACOCAT);
+      game.resolvePendingAction();
     });
 
-    assertEquals("cannot target yourself", e.getMessage());
+    assertEquals("invalid target for 2-cat combo", e.getMessage());
   }
 
   @Test
@@ -1932,10 +1974,11 @@ public class GameTest {
     currentPlayer.addCard(cat2);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+      game.playCard(List.of(cat1, cat2), target, CardType.TACOCAT);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid two-cat combo", e.getMessage());
+    assertEquals("invalid cat combo", e.getMessage());
   }
 
   @Test
@@ -1952,10 +1995,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2, cat3), target);
+      game.playCard(List.of(cat1, cat2, cat3), target, null);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid two-cat combo", e.getMessage());
+    assertEquals("invalid wanted card type for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -1967,7 +2011,8 @@ public class GameTest {
     Card cat2 = new Card(CardType.TACOCAT);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+      game.playCard(List.of(cat1, cat2), target, CardType.BEARD_CAT);
+      game.resolvePendingAction();
     });
 
     assertEquals("cards not in hand", e.getMessage());
@@ -1984,7 +2029,8 @@ public class GameTest {
     currentPlayer.addCard(cat1);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+      game.playCard(List.of(cat1, cat2), target, CardType.DEFUSE);
+      game.resolvePendingAction();
     });
 
     assertEquals("cards not in hand", e.getMessage());
@@ -2004,19 +2050,22 @@ public class GameTest {
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
     Card skip = new Card(CardType.SKIP);
+
     currentPlayer.addCard(cat1);
     currentPlayer.addCard(cat2);
     target.addCard(skip);
-    int discardSizeBefore = game.getDiscardPile().size();
 
-    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
 
-    assertEquals(CardType.SKIP, stolen.getType());
-    assertTrue(currentPlayer.getHand().contains(stolen));
+    game.playCard(List.of(cat1, cat2), target, null);
+
+    game.resolvePendingAction();
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+
     assertFalse(currentPlayer.getHand().contains(cat1));
     assertFalse(currentPlayer.getHand().contains(cat2));
+
     assertEquals(0, target.getHand().size());
-    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
   }
 
   @Test
@@ -2038,7 +2087,6 @@ public class GameTest {
     currentPlayer.addCard(cat2);
     target.addCard(skip);
     target.addCard(attack);
-    int discardSizeBefore = game.getDiscardPile().size();
 
     Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
 
@@ -2046,7 +2094,6 @@ public class GameTest {
     assertTrue(currentPlayer.getHand().contains(stolen));
     assertEquals(1, target.getHand().size());
     assertFalse(target.getHand().contains(stolen));
-    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
   }
 
   @Test
@@ -2071,7 +2118,6 @@ public class GameTest {
     target.addCard(new Card(CardType.FAVOR));
     target.addCard(new Card(CardType.NOPE));
 
-    int discardSizeBefore = game.getDiscardPile().size();
 
     Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
 
@@ -2079,7 +2125,6 @@ public class GameTest {
     assertTrue(currentPlayer.getHand().contains(stolen));
     assertEquals(FOUR_CARDS, target.getHand().size());
     assertFalse(target.getHand().contains(stolen));
-    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
   }
 
   @Test
@@ -2095,10 +2140,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), null, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("target cannot be null or dead", e.getMessage());
+    assertEquals("invalid target for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2116,10 +2162,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("target cannot be null or dead", e.getMessage());
+    assertEquals("invalid target for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2135,10 +2182,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), currentPlayer, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), currentPlayer, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("cannot target yourself", e.getMessage());
+    assertEquals("invalid target for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2155,10 +2203,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, null);
+      game.playCard(List.of(cat1, cat2, cat3), target, null);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid wanted card type", e.getMessage());
+    assertEquals("invalid wanted card type for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2175,10 +2224,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.EXPLODING_KITTEN);
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.EXPLODING_KITTEN);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid wanted card type", e.getMessage());
+    assertEquals("invalid wanted card type for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2195,28 +2245,35 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid three-cat combo", e.getMessage());
+    assertEquals("invalid cat combo", e.getMessage());
   }
 
   @Test
-  public void playThreeMatchingCatsTwoCardsThrowsIllegalArgumentException() {
+  public void playFourMatchingCatsTwoCardsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    Card cat4 = new Card(CardType.TACOCAT);
+
     currentPlayer.addCard(cat1);
     currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2), target, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3, cat4), target, null);
     });
 
-    assertEquals("invalid three-cat combo", e.getMessage());
+    assertEquals("invalid cat combo", e.getMessage());
   }
 
   @Test
@@ -2229,7 +2286,8 @@ public class GameTest {
     Card cat3 = new Card(CardType.TACOCAT);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
     assertEquals("cards not in hand", e.getMessage());
@@ -2255,9 +2313,9 @@ public class GameTest {
     target.addCard(new Card(CardType.ATTACK));
     int discardSizeBefore = game.getDiscardPile().size();
 
-    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
-    assertFalse(result);
     assertFalse(currentPlayer.getHand().contains(cat1));
     assertFalse(currentPlayer.getHand().contains(cat2));
     assertFalse(currentPlayer.getHand().contains(cat3));
@@ -2519,17 +2577,15 @@ public class GameTest {
     currentPlayer.addCard(cat2);
     currentPlayer.addCard(cat3);
     target.addCard(favor);
-    int discardSizeBefore = game.getDiscardPile().size();
 
-    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
-    assertTrue(result);
     assertTrue(currentPlayer.getHand().contains(favor));
     assertFalse(currentPlayer.getHand().contains(cat1));
     assertFalse(currentPlayer.getHand().contains(cat2));
     assertFalse(currentPlayer.getHand().contains(cat3));
     assertEquals(0, target.getHand().size());
-    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
   @Test
@@ -2572,9 +2628,9 @@ public class GameTest {
     target.addCard(favor2);
     int discardSizeBefore = game.getDiscardPile().size();
 
-    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
-    assertTrue(result);
     assertEquals(1, countCards(currentPlayer, CardType.FAVOR));
     assertEquals(1, countCards(target, CardType.FAVOR));
     assertFalse(currentPlayer.getHand().contains(cat1));
@@ -2606,7 +2662,6 @@ public class GameTest {
     target.addCard(favor);
     target.addCard(attack);
     target.addCard(skip);
-    int discardSizeBefore = game.getDiscardPile().size();
 
     boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
 
@@ -2616,7 +2671,6 @@ public class GameTest {
     assertTrue(target.getHand().contains(attack));
     assertTrue(target.getHand().contains(skip));
     assertEquals(2, target.getHand().size());
-    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
   @Test
@@ -2646,10 +2700,11 @@ public class GameTest {
     game.startGame();
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(null, CardType.FAVOR);
+      game.playCard(null, null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("cards cannot be null", e.getMessage());
+    assertEquals("cards cannot be null or empty", e.getMessage());
   }
 
   @Test
@@ -2671,10 +2726,11 @@ public class GameTest {
     currentPlayer.addCard(cat5);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), null);
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, null);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid wanted card type", e.getMessage());
+    assertEquals("invalid wanted card type for 5-cat combo", e.getMessage());
   }
 
   @Test
@@ -2696,11 +2752,12 @@ public class GameTest {
     currentPlayer.addCard(cat5);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null,
           CardType.EXPLODING_KITTEN);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid wanted card type", e.getMessage());
+    assertEquals("invalid wanted card type for 5-cat combo", e.getMessage());
   }
 
   @Test
@@ -2722,10 +2779,10 @@ public class GameTest {
     currentPlayer.addCard(cat5);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR);
     });
 
-    assertEquals("invalid five-cat combo", e.getMessage());
+    assertEquals("invalid cat combo", e.getMessage());
   }
 
   @Test
@@ -2743,10 +2800,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3), CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid five-cat combo", e.getMessage());
+    assertEquals("invalid target for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2761,7 +2819,8 @@ public class GameTest {
     Card cat5 = new Card(CardType.CATTERMELON);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
     assertEquals("cards not in hand", e.getMessage());
@@ -3000,7 +3059,8 @@ public class GameTest {
     new ArrayList<>(target.getHand()).forEach(target::removeCard);
     target.addCard(skip);
 
-    game.playCatCards(List.of(cat1, cat2), target, null);
+    game.playCard(List.of(cat1, cat2), target, null);
+    game.resolvePendingAction();
 
     assertTrue(currentPlayer.getHand().contains(skip));
     assertFalse(target.getHand().contains(skip));
@@ -3030,7 +3090,8 @@ public class GameTest {
 
     target.addCard(favor);
 
-    game.playCatCards(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
     assertTrue(currentPlayer.getHand().contains(favor));
     assertFalse(target.getHand().contains(favor));
@@ -3058,7 +3119,8 @@ public class GameTest {
         .filter(c -> c.getType() == CardType.FAVOR)
         .forEach(target::removeCard);
 
-    game.playCatCards(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
     assertFalse(currentPlayer.getHand().contains(new Card(CardType.FAVOR)));
     assertTrue(game.getDiscardPile().contains(cat1));
@@ -3185,7 +3247,8 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
@@ -3207,7 +3270,8 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
@@ -3226,7 +3290,8 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
@@ -3269,10 +3334,154 @@ public class GameTest {
     game.startGame();
 
     game.playCard(blessingCardMock, targetPlayerMock);
+    game.resolvePendingAction();
 
     EasyMock.verify(
             currentPlayerMock, targetPlayerMock, dummyPlayer1, dummyPlayer2,
             deckMock, blessingCardMock
     );
+  }
+
+  @Test
+  public void testPlaySkipIsNopedFailsToSkip() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player1 = game.getCurrentPlayer();
+    Player player2 = game.getPlayers().get((game.getCurrentPlayerIndex() + 1) % MIN_PLAYERS);
+
+    Card skipCard = new Card(CardType.SKIP);
+    player1.addCard(skipCard);
+
+    Card nopeCard = new Card(CardType.NOPE);
+    player2.addCard(nopeCard);
+
+    game.playCard(skipCard);
+
+    game.playNope(player2, nopeCard);
+
+    game.resolvePendingAction();
+
+    assertFalse(player1.getHand().contains(skipCard), "Skip card consumed");
+    assertFalse(player2.getHand().contains(nopeCard), "Nope card consumed");
+    assertTrue(game.getDiscardPile().contains(skipCard), "Skip in discard");
+    assertTrue(game.getDiscardPile().contains(nopeCard), "Nope in discard");
+
+    assertEquals(player1, game.getCurrentPlayer(),
+            "The Skip was Noped, so it should still be Player 1's turn.");
+  }
+
+  @Test
+  void nopeWhenNoActionPending() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player = game.getCurrentPlayer();
+    Card nopeCard = new Card(CardType.NOPE);
+    player.addCard(nopeCard);
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playNope(player, nopeCard), "Cannot play Nope when pendingAction is NONE");
+  }
+
+  @Test
+  void nopeWithCardNotInHand() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player = game.getCurrentPlayer();
+    Card skipCard = new Card(CardType.SKIP);
+    player.addCard(skipCard);
+
+    game.playCard(skipCard);
+
+    Card phantomNope = new Card(CardType.NOPE);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playNope(player, phantomNope), "Cannot play a card not in player's hand");
+  }
+
+  @Test
+  void passNonNopeCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player = game.getCurrentPlayer();
+    Player noper = game.getPlayers().get((game.getCurrentPlayerIndex() + 1) % MIN_PLAYERS);
+
+    Card skipCard = new Card(CardType.SKIP);
+    player.addCard(skipCard);
+    game.playCard(skipCard);
+
+    Card attackCard = new Card(CardType.ATTACK);
+    noper.addCard(attackCard);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playNope(noper, attackCard), "Card must be of type NOPE");
+  }
+
+  @Test
+  void nopeByThirdPartyPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player attacker = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(1);
+    Player thirdParty = game.getPlayers().get(2); // The player entirely uninvolved
+
+    Card attackCard = new Card(CardType.TARGETED_ATTACK);
+    attacker.addCard(attackCard);
+
+    Card nopeCard = new Card(CardType.NOPE);
+    thirdParty.addCard(nopeCard);
+
+    game.playCard(attackCard, target);
+
+    game.playNope(thirdParty, nopeCard);
+    game.resolvePendingAction();
+
+    assertFalse(thirdParty.getHand().contains(nopeCard));
+    assertTrue(game.getDiscardPile().contains(nopeCard));
+    assertEquals(attacker, game.getCurrentPlayer(),
+            "Attack was cancelled, so turn doesn't pass to target");
+  }
+
+  @Test
+  void nopeOnCatCombo() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player attacker = game.getCurrentPlayer();
+    Player victim = game.getPlayers().get(1);
+    Player noper = game.getPlayers().get(2);
+
+    int initialAttackerHandSize = attacker.getHand().size();
+    int initialDiscardSize = game.getDiscardPile().size();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    attacker.addCard(cat1);
+    attacker.addCard(cat2);
+
+    Card victimCard = new Card(CardType.DEFUSE);
+    victim.addCard(victimCard);
+    int expectedVictimHandSize = victim.getHand().size();
+
+    Card nope = new Card(CardType.NOPE);
+    noper.addCard(nope);
+
+    game.playCard(List.of(cat1, cat2), victim, null);
+
+    game.playNope(noper, nope);
+    game.resolvePendingAction();
+
+    assertEquals(initialAttackerHandSize, attacker.getHand().size(),
+            "Attacker loses combo cards");
+
+    assertEquals(initialDiscardSize + MIN_PLAYERS, game.getDiscardPile().size(),
+            "Combo and Nope cards go to discard");
+
+    assertEquals(expectedVictimHandSize, victim.getHand().size(), "Victim was not robbed");
+    assertTrue(victim.getHand().contains(victimCard), "Victim still has their specific card");
   }
 }
