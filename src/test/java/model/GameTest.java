@@ -2234,10 +2234,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid three-cat combo", e.getMessage());
+    assertEquals("invalid cat combo", e.getMessage());
   }
 
   @Test
