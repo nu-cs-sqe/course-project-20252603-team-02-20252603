@@ -16,7 +16,5 @@ public enum ActionType {
     ALTER_FUTURE,
     FAVOR,
     NEKO_COMBO,
-    TWO_CAT_COMBO,
-    THREE_CAT_COMBO,
-    FIVE_CAT_COMBO
+    CAT_COMBO
 }

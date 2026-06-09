@@ -25,7 +25,7 @@ public class Game {
   private ActionType pendingAction = ActionType.NONE;
   private int nopeCount = 0;
 
-  private Player actionInitiator;
+//  private Player actionInitiator;
   private Player pendingTarget;
   private Card pendingGivenCard;
   private CardType pendingWantedCardType;
@@ -152,7 +152,6 @@ public class Game {
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
-    this.actionInitiator = getCurrentPlayer();
     this.nopeCount = 0;
 
     if (card.getType() == CardType.SKIP) {
@@ -194,6 +193,7 @@ public class Game {
     return Collections.emptyList();
   }
 
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
   public List<Card> playCard(Card card, Player target) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
@@ -208,7 +208,6 @@ public class Game {
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
-    this.actionInitiator = getCurrentPlayer();
     this.nopeCount = 0;
 
     if (card.getType() == CardType.TARGETED_ATTACK) {
@@ -238,17 +237,17 @@ public class Game {
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
-    this.actionInitiator = getCurrentPlayer();
     this.nopeCount = 0;
 
     if (card.getType() == CardType.ALTER_FUTURE) {
       this.pendingAction = ActionType.ALTER_FUTURE;
-      this.pendingCardList = reorderedCards;
+      this.pendingCardList = new ArrayList<>(reorderedCards);
     }
 
     return Collections.emptyList();
   }
 
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
   public List<Card> playCard(Card card, Player target, Card given) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
@@ -289,10 +288,14 @@ public class Game {
         throw new IllegalArgumentException("all cards must be neko cards");
       }
     }
-    playNeko(cards);
+
+    this.pendingAction = ActionType.NEKO_COMBO;
+    this.pendingCardList = new ArrayList<>(cards);
+
     return Collections.emptyList();
   }
 
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
   public List<Card> playCard(List<Card> cards, Player target, CardType named) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
@@ -303,7 +306,12 @@ public class Game {
     if (!isValidCatCombo(cards)) {
       throw new IllegalArgumentException("invalid cat combo");
     }
-    playCatCards(cards, target, named);
+
+    this.pendingAction = ActionType.CAT_COMBO;
+    this.pendingCardList = new ArrayList<>(cards);
+    this.pendingTarget = target;
+    this.pendingWantedCardType = named;
+
     return Collections.emptyList();
   }
 
@@ -342,7 +350,7 @@ public class Game {
           clearPendingState();
           return playShuffle();
         case FAVOR:
-          playFavor(pendingTarget, pendingGivenCard);
+          playFavor(this.pendingTarget, this.pendingGivenCard);
           break;
         case TARGETED_ATTACK:
           playTargetedAttack(pendingTarget);
@@ -371,6 +379,12 @@ public class Game {
         case BLESSING:
           this.pendingTarget.removeTurn();
           break;
+        case NEKO_COMBO:
+          playNeko(this.pendingCardList);
+          break;
+        case CAT_COMBO:
+          playCatCards(this.pendingCardList, this.pendingTarget, this.pendingWantedCardType);
+          break;
         default:
           break;
       }
@@ -384,7 +398,6 @@ public class Game {
   private void clearPendingState() {
     this.pendingAction = ActionType.NONE;
     this.nopeCount = 0;
-    this.actionInitiator = null;
     this.pendingTarget = null;
     this.pendingGivenCard = null;
     this.pendingWantedCardType = null;
