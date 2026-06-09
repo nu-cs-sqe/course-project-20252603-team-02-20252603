@@ -3479,7 +3479,8 @@ public class GameTest {
     assertEquals(initialAttackerHandSize, attacker.getHand().size(),
             "Attacker loses combo cards");
 
-    assertEquals(initialDiscardSize + MIN_PLAYERS, game.getDiscardPile().size(), "Combo and Nope cards go to discard");
+    assertEquals(initialDiscardSize + MIN_PLAYERS, game.getDiscardPile().size(),
+            "Combo and Nope cards go to discard");
 
     assertEquals(expectedVictimHandSize, victim.getHand().size(), "Victim was not robbed");
     assertTrue(victim.getHand().contains(victimCard), "Victim still has their specific card");
