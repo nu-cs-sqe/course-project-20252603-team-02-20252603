@@ -92,7 +92,7 @@
    Group: Work on individual card implementation work for the next milestone and review.
 
 
-# Week 9 (05/25/2026-XX/XX/2026)
+# Week 9 (05/25/2026-06/06/2026)
 1. [done]
    Group: Each persons' assigned playCard actions (4 each)
    Ana + Clarissa: mocking for unit tests (waiting for review)
@@ -101,6 +101,20 @@
    Kevin: Terminal UI
    Kaitlyn: i18n
    Ben: integration tests/refactoring game controller
+
+# Week 10 (06/07/2026-06/10/2026)
+1. [done]
+   Group: Each persons' assigned playCard actions (4 each)
+   Ana + Clarissa: mocking for unit tests (waiting for review)
+
+2. [in progress]
+   Kevin: Terminal UI
+
+4. [not started]
+   Kaitlyn: i18n
+   Ben: integration tests/refactoring game controller
+   Group: Fix code coverage on Game and playCard()
+   Group: Test final program
 
 # Week X (XX/XX/2026-XX/XX/2026) TEMPLATE (You can change the format to whatever the team likes better)
 **Planning and Progress Tracking**:
