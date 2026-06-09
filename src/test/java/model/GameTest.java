@@ -3443,7 +3443,8 @@ public class GameTest {
 
     assertFalse(thirdParty.getHand().contains(nopeCard));
     assertTrue(game.getDiscardPile().contains(nopeCard));
-    assertEquals(attacker, game.getCurrentPlayer(), "Attack was cancelled, so turn doesn't pass to target");
+    assertEquals(attacker, game.getCurrentPlayer(),
+            "Attack was cancelled, so turn doesn't pass to target");
   }
 
   @Test
@@ -3475,9 +3476,10 @@ public class GameTest {
     game.playNope(noper, nope);
     game.resolvePendingAction();
 
-    assertEquals(initialAttackerHandSize, attacker.getHand().size(), "Attacker loses combo cards");
+    assertEquals(initialAttackerHandSize, attacker.getHand().size(),
+            "Attacker loses combo cards");
 
-    assertEquals(initialDiscardSize + 3, game.getDiscardPile().size(), "Combo and Nope cards go to discard");
+    assertEquals(initialDiscardSize + MIN_PLAYERS, game.getDiscardPile().size(), "Combo and Nope cards go to discard");
 
     assertEquals(expectedVictimHandSize, victim.getHand().size(), "Victim was not robbed");
     assertTrue(victim.getHand().contains(victimCard), "Victim still has their specific card");
