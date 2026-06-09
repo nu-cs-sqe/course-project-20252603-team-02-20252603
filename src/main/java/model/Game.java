@@ -156,47 +156,41 @@ public class Game {
     this.nopeCount = 0;
 
     if (card.getType() == CardType.SKIP) {
-//      playSkip();
       this.pendingAction = ActionType.SKIP;
     }
 
     if (card.getType() == CardType.SUPER_SKIP) {
-      playSuperSkip();
-      return Collections.emptyList();
+      this.pendingAction = ActionType.SUPER_SKIP;
     }
 
     if (card.getType() == CardType.SEE_THE_FUTURE) {
-      return playSeeTheFuture();
+      this.pendingAction = ActionType.SEE_THE_FUTURE;
     }
 
     if (card.getType() == CardType.SHUFFLE) {
-      return playShuffle();
+      this.pendingAction = ActionType.SHUFFLE;
     }
     
     if (card.getType() == CardType.SWAP_TOP_BOTTOM) {
-      playSwap();
-      return Collections.emptyList();
+      this.pendingAction = ActionType.SWAP_TOP_BOTTOM;
     }
     
     if (card.getType() == CardType.ATTACK) {
-      playAttack();
-      return Collections.emptyList();
+      this.pendingAction = ActionType.ATTACK;
     }
     
     if (card.getType() == CardType.BUBONIC_PLAGUE) {
-      playBubonicPlague();
-      return Collections.emptyList();
+      this.pendingAction = ActionType.BUBONIC_PLAGUE;
     }
 
     if (card.getType() == CardType.DRAW_FROM_BOTTOM) {
-      playDrawFromBottom();
-      return Collections.emptyList();
+      this.pendingAction = ActionType.DRAW_FROM_BOTTOM;
     }
 
     if (card.getType() == CardType.CURSE) {
-      playCurse();
-      return Collections.emptyList();
+      this.pendingAction = ActionType.CURSE;
     }
+
     return Collections.emptyList();
   }
 
@@ -214,14 +208,17 @@ public class Game {
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
+    this.actionInitiator = getCurrentPlayer();
+    this.nopeCount = 0;
+
     if (card.getType() == CardType.TARGETED_ATTACK) {
-      playTargetedAttack(target);
-      return Collections.emptyList();
+      this.pendingAction = ActionType.TARGETED_ATTACK;
+      this.pendingTarget = target;
     }
 
     if (card.getType() == CardType.BLESSING) {
-      target.removeTurn();
-      return Collections.emptyList();
+      this.pendingAction = ActionType.BLESSING;
+      this.pendingTarget = target;
     }
 
     return Collections.emptyList();
@@ -241,10 +238,14 @@ public class Game {
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
+    this.actionInitiator = getCurrentPlayer();
+    this.nopeCount = 0;
+
     if (card.getType() == CardType.ALTER_FUTURE) {
-      playAlterTheFuture(reorderedCards);
-      return Collections.emptyList();
+      this.pendingAction = ActionType.ALTER_FUTURE;
+      this.pendingCardList = reorderedCards;
     }
+
     return Collections.emptyList();
   }
 
@@ -318,9 +319,9 @@ public class Game {
     nopeCount++;
   }
 
-  public void resolvePendingAction() {
+  public List<Card> resolvePendingAction() {
     if (pendingAction == ActionType.NONE) {
-      return;
+      return Collections.emptyList();
     }
 
     boolean actionIsNoped = (nopeCount % 2 != 0);
@@ -334,13 +335,37 @@ public class Game {
           playAttack();
           break;
         case SHUFFLE:
-          playShuffle();
-          break;
+          clearPendingState();
+          return playShuffle();
         case FAVOR:
           playFavor(pendingTarget, pendingGivenCard);
           break;
         case TARGETED_ATTACK:
           playTargetedAttack(pendingTarget);
+          break;
+        case SEE_THE_FUTURE:
+          clearPendingState();
+          return playSeeTheFuture();
+        case SWAP_TOP_BOTTOM:
+          playSwap();
+          break;
+        case BUBONIC_PLAGUE:
+          playBubonicPlague();
+          break;
+        case SUPER_SKIP:
+          playSuperSkip();
+          break;
+        case CURSE:
+          playCurse();
+          break;
+        case ALTER_FUTURE:
+          playAlterTheFuture(this.pendingCardList);
+          break;
+        case DRAW_FROM_BOTTOM:
+          playDrawFromBottom();
+          break;
+        case BLESSING:
+          this.pendingTarget.removeTurn();
           break;
         default:
           break;
@@ -349,6 +374,7 @@ public class Game {
 
     // Reset the state machine for the next turn
     clearPendingState();
+    return Collections.emptyList();
   }
 
   private void clearPendingState() {

@@ -523,7 +523,8 @@ public class GameTest {
     game.addToDrawPile(bottomCard, game.getDrawPile().size());
     int discardSizeBefore = game.getDiscardPile().size();
 
-    List<Card> result = game.playCard(drawFromBottom);
+    game.playCard(drawFromBottom);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertTrue(currentPlayer.getHand().contains(bottomCard));
@@ -546,7 +547,8 @@ public class GameTest {
     }
     game.addToDrawPile(onlyCard, FIRST_PLAYER_INDEX);
 
-    List<Card> result = game.playCard(drawFromBottom);
+    game.playCard(drawFromBottom);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertTrue(currentPlayer.getHand().contains(onlyCard));
@@ -588,7 +590,8 @@ public class GameTest {
     reorderedCards.add(firstCard);
     reorderedCards.add(secondCard);
 
-    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    game.playCard(alterFuture, reorderedCards);
+    List<Card> result = game.resolvePendingAction();
     List<Card> drawPile = game.getDrawPile();
 
     assertEquals(Collections.emptyList(), result);
@@ -619,7 +622,8 @@ public class GameTest {
     reorderedCards.add(thirdCard);
     reorderedCards.add(firstCard);
 
-    List<Card> result = game.playCard(alterFuture, reorderedCards);
+    game.playCard(alterFuture, reorderedCards);
+    List<Card> result = game.resolvePendingAction();
     List<Card> drawPile = game.getDrawPile();
 
     assertEquals(Collections.emptyList(), result);
@@ -660,8 +664,10 @@ public class GameTest {
       game.drawFromDeck();
     }
 
-    assertThrows(IllegalStateException.class, () ->
-            game.playCard(alterFuture, Collections.emptyList()));
+    assertThrows(IllegalStateException.class, () -> {
+      game.playCard(alterFuture, Collections.emptyList());
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -686,8 +692,10 @@ public class GameTest {
     reorderedCards.add(firstCard);
     reorderedCards.add(secondCard);
 
-    assertThrows(IllegalArgumentException.class, () ->
-            game.playCard(alterFuture, reorderedCards));
+    assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(alterFuture, reorderedCards);
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -704,7 +712,8 @@ public class GameTest {
     int drawPileSizeBefore = game.getDrawPile().size();
     int discardSizeBefore = game.getDiscardPile().size();
 
-    List<Card> result = game.playCard(curse);
+    game.playCard(curse);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(nextPlayer.hasDefuse());
@@ -726,7 +735,8 @@ public class GameTest {
     nextPlayer.addCard(new Card(CardType.DEFUSE));
     int drawPileSizeBefore = game.getDrawPile().size();
 
-    List<Card> result = game.playCard(curse);
+    game.playCard(curse);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(nextPlayer.hasDefuse());
@@ -748,7 +758,8 @@ public class GameTest {
     nextPlayer.addCard(new Card(CardType.DEFUSE));
     int drawPileSizeBefore = game.getDrawPile().size();
 
-    List<Card> result = game.playCard(curse);
+    game.playCard(curse);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(nextPlayer.hasDefuse());
@@ -771,7 +782,8 @@ public class GameTest {
     nextPlayer.addCard(new Card(CardType.DEFUSE));
     int drawPileSizeBefore = game.getDrawPile().size();
 
-    List<Card> result = game.playCard(curse);
+    game.playCard(curse);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(nextPlayer.hasDefuse());
@@ -929,6 +941,7 @@ public class GameTest {
     currentPlayer.addCard(skip);
 
     game.playCard(skip);
+    game.resolvePendingAction();
 
     assertEquals(0, currentPlayer.getTurnsOwed());
     assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
@@ -947,6 +960,7 @@ public class GameTest {
     currentPlayer.addTurn();
 
     game.playCard(skip);
+    game.resolvePendingAction();
 
     assertEquals(1, currentPlayer.getTurnsOwed());
     assertEquals(FIRST_PLAYER_INDEX, game.getCurrentPlayerIndex());
@@ -996,6 +1010,7 @@ public class GameTest {
     currentPlayer.addCard(superSkip);
 
     game.playCard(superSkip);
+    game.resolvePendingAction();
 
     assertEquals(0, currentPlayer.getTurnsOwed());
     assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
@@ -1014,6 +1029,7 @@ public class GameTest {
     currentPlayer.addTurn();
 
     game.playCard(superSkip);
+    game.resolvePendingAction();
 
     assertEquals(0, currentPlayer.getTurnsOwed());
     assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
@@ -1038,6 +1054,7 @@ public class GameTest {
     int currentHandSizeBefore = currentPlayer.getHand().size();
 
     game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
 
     // current player hand unchanged (minus the played card)
     assertEquals(currentHandSizeBefore - 1, game.getCurrentPlayer().getHand().size());
@@ -1076,6 +1093,7 @@ public class GameTest {
     int otherHandSizeBefore = otherPlayer.getHand().size();
 
     game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
 
     // empty player still has no cards
     assertEquals(EMPTY_HAND_SIZE, emptyPlayer.getHand().size());
@@ -1105,6 +1123,7 @@ public class GameTest {
     }
 
     game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
 
     // draw pile size unchanged (no cards moved)
     assertEquals(drawPileSizeBefore, game.getDrawPile().size());
@@ -1127,6 +1146,7 @@ public class GameTest {
     int aliveHandSizeBefore = alivePlayer.getHand().size();
 
     game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
 
     assertEquals(aliveHandSizeBefore - 1, alivePlayer.getHand().size());
   }
@@ -1156,7 +1176,8 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player target = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, target.getTurnsOwed());
@@ -1170,11 +1191,11 @@ public class GameTest {
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
 
-    // target player 2 spots ahead
     int targetIndex = (game.getCurrentPlayerIndex() + 2) % game.getPlayers().size();
     Player target = game.getPlayers().get(targetIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(targetIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, target.getTurnsOwed());
@@ -1195,7 +1216,9 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player target = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+    game.playCard(new Card(CardType.TARGETED_ATTACK), target);
+
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, target.getTurnsOwed());
@@ -1212,8 +1235,10 @@ public class GameTest {
     Player deadPlayer = game.getPlayers().get(THIRD_PLAYER_INDEX);
     deadPlayer.die();
 
-    assertThrows(IllegalArgumentException.class, () ->
-        game.playCard(new Card(CardType.TARGETED_ATTACK), deadPlayer));
+    assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(new Card(CardType.TARGETED_ATTACK), deadPlayer);
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -1223,8 +1248,10 @@ public class GameTest {
     Player currentPlayer = game.getCurrentPlayer();
     currentPlayer.addCard(new Card(CardType.TARGETED_ATTACK));
 
-    assertThrows(IllegalArgumentException.class, () ->
-        game.playCard(new Card(CardType.TARGETED_ATTACK), currentPlayer));
+    assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(new Card(CardType.TARGETED_ATTACK), currentPlayer);
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -1238,8 +1265,10 @@ public class GameTest {
       game.drawFromDeck();
     }
 
-    assertThrows(IllegalStateException.class, () ->
-        game.playCard(new Card(CardType.SEE_THE_FUTURE)));
+    assertThrows(IllegalStateException.class, () -> {
+      game.playCard(new Card(CardType.SEE_THE_FUTURE));
+      game.resolvePendingAction();
+    });
   }
 
   @Test
@@ -1256,7 +1285,8 @@ public class GameTest {
     List<Card> drawPile = game.getDrawPile();
     Card expectedFirst = drawPile.get(0);
 
-    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(1, result.size());
     assertEquals(expectedFirst, result.get(0));
@@ -1274,7 +1304,8 @@ public class GameTest {
     Card expectedSecond = drawPile.get(1);
     Card expectedThird = drawPile.get(2);
 
-    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(NUM_CARDS_PEEKED, result.size());
     assertEquals(expectedFirst, result.get(0));
@@ -1298,7 +1329,8 @@ public class GameTest {
     Card expectedSecond = drawPile.get(1);
     Card expectedThird = drawPile.get(2);
 
-    List<Card> result = game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(NUM_CARDS_PEEKED, result.size());
     assertEquals(expectedFirst, result.get(0));
@@ -1493,7 +1525,8 @@ public class GameTest {
       game.drawFromDeck();
     }
     
-    List<Card> result = game.playCard(shuffleCard);
+    game.playCard(shuffleCard);
+    List<Card> result = game.resolvePendingAction();
     
     assertEquals(1, result.size());
   }
@@ -1514,6 +1547,7 @@ public class GameTest {
     int handSizeBefore = currentPlayer.getHand().size();
   
     game.playCard(swapCard);
+    game.resolvePendingAction();
   
     assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
     assertEquals(1, game.getDrawPile().size());
@@ -1533,7 +1567,8 @@ public class GameTest {
       game.drawFromDeck();
     }
 
-    List<Card> result = game.playCard(shuffleCard);
+    game.playCard(shuffleCard);
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(NUM_CARDS_PEEKED, result.size());
   }
@@ -1555,6 +1590,7 @@ public class GameTest {
     int handSizeBefore = currentPlayer.getHand().size();
   
     game.playCard(swapCard);
+    game.resolvePendingAction();
   
     assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
     assertEquals(2, game.getDrawPile().size());
@@ -1576,6 +1612,7 @@ public class GameTest {
     int handSizeBefore = currentPlayer.getHand().size();
 
     game.playCard(swapCard);
+    game.resolvePendingAction();
 
     assertEquals(handSizeBefore - 1, currentPlayer.getHand().size());
 
@@ -3185,7 +3222,8 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
@@ -3207,7 +3245,8 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
@@ -3226,7 +3265,8 @@ public class GameTest {
     int nextPlayerIndex = (game.getCurrentPlayerIndex() + 1) % game.getPlayers().size();
     Player nextPlayer = game.getPlayers().get(nextPlayerIndex);
 
-    List<Card> result = game.playCard(new Card(CardType.ATTACK));
+    game.playCard(new Card(CardType.ATTACK));
+    List<Card> result = game.resolvePendingAction();
 
     assertEquals(nextPlayerIndex, game.getCurrentPlayerIndex());
     assertEquals(TURNS_OWED, nextPlayer.getTurnsOwed());
@@ -3269,6 +3309,7 @@ public class GameTest {
     game.startGame();
 
     game.playCard(blessingCardMock, targetPlayerMock);
+    game.resolvePendingAction();
 
     EasyMock.verify(
             currentPlayerMock, targetPlayerMock, dummyPlayer1, dummyPlayer2,
