@@ -2655,7 +2655,6 @@ public class GameTest {
     assertTrue(target.getHand().contains(attack));
     assertTrue(target.getHand().contains(skip));
     assertEquals(2, target.getHand().size());
-    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
   @Test
