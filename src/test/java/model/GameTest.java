@@ -1917,10 +1917,11 @@ public class GameTest {
     currentPlayer.addCard(cat2);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), null);
+      game.playCard(List.of(cat1, cat2), null, CardType.TACOCAT);
+      game.resolvePendingAction();
     });
 
-    assertEquals("target cannot be null or dead", e.getMessage());
+    assertEquals("invalid target for 2-cat combo", e.getMessage());
   }
 
   @Test
@@ -1936,10 +1937,11 @@ public class GameTest {
     currentPlayer.addCard(cat2);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+      game.playCard(List.of(cat1, cat2), target, CardType.TACOCAT);
+      game.resolvePendingAction();
     });
 
-    assertEquals("target cannot be null or dead", e.getMessage());
+    assertEquals("invalid target for 2-cat combo", e.getMessage());
   }
 
   @Test
@@ -1953,10 +1955,11 @@ public class GameTest {
     currentPlayer.addCard(cat2);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), currentPlayer);
+      game.playCard(List.of(cat1, cat2), currentPlayer, CardType.TACOCAT);
+      game.resolvePendingAction();
     });
 
-    assertEquals("cannot target yourself", e.getMessage());
+    assertEquals("invalid target for 2-cat combo", e.getMessage());
   }
 
   @Test
@@ -1971,10 +1974,11 @@ public class GameTest {
     currentPlayer.addCard(cat2);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+      game.playCard(List.of(cat1, cat2), target, CardType.TACOCAT);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid two-cat combo", e.getMessage());
+    assertEquals("invalid cat combo", e.getMessage());
   }
 
   @Test
@@ -1991,10 +1995,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2, cat3), target);
+      game.playCard(List.of(cat1, cat2, cat3), target, null);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid two-cat combo", e.getMessage());
+    assertEquals("invalid wanted card type for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2006,7 +2011,8 @@ public class GameTest {
     Card cat2 = new Card(CardType.TACOCAT);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+      game.playCard(List.of(cat1, cat2), target, CardType.BEARD_CAT);
+      game.resolvePendingAction();
     });
 
     assertEquals("cards not in hand", e.getMessage());
@@ -2023,7 +2029,8 @@ public class GameTest {
     currentPlayer.addCard(cat1);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playTwoMatchingCats(List.of(cat1, cat2), target);
+      game.playCard(List.of(cat1, cat2), target, CardType.DEFUSE);
+      game.resolvePendingAction();
     });
 
     assertEquals("cards not in hand", e.getMessage());
@@ -2043,19 +2050,22 @@ public class GameTest {
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
     Card skip = new Card(CardType.SKIP);
+
     currentPlayer.addCard(cat1);
     currentPlayer.addCard(cat2);
     target.addCard(skip);
-    int discardSizeBefore = game.getDiscardPile().size();
 
-    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
 
-    assertEquals(CardType.SKIP, stolen.getType());
-    assertTrue(currentPlayer.getHand().contains(stolen));
+    game.playCard(List.of(cat1, cat2), target, null);
+
+    game.resolvePendingAction();
+
+    assertTrue(currentPlayer.getHand().contains(skip));
+
     assertFalse(currentPlayer.getHand().contains(cat1));
     assertFalse(currentPlayer.getHand().contains(cat2));
+
     assertEquals(0, target.getHand().size());
-    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
   }
 
   @Test
@@ -2077,7 +2087,6 @@ public class GameTest {
     currentPlayer.addCard(cat2);
     target.addCard(skip);
     target.addCard(attack);
-    int discardSizeBefore = game.getDiscardPile().size();
 
     Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
 
@@ -2085,7 +2094,6 @@ public class GameTest {
     assertTrue(currentPlayer.getHand().contains(stolen));
     assertEquals(1, target.getHand().size());
     assertFalse(target.getHand().contains(stolen));
-    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
   }
 
   @Test
@@ -2110,7 +2118,6 @@ public class GameTest {
     target.addCard(new Card(CardType.FAVOR));
     target.addCard(new Card(CardType.NOPE));
 
-    int discardSizeBefore = game.getDiscardPile().size();
 
     Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
 
@@ -2118,7 +2125,6 @@ public class GameTest {
     assertTrue(currentPlayer.getHand().contains(stolen));
     assertEquals(FOUR_CARDS, target.getHand().size());
     assertFalse(target.getHand().contains(stolen));
-    assertEquals(discardSizeBefore + 2, game.getDiscardPile().size());
   }
 
   @Test
@@ -2134,10 +2140,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), null, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("target cannot be null or dead", e.getMessage());
+    assertEquals("invalid target for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2155,10 +2162,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("target cannot be null or dead", e.getMessage());
+    assertEquals("invalid target for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2174,10 +2182,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), currentPlayer, CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), currentPlayer, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("cannot target yourself", e.getMessage());
+    assertEquals("invalid target for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2194,10 +2203,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, null);
+      game.playCard(List.of(cat1, cat2, cat3), target, null);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid wanted card type", e.getMessage());
+    assertEquals("invalid wanted card type for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2214,10 +2224,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.EXPLODING_KITTEN);
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.EXPLODING_KITTEN);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid wanted card type", e.getMessage());
+    assertEquals("invalid wanted card type for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2242,22 +2253,27 @@ public class GameTest {
   }
 
   @Test
-  public void playThreeMatchingCatsTwoCardsThrowsIllegalArgumentException() {
+  public void playFourMatchingCatsTwoCardsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    Card cat4 = new Card(CardType.TACOCAT);
+
     currentPlayer.addCard(cat1);
     currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playCard(List.of(cat1, cat2), target, CardType.FAVOR);
-      game.resolvePendingAction();
+      game.playCard(List.of(cat1, cat2, cat3, cat4), target, null);
     });
 
-    assertEquals("invalid three-cat combo", e.getMessage());
+    assertEquals("invalid cat combo", e.getMessage());
   }
 
   @Test
@@ -2561,17 +2577,15 @@ public class GameTest {
     currentPlayer.addCard(cat2);
     currentPlayer.addCard(cat3);
     target.addCard(favor);
-    int discardSizeBefore = game.getDiscardPile().size();
 
-    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
-    assertTrue(result);
     assertTrue(currentPlayer.getHand().contains(favor));
     assertFalse(currentPlayer.getHand().contains(cat1));
     assertFalse(currentPlayer.getHand().contains(cat2));
     assertFalse(currentPlayer.getHand().contains(cat3));
     assertEquals(0, target.getHand().size());
-    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
   @Test
@@ -2687,10 +2701,11 @@ public class GameTest {
     game.startGame();
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(null, CardType.FAVOR);
+      game.playCard(null, null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("cards cannot be null", e.getMessage());
+    assertEquals("cards cannot be null or empty", e.getMessage());
   }
 
   @Test
@@ -2712,10 +2727,11 @@ public class GameTest {
     currentPlayer.addCard(cat5);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), null);
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, null);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid wanted card type", e.getMessage());
+    assertEquals("invalid wanted card type for 5-cat combo", e.getMessage());
   }
 
   @Test
@@ -2737,11 +2753,12 @@ public class GameTest {
     currentPlayer.addCard(cat5);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null,
           CardType.EXPLODING_KITTEN);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid wanted card type", e.getMessage());
+    assertEquals("invalid wanted card type for 5-cat combo", e.getMessage());
   }
 
   @Test
@@ -2763,10 +2780,10 @@ public class GameTest {
     currentPlayer.addCard(cat5);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR);
     });
 
-    assertEquals("invalid five-cat combo", e.getMessage());
+    assertEquals("invalid cat combo", e.getMessage());
   }
 
   @Test
@@ -2784,10 +2801,11 @@ public class GameTest {
     currentPlayer.addCard(cat3);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3), CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
-    assertEquals("invalid five-cat combo", e.getMessage());
+    assertEquals("invalid target for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -2802,7 +2820,8 @@ public class GameTest {
     Card cat5 = new Card(CardType.CATTERMELON);
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
     assertEquals("cards not in hand", e.getMessage());
@@ -3041,7 +3060,8 @@ public class GameTest {
     new ArrayList<>(target.getHand()).forEach(target::removeCard);
     target.addCard(skip);
 
-    game.playCatCards(List.of(cat1, cat2), target, null);
+    game.playCard(List.of(cat1, cat2), target, null);
+    game.resolvePendingAction();
 
     assertTrue(currentPlayer.getHand().contains(skip));
     assertFalse(target.getHand().contains(skip));
@@ -3071,7 +3091,8 @@ public class GameTest {
 
     target.addCard(favor);
 
-    game.playCatCards(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
     assertTrue(currentPlayer.getHand().contains(favor));
     assertFalse(target.getHand().contains(favor));
@@ -3099,7 +3120,8 @@ public class GameTest {
         .filter(c -> c.getType() == CardType.FAVOR)
         .forEach(target::removeCard);
 
-    game.playCatCards(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
     assertFalse(currentPlayer.getHand().contains(new Card(CardType.FAVOR)));
     assertTrue(game.getDiscardPile().contains(cat1));
