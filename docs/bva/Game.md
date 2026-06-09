@@ -923,3 +923,7 @@
 - **TC202: Pass a non-Nope card into the nope method** ( :white_check_mark: )
   - **State of the system**: Game is started, an action is pending, a player attempts to pass a different card type (e.g., SKIP) into the playNope() method.
   - **Expected output**: IllegalArgumentException is thrown, card remains in hand, action remains pending.
+
+- **TC203: Play Nope out of turn** (Third-party intervention) ( :white_check_mark: )
+  - **State of the system**: Game is started, Player 1 plays an action targeting Player 2. Player 3 (who is neither the initiator nor the target) plays a Nope card.
+  - **Expected output**: Nope card removed from Player 3's hand, added to discard, Player 1's action is not performed.

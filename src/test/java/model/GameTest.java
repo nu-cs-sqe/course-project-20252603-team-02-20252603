@@ -3379,7 +3379,7 @@ public class GameTest {
   }
 
   @Test
-  void testTC202_passNonNopeCard() {
+  void passNonNopeCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
 
@@ -3395,5 +3395,30 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () ->
             game.playNope(noper, attackCard), "Card must be of type NOPE");
+  }
+
+  @Test
+  void nopeByThirdPartyPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player attacker = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(1);
+    Player thirdParty = game.getPlayers().get(2); // The player entirely uninvolved
+
+    Card attackCard = new Card(CardType.TARGETED_ATTACK);
+    attacker.addCard(attackCard);
+
+    Card nopeCard = new Card(CardType.NOPE);
+    thirdParty.addCard(nopeCard);
+
+    game.playCard(attackCard, target);
+
+    game.playNope(thirdParty, nopeCard);
+    game.resolvePendingAction();
+
+    assertFalse(thirdParty.getHand().contains(nopeCard));
+    assertTrue(game.getDiscardPile().contains(nopeCard));
+    assertEquals(attacker, game.getCurrentPlayer(), "Attack was cancelled, so turn doesn't pass to target");
   }
 }
