@@ -927,3 +927,7 @@
 - **TC203: Play Nope out of turn** (Third-party intervention) ( :white_check_mark: )
   - **State of the system**: Game is started, Player 1 plays an action targeting Player 2. Player 3 (who is neither the initiator nor the target) plays a Nope card.
   - **Expected output**: Nope card removed from Player 3's hand, added to discard, Player 1's action is not performed.
+
+- **TC204: Play Nope on a multiple-card Cat Combo** ( :white_check_mark: )
+  - **State of the system**: Game is started, current player plays a Two-Cat (or Three-Cat/Five-Cat) combo to steal a card, another player nopes it.
+  - **Expected output**: Nope card consumed, all combo cards removed from attacker's hand and added to discard, no card is stolen from the target.

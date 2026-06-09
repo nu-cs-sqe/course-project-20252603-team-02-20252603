@@ -3421,4 +3421,41 @@ public class GameTest {
     assertTrue(game.getDiscardPile().contains(nopeCard));
     assertEquals(attacker, game.getCurrentPlayer(), "Attack was cancelled, so turn doesn't pass to target");
   }
+
+  @Test
+  void nopeOnCatCombo() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player attacker = game.getCurrentPlayer();
+    Player victim = game.getPlayers().get(1);
+    Player noper = game.getPlayers().get(2);
+
+    int initialAttackerHandSize = attacker.getHand().size();
+    int initialDiscardSize = game.getDiscardPile().size();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    attacker.addCard(cat1);
+    attacker.addCard(cat2);
+
+    Card victimCard = new Card(CardType.DEFUSE);
+    victim.addCard(victimCard);
+    int expectedVictimHandSize = victim.getHand().size();
+
+    Card nope = new Card(CardType.NOPE);
+    noper.addCard(nope);
+
+    game.playCard(List.of(cat1, cat2), victim, null);
+
+    game.playNope(noper, nope);
+    game.resolvePendingAction();
+
+    assertEquals(initialAttackerHandSize, attacker.getHand().size(), "Attacker loses combo cards");
+
+    assertEquals(initialDiscardSize + 3, game.getDiscardPile().size(), "Combo and Nope cards go to discard");
+
+    assertEquals(expectedVictimHandSize, victim.getHand().size(), "Victim was not robbed");
+    assertTrue(victim.getHand().contains(victimCard), "Victim still has their specific card");
+  }
 }

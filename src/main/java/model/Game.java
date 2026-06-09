@@ -296,6 +296,39 @@ public class Game {
       throw new IllegalArgumentException("invalid cat combo");
     }
 
+    Player currentPlayer = getCurrentPlayer();
+    int size = cards.size();
+
+    if (size == TWO_CAT_COMBO_SIZE) {
+      if (target == null || !target.isAlive() || target == currentPlayer) {
+        throw new IllegalArgumentException("invalid target for 2-cat combo");
+      }
+    } else if (size == THREE_CAT_COMBO_SIZE) {
+      if (target == null || !target.isAlive() || target == currentPlayer) {
+        throw new IllegalArgumentException("invalid target for 3-cat combo");
+      }
+      if (named == null || named == CardType.EXPLODING_KITTEN || named == CardType.DEFUSE) {
+        throw new IllegalArgumentException("invalid wanted card type for 3-cat combo");
+      }
+    } else if (size == FIVE_CAT_COMBO_SIZE) {
+      if (named == null || named == CardType.EXPLODING_KITTEN || named == CardType.DEFUSE) {
+        throw new IllegalArgumentException("invalid wanted card type for 5-cat combo");
+      }
+    }
+
+    List<Card> handCopy = new ArrayList<>(currentPlayer.getHand());
+    for (Card c : cards) {
+      if (!handCopy.remove(c)) {
+        throw new IllegalArgumentException("cards not in hand");
+      }
+    }
+
+    for (Card c : cards) {
+      currentPlayer.removeCard(c);
+      deck.discardCard(c);
+    }
+
+    this.nopeCount = 0;
     this.pendingAction = ActionType.CAT_COMBO;
     this.pendingCardList = new ArrayList<>(cards);
     this.pendingTarget = target;
@@ -377,7 +410,6 @@ public class Game {
       }
     }
 
-    // Reset the state machine for the next turn
     clearPendingState();
     return Collections.emptyList();
   }
@@ -651,34 +683,18 @@ public class Game {
   }
 
   public Card playTwoMatchingCats(List<Card> cards, Player target) {
-    if (target == null || !target.isAlive()) {
-      throw new IllegalArgumentException("target cannot be null or dead");
-    }
-
     Player currentPlayer = getCurrentPlayer();
-    if (target == currentPlayer) {
-      throw new IllegalArgumentException("cannot target yourself");
-    }
-    if (!isValidCatCombo(cards) || cards.size() != TWO_CAT_COMBO_SIZE) {
-      throw new IllegalArgumentException("invalid two-cat combo");
-    }
-    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
-    for (Card c : cards) {
-      if (!hand.remove(c)) {
-        throw new IllegalArgumentException("cards not in hand");
-      }
+
+    List<Card> targetHand = target.getHand();
+    if (targetHand.isEmpty()) {
+      return null;
     }
 
-    for (Card c : cards) {
-      currentPlayer.removeCard(c);
-      deck.discardCard(c);
-    }
-    
-    List<Card> targetHand = target.getHand();
     int index = random.nextInt(targetHand.size());
     Card stolenCard = targetHand.get(index);
     target.removeCard(stolenCard);
     currentPlayer.addCard(stolenCard);
+
     return stolenCard;
   }
 
@@ -718,40 +734,15 @@ public class Game {
   }
 
   public boolean playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
-    if (target == null || !target.isAlive()) {
-      throw new IllegalArgumentException("target cannot be null or dead");
-    }
     Player currentPlayer = getCurrentPlayer();
-    if (target == currentPlayer) {
-      throw new IllegalArgumentException("cannot target yourself");
-    }
-
-    if (wantedCard == null || wantedCard == CardType.EXPLODING_KITTEN) {
-      throw new IllegalArgumentException("invalid wanted card type");
-    }
-
-    if (!isValidCatCombo(cards) || cards.size() != THREE_CAT_COMBO_SIZE) {
-      throw new IllegalArgumentException("invalid three-cat combo");
-    }
-
-    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
-    for (Card c : cards) {
-      if (!hand.remove(c)) {
-        throw new IllegalArgumentException("cards not in hand");
-      }
-    }
-
-    for (Card c : cards) {
-      currentPlayer.removeCard(c);
-      deck.discardCard(c);
-    }
 
     Card namedCard = new Card(wantedCard);
     List<Card> targetHand = target.getHand();
-    // current player gets nothing if target doesn't have the card they ask for
+
     if (!targetHand.contains(namedCard)) {
       return false;
     }
+
     target.removeCard(namedCard);
     currentPlayer.addCard(namedCard);
     return true;
@@ -777,31 +768,11 @@ public class Game {
   }
 
   public Card playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
-    if (cards == null) {
-      throw new IllegalArgumentException("cards cannot be null");
-    }
-
-    if (wantedCard == null || wantedCard == CardType.EXPLODING_KITTEN) {
-      throw new IllegalArgumentException("invalid wanted card type");
-    }
-
-    if (!isValidCatCombo(cards) || cards.size() != FIVE_CAT_COMBO_SIZE) {
-      throw new IllegalArgumentException("invalid five-cat combo");
-    }
-
     Player currentPlayer = getCurrentPlayer();
-    List<Card> hand = new ArrayList<>(currentPlayer.getHand());
-    for (Card c : cards) {
-      if (!hand.remove(c)) {
-        throw new IllegalArgumentException("cards not in hand");
-      }
-    }
-    Card receivedCard = takeFromDiscard(wantedCard); // throws if not found
-    for (Card c : cards) {
-      currentPlayer.removeCard(c);
-      deck.discardCard(c);
-    }
+
+    Card receivedCard = takeFromDiscard(wantedCard);
     currentPlayer.addCard(receivedCard);
+
     return receivedCard;
   }
 
