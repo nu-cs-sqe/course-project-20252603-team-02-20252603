@@ -2662,7 +2662,6 @@ public class GameTest {
     target.addCard(favor);
     target.addCard(attack);
     target.addCard(skip);
-    int discardSizeBefore = game.getDiscardPile().size();
 
     boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
 
