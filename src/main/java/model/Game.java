@@ -25,7 +25,6 @@ public class Game {
   private ActionType pendingAction = ActionType.NONE;
   private int nopeCount = 0;
 
-//  private Player actionInitiator;
   private Player pendingTarget;
   private Card pendingGivenCard;
   private CardType pendingWantedCardType;
@@ -191,7 +190,7 @@ public class Game {
     }
   }
 
-  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required but needed for checkstyle.")
   public void playCard(Card card, Player target) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
@@ -241,7 +240,7 @@ public class Game {
     }
   }
 
-  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required but needed for checkstyle.")
   public void playCard(Card card, Player target, Card given) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
@@ -285,7 +284,7 @@ public class Game {
     this.pendingCardList = new ArrayList<>(cards);
   }
 
-  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Targeting exact player references is required for game logic.")
+  @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "Required but needed for checkstyle.")
   public void playCard(List<Card> cards, Player target, CardType named) {
     if (!gameLaunched) {
       throw new IllegalStateException("game has not started");
