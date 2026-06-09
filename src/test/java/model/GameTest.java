@@ -2611,9 +2611,9 @@ public class GameTest {
     target.addCard(favor2);
     int discardSizeBefore = game.getDiscardPile().size();
 
-    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
 
-    assertTrue(result);
     assertEquals(1, countCards(currentPlayer, CardType.FAVOR));
     assertEquals(1, countCards(target, CardType.FAVOR));
     assertFalse(currentPlayer.getHand().contains(cat1));
