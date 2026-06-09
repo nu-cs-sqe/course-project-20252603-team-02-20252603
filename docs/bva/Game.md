@@ -906,3 +906,8 @@
 - **TC198: Play Nosy on valid target player** ( :white_check_mark: )
     - **State of the system**: Game is started, current player has a Nosy card, target is a different alive player
     - **Expected output**: Card removed from hand, card added to discard, target player's hand is returned
+
+### Method under test: `playNope()`
+- **TC199: Play Nope on any card** ( :white_check_mark: )
+  - **State of the system**: Game is started, current player plays a card, another player nopes it
+  - **Expected output**: Card removed from hand, card added to discard, action not performed

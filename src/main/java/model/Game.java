@@ -22,6 +22,15 @@ public class Game {
   private boolean gameOver;
   private int currentPlayerIndex;
 
+  private ActionType pendingAction = ActionType.NONE;
+  private int nopeCount = 0;
+
+  private Player actionInitiator;
+  private Player pendingTarget;
+  private Card pendingGivenCard;
+  private CardType pendingWantedCardType;
+  private List<Card> pendingCardList;
+
   public Game(int numberOfPlayers, Random random) {
     this.numberOfPlayers = numberOfPlayers;
     this.random = new Random(random.nextLong());
@@ -143,8 +152,12 @@ public class Game {
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
+    this.actionInitiator = getCurrentPlayer();
+    this.nopeCount = 0;
+
     if (card.getType() == CardType.SKIP) {
-      playSkip();
+//      playSkip();
+      this.pendingAction = ActionType.SKIP;
     }
 
     if (card.getType() == CardType.SUPER_SKIP) {
@@ -287,6 +300,65 @@ public class Game {
     }
     playCatCards(cards, target, named);
     return Collections.emptyList();
+  }
+
+  public void playNope(Player player, Card nopeCard) {
+    if (pendingAction == ActionType.NONE) {
+      throw new IllegalStateException("There is no pending action to Nope!");
+    }
+    if (nopeCard == null || nopeCard.getType() != CardType.NOPE) {
+      throw new IllegalArgumentException("Card must be a NOPE card.");
+    }
+    if (!player.getHand().contains(nopeCard)) {
+      throw new IllegalArgumentException("Player does not have that card.");
+    }
+
+    player.removeCard(nopeCard);
+    deck.discardCard(nopeCard);
+    nopeCount++;
+  }
+
+  public void resolvePendingAction() {
+    if (pendingAction == ActionType.NONE) {
+      return;
+    }
+
+    boolean actionIsNoped = (nopeCount % 2 != 0);
+
+    if (!actionIsNoped) {
+      switch (pendingAction) {
+        case SKIP:
+          playSkip();
+          break;
+        case ATTACK:
+          playAttack();
+          break;
+        case SHUFFLE:
+          playShuffle();
+          break;
+        case FAVOR:
+          playFavor(pendingTarget, pendingGivenCard);
+          break;
+        case TARGETED_ATTACK:
+          playTargetedAttack(pendingTarget);
+          break;
+        default:
+          break;
+      }
+    }
+
+    // Reset the state machine for the next turn
+    clearPendingState();
+  }
+
+  private void clearPendingState() {
+    this.pendingAction = ActionType.NONE;
+    this.nopeCount = 0;
+    this.actionInitiator = null;
+    this.pendingTarget = null;
+    this.pendingGivenCard = null;
+    this.pendingWantedCardType = null;
+    this.pendingCardList = null;
   }
 
   private boolean isPlayableCard(Card card) {

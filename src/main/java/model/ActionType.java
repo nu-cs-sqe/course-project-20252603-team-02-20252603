@@ -1,0 +1,22 @@
+package model;
+
+public enum ActionType {
+    NONE,
+    SKIP,
+    SUPER_SKIP,
+    ATTACK,
+    TARGETED_ATTACK,
+    SEE_THE_FUTURE,
+    SHUFFLE,
+    SWAP_TOP_BOTTOM,
+    BUBONIC_PLAGUE,
+    DRAW_FROM_BOTTOM,
+    CURSE,
+    BLESSING,
+    ALTER_FUTURE,
+    FAVOR,
+    NEKO_COMBO,
+    TWO_CAT_COMBO,
+    THREE_CAT_COMBO,
+    FIVE_CAT_COMBO
+}

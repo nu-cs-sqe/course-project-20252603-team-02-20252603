@@ -3275,4 +3275,33 @@ public class GameTest {
             deckMock, blessingCardMock
     );
   }
+
+  @Test
+  public void testPlaySkip_IsNoped_FailsToSkip() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player1 = game.getCurrentPlayer();
+    Player player2 = game.getPlayers().get((game.getCurrentPlayerIndex() + 1) % 3);
+
+    Card skipCard = new Card(CardType.SKIP);
+    player1.addCard(skipCard);
+
+    Card nopeCard = new Card(CardType.NOPE);
+    player2.addCard(nopeCard);
+
+    game.playCard(skipCard);
+
+    game.playNope(player2, nopeCard);
+
+    game.resolvePendingAction();
+
+    assertFalse(player1.getHand().contains(skipCard), "Skip card consumed");
+    assertFalse(player2.getHand().contains(nopeCard), "Nope card consumed");
+    assertTrue(game.getDiscardPile().contains(skipCard), "Skip in discard");
+    assertTrue(game.getDiscardPile().contains(nopeCard), "Nope in discard");
+
+    assertEquals(player1, game.getCurrentPlayer(),
+            "The Skip was Noped, so it should still be Player 1's turn.");
+  }
 }
