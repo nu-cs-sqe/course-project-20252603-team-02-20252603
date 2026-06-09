@@ -3360,4 +3360,40 @@ public class GameTest {
     assertThrows(IllegalStateException.class, () ->
             game.playNope(player, nopeCard), "Cannot play Nope when pendingAction is NONE");
   }
+
+  @Test
+  void nopeWithCardNotInHand() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player = game.getCurrentPlayer();
+    Card skipCard = new Card(CardType.SKIP);
+    player.addCard(skipCard);
+
+    game.playCard(skipCard);
+
+    Card phantomNope = new Card(CardType.NOPE);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playNope(player, phantomNope), "Cannot play a card not in player's hand");
+  }
+
+  @Test
+  void testTC202_passNonNopeCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player = game.getCurrentPlayer();
+    Player noper = game.getPlayers().get((game.getCurrentPlayerIndex() + 1) % MIN_PLAYERS);
+
+    Card skipCard = new Card(CardType.SKIP);
+    player.addCard(skipCard);
+    game.playCard(skipCard);
+
+    Card attackCard = new Card(CardType.ATTACK);
+    noper.addCard(attackCard);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playNope(noper, attackCard), "Card must be of type NOPE");
+  }
 }

@@ -912,6 +912,14 @@
   - **State of the system**: Game is started, current player plays a card, another player nopes it
   - **Expected output**: Card removed from hand, card added to discard, action not performed
 
-- TC200: Play Nope when no action is pending ( :white_check_mark: )
-  - State of the system: Game is started, it is a player's turn, but no action card has been played (pendingAction is NONE), player attempts to play a Nope card.
-  - Expected output: IllegalStateException is thrown, Nope card remains in hand, game state remains unchanged.
+- **TC200: Play Nope when no action is pending** ( :white_check_mark: )
+  - **State of the system**: Game is started, it is a player's turn, but no action card has been played (pendingAction is NONE), player attempts to play a Nope card.
+  - **Expected output**: IllegalStateException is thrown, Nope card remains in hand, game state remains unchanged.
+
+- **TC201: Play Nope card not present in player's hand** ( :white_check_mark: )
+  - **State of the system**: Game is started, an action is pending, a player attempts to play a Nope card that is not currently in their inventory.
+  - **Expected output**: IllegalArgumentException is thrown, action remains pending.
+
+- **TC202: Pass a non-Nope card into the nope method** ( :white_check_mark: )
+  - **State of the system**: Game is started, an action is pending, a player attempts to pass a different card type (e.g., SKIP) into the playNope() method.
+  - **Expected output**: IllegalArgumentException is thrown, card remains in hand, action remains pending.
