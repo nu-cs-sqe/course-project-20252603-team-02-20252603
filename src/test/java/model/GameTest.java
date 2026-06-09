@@ -3318,12 +3318,12 @@ public class GameTest {
   }
 
   @Test
-  public void testPlaySkip_IsNoped_FailsToSkip() {
+  public void testPlaySkipIsNopedFailsToSkip() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
 
     Player player1 = game.getCurrentPlayer();
-    Player player2 = game.getPlayers().get((game.getCurrentPlayerIndex() + 1) % 3);
+    Player player2 = game.getPlayers().get((game.getCurrentPlayerIndex() + 1) % MIN_PLAYERS);
 
     Card skipCard = new Card(CardType.SKIP);
     player1.addCard(skipCard);

@@ -266,7 +266,11 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
-    playFavor(target, given);
+
+    this.pendingAction = ActionType.FAVOR;
+    this.pendingTarget = target;
+    this.pendingGivenCard = given;
+
     return Collections.emptyList();
   }
 
