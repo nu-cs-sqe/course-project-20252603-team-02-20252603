@@ -1623,6 +1623,7 @@ public class GameTest {
 
     game.startGame();
     game.playCard(skipCard);
+    game.resolvePendingAction();
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
