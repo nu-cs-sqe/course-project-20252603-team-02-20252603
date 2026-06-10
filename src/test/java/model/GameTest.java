@@ -2203,6 +2203,7 @@ public class GameTest {
 
     game.startGame();
     game.playCard(swapCard);
+    game.resolvePendingAction();
 
     assertEquals(0, game.getCurrentPlayerIndex());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
