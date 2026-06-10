@@ -436,7 +436,7 @@ public class GameIntegrationTest {
     int handSizeBefore = firstPlayer.getHand().size();
     int deckSizeBefore = game.getDrawPile().size();
 
-    game.drawCard();
+    game.drawCard(0);
 
     assertEquals(handSizeBefore + 1, firstPlayer.getHand().size());
     assertEquals(deckSizeBefore - 1, game.getDrawPile().size());
@@ -455,7 +455,7 @@ public class GameIntegrationTest {
     }
     game.addToDrawPile(new Card(CardType.SKIP), 0);
 
-    game.drawCard();
+    game.drawCard(0);
 
     assertEquals(handSizeBefore + 1, firstPlayer.getHand().size());
     assertEquals(0, game.getDrawPile().size());
@@ -469,7 +469,7 @@ public class GameIntegrationTest {
       game.drawFromDeck();
     }
 
-    assertThrows(IllegalStateException.class, () -> game.drawCard());
+    assertThrows(IllegalStateException.class, () -> game.drawCard(0));
   }
 
   @Test
@@ -482,7 +482,7 @@ public class GameIntegrationTest {
     game.addToDrawPile(explodingKitten, 0);
     int deckSizeBefore = game.getDrawPile().size();
 
-    game.drawCard();
+    game.drawCard(0);
 
     assertTrue(firstPlayer.isAlive());
     assertEquals(defuseCountBefore - 1, countCards(firstPlayer, CardType.DEFUSE));
@@ -501,7 +501,7 @@ public class GameIntegrationTest {
     }
     game.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), 0);
 
-    game.drawCard();
+    game.drawCard(0);
 
     assertFalse(firstPlayer.isAlive());
     assertFalse(game.isGameOver());
