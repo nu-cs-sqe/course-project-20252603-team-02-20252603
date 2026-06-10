@@ -11,6 +11,10 @@ import model.Player;
 
 public class ConsoleUI {
 
+    private static final int MAX_FUTURE_CARDS = 3;
+    private static final int COMBO_SIZE_THREE = 3;
+    private static final int COMBO_SIZE_FIVE = 5;
+
     private final Scanner scanner;
     private Game game;
 
@@ -83,7 +87,8 @@ public class ConsoleUI {
                     handleMultiCard(cardsToPlay);
                 }
 
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 System.out.println("Invalid input or move (" + e.getMessage() + "). Try again.");
             }
         }
@@ -97,7 +102,9 @@ public class ConsoleUI {
             int targetId = Integer.parseInt(scanner.nextLine().trim());
             List<Card> targetHand = game.playNosy(targetId);
             System.out.println("Player " + targetId + "'s hand:");
-            for (Card c : targetHand) System.out.println("- " + c.getType());
+            for (Card c : targetHand) {
+                System.out.println("- " + c.getType());
+            }
             return;
         }
 
@@ -106,7 +113,8 @@ public class ConsoleUI {
             int targetId = Integer.parseInt(scanner.nextLine().trim());
             Player target = game.getPlayers().get(targetId);
 
-            System.out.println("Player " + targetId + ", choose a card to give (0-" + (target.getHand().size() - 1) + "):");
+            System.out.println("Player " + targetId + ", choose a card to give (0-"
+                    + (target.getHand().size() - 1) + "):");
             for (int i = 0; i < target.getHand().size(); i++) {
                 System.out.println("[" + i + "] " + target.getHand().get(i).getType());
             }
@@ -124,7 +132,7 @@ public class ConsoleUI {
 
         } else if (type == CardType.ALTER_FUTURE) {
             List<Card> drawPile = game.getDrawPile();
-            int numCards = Math.min(3, drawPile.size());
+            int numCards = Math.min(MAX_FUTURE_CARDS, drawPile.size());
             List<Card> topCards = new ArrayList<>();
 
             System.out.println("Top cards are:");
@@ -160,21 +168,21 @@ public class ConsoleUI {
     private void handleMultiCard(List<Card> cardsToPlay) {
         int size = cardsToPlay.size();
 
-        if (size == 3 && cardsToPlay.get(0).getType() == CardType.NEKO) {
+        if (size == COMBO_SIZE_THREE && cardsToPlay.get(0).getType() == CardType.NEKO) {
             game.playCard(cardsToPlay);
         } else if (size == 2) {
             System.out.println("Enter target Player ID to steal a random card:");
             int targetId = Integer.parseInt(scanner.nextLine().trim());
             Player target = game.getPlayers().get(targetId);
             game.playCard(cardsToPlay, target, null);
-        } else if (size == 3) {
+        } else if (size == COMBO_SIZE_THREE) {
             System.out.println("Enter target Player ID:");
             int targetId = Integer.parseInt(scanner.nextLine().trim());
             Player target = game.getPlayers().get(targetId);
             System.out.println("Enter exact CardType you want to demand (e.g., DEFUSE, TACOCAT):");
             CardType named = CardType.valueOf(scanner.nextLine().trim().toUpperCase());
             game.playCard(cardsToPlay, target, named);
-        } else if (size == 5) {
+        } else if (size == COMBO_SIZE_FIVE) {
             System.out.println("Enter exact CardType you want from the discard pile:");
             CardType named = CardType.valueOf(scanner.nextLine().trim().toUpperCase());
             game.playCard(cardsToPlay, null, named);
@@ -189,7 +197,9 @@ public class ConsoleUI {
     private int countDefuses(Player p) {
         int count = 0;
         for (Card c : p.getHand()) {
-            if (c.getType() == CardType.DEFUSE) count++;
+            if (c.getType() == CardType.DEFUSE) {
+                count++;
+            }
         }
         return count;
     }
@@ -198,7 +208,8 @@ public class ConsoleUI {
         boolean acceptingNopes = true;
 
         while (acceptingNopes) {
-            System.out.println("Does anyone want to play a NOPE card? Enter Player ID, or 'N' to skip:");
+            System.out.println("Does anyone want to play a NOPE card? "
+                    + "Enter Player ID, or 'N' to skip:");
             String input = scanner.nextLine().trim().toUpperCase();
 
             if (input.equals("N")) {
@@ -208,13 +219,24 @@ public class ConsoleUI {
                     int playerId = Integer.parseInt(input);
                     Player p = game.getPlayers().get(playerId);
 
-                    System.out.println("Player " + playerId + ", enter NOPE card index in hand:");
-                    int cardIndex = Integer.parseInt(scanner.nextLine().trim());
-                    Card nopeCard = p.getHand().get(cardIndex);
+                    // Auto-find the NOPE card in the player's hand
+                    Card nopeCard = null;
+                    for (Card c : p.getHand()) {
+                        if (c.getType() == CardType.NOPE) {
+                            nopeCard = c;
+                            break;
+                        }
+                    }
 
-                    game.playNope(p, nopeCard);
-                    System.out.println("NOPE played!");
-                } catch (Exception e) {
+                    // Play it if found, otherwise reject the attempt
+                    if (nopeCard != null) {
+                        game.playNope(p, nopeCard);
+                        System.out.println("NOPE played automatically for Player " + playerId + "!");
+                    } else {
+                        System.out.println("Player " + playerId + " does not have a NOPE card. Try again.");
+                    }
+                }
+                catch (Exception e) {
                     System.out.println("Invalid Nope attempt. Resuming...");
                     acceptingNopes = false;
                 }
