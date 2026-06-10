@@ -906,3 +906,28 @@
 - **TC198: Play Nosy on valid target player** ( :white_check_mark: )
     - **State of the system**: Game is started, current player has a Nosy card, target is a different alive player
     - **Expected output**: Card removed from hand, card added to discard, target player's hand is returned
+
+### Method under test: `playNope()`
+- **TC199: Play Nope on any card** ( :white_check_mark: )
+  - **State of the system**: Game is started, current player plays a card, another player nopes it
+  - **Expected output**: Card removed from hand, card added to discard, action not performed
+
+- **TC200: Play Nope when no action is pending** ( :white_check_mark: )
+  - **State of the system**: Game is started, it is a player's turn, but no action card has been played (pendingAction is NONE), player attempts to play a Nope card.
+  - **Expected output**: IllegalStateException is thrown, Nope card remains in hand, game state remains unchanged.
+
+- **TC201: Play Nope card not present in player's hand** ( :white_check_mark: )
+  - **State of the system**: Game is started, an action is pending, a player attempts to play a Nope card that is not currently in their inventory.
+  - **Expected output**: IllegalArgumentException is thrown, action remains pending.
+
+- **TC202: Pass a non-Nope card into the nope method** ( :white_check_mark: )
+  - **State of the system**: Game is started, an action is pending, a player attempts to pass a different card type (e.g., SKIP) into the playNope() method.
+  - **Expected output**: IllegalArgumentException is thrown, card remains in hand, action remains pending.
+
+- **TC203: Play Nope out of turn** (Third-party intervention) ( :white_check_mark: )
+  - **State of the system**: Game is started, Player 1 plays an action targeting Player 2. Player 3 (who is neither the initiator nor the target) plays a Nope card.
+  - **Expected output**: Nope card removed from Player 3's hand, added to discard, Player 1's action is not performed.
+
+- **TC204: Play Nope on a multiple-card Cat Combo** ( :white_check_mark: )
+  - **State of the system**: Game is started, current player plays a Two-Cat (or Three-Cat/Five-Cat) combo to steal a card, another player nopes it.
+  - **Expected output**: Nope card consumed, all combo cards removed from attacker's hand and added to discard, no card is stolen from the target.
