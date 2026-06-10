@@ -1,6 +1,7 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class GameIntegrationTest {
   private static final int SECOND_CARD_INDEX = 1;
   private static final int THIRD_CARD_INDEX = 2;
   private static final int FOURTH_CARD_INDEX = 3;
+  private static final int SECOND_PLAYER_INDEX = 1;
+  private static final int TWO_DEFUSE_CARDS = 2;
 
   @Test
   public void givenAlterFutureOrderWhenActionResolvesThenDeckTopCardsAreReordered() {
@@ -35,6 +38,25 @@ public class GameIntegrationTest {
     thenActionReturnsNoCards(result);
     thenDrawPileStartsWith(game, thirdCard, firstCard, secondCard, fourthCard);
     thenDiscardPileContains(game, alterFuture);
+  }
+
+  @Test
+  public void givenCurseWhenActionResolvesThenDefuseCardsReturnToDrawPile() {
+    Game game = givenStartedGameWithEmptyDrawPile();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player nextPlayer = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card curse = new Card(CardType.CURSE);
+    givenCurrentPlayerHasCard(currentPlayer, curse);
+    givenPlayerHasOnlyTheseDefuseCards(nextPlayer, TWO_DEFUSE_CARDS);
+    int drawPileSizeBefore = game.getDrawPile().size();
+
+    whenCurrentPlayerPlaysCard(game, curse);
+    List<Card> result = whenPendingActionResolves(game);
+
+    thenActionReturnsNoCards(result);
+    thenPlayerHasNoDefuseCards(nextPlayer);
+    thenDrawPileSizeIs(game, drawPileSizeBefore + TWO_DEFUSE_CARDS);
+    thenDiscardPileContains(game, curse);
   }
 
   private Game givenStartedGameWithEmptyDrawPile() {
@@ -67,6 +89,10 @@ public class GameIntegrationTest {
     game.playCard(alterFuture, reorderedCards);
   }
 
+  private void whenCurrentPlayerPlaysCard(Game game, Card card) {
+    game.playCard(card);
+  }
+
   private List<Card> whenPendingActionResolves(Game game) {
     return game.resolvePendingAction();
   }
@@ -86,5 +112,22 @@ public class GameIntegrationTest {
 
   private void thenDiscardPileContains(Game game, Card card) {
     assertTrue(game.getDiscardPile().contains(card));
+  }
+
+  private void givenPlayerHasOnlyTheseDefuseCards(Player player, int defuseCount) {
+    while (player.hasDefuse()) {
+      player.removeCard(new Card(CardType.DEFUSE));
+    }
+    for (int i = 0; i < defuseCount; i++) {
+      player.addCard(new Card(CardType.DEFUSE));
+    }
+  }
+
+  private void thenPlayerHasNoDefuseCards(Player player) {
+    assertFalse(player.hasDefuse());
+  }
+
+  private void thenDrawPileSizeIs(Game game, int expectedSize) {
+    assertEquals(expectedSize, game.getDrawPile().size());
   }
 }
