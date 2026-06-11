@@ -814,8 +814,6 @@ public class Game {
 
     Player currentPlayer = getCurrentPlayer();
 
-    Card namedCard = new Card(wantedCard);
-
     try {
       Card receivedCard = takeFromDiscard(wantedCard);
       currentPlayer.addCard(receivedCard);
