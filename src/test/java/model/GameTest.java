@@ -2131,28 +2131,29 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-//  @Test
-//  public void defuseNegativePositionThrowsException() {
-//    Player mockPlayer1 = createMock(Player.class);
-//    Player mockPlayer2 = createMock(Player.class);
-//    Player mockPlayer3 = createMock(Player.class);
-//    Deck mockDeck = createMock(Deck.class);
-//
-//    expect(mockDeck.getDeck()).andReturn(List.of()).once();
-//    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//
-//    Game game = new Game(
-//        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-//        mockDeck,
-//        new Random(RANDOM_SEED)
-//    );
-//
-//    game.startGame();
-//
-//    assertThrows(IllegalArgumentException.class, () -> game.defuse(-1));
-//
-//    verify(mockPlayer1, mockPlayer2, mockPlayer3);
-//  }
+  @Test
+  public void defuseNegativePositionThrowsException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    expect(mockPlayer1.hasDefuse()).andReturn(true).once();
+    expect(mockDeck.getDeck()).andReturn(List.of()).once();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.defuse(-1));
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3);
+  }
 
   @Test
   public void defusePositionTooLargeThrowsException() {
