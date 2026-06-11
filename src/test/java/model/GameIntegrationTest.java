@@ -2068,33 +2068,33 @@ public class GameIntegrationTest {
     assertEquals(0, target.getHand().size());
   }
 
-//  @Test
-//  public void playTwoMatchingCatsTargetHasTwoCardsReturnsStolenCard() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
-//
-//    while (!target.getHand().isEmpty()) {
-//      target.removeCard(target.getHand().get(0));
-//    }
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.TACOCAT);
-//    Card skip = new Card(CardType.SKIP);
-//    Card attack = new Card(CardType.ATTACK);
-//    currentPlayer.addCard(cat1);
-//    currentPlayer.addCard(cat2);
-//    target.addCard(skip);
-//    target.addCard(attack);
-//
-//    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
-//
-//    assertTrue(stolen.getType() == CardType.SKIP || stolen.getType() == CardType.ATTACK);
-//    assertTrue(currentPlayer.getHand().contains(stolen));
-//    assertEquals(1, target.getHand().size());
-//    assertFalse(target.getHand().contains(stolen));
-//  }
+  @Test
+  public void playTwoMatchingCatsTargetHasTwoCardsReturnsStolenCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card skip = new Card(CardType.SKIP);
+    Card attack = new Card(CardType.ATTACK);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    target.addCard(skip);
+    target.addCard(attack);
+
+    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), target);
+
+    assertTrue(stolen.getType() == CardType.SKIP || stolen.getType() == CardType.ATTACK);
+    assertTrue(currentPlayer.getHand().contains(stolen));
+    assertEquals(1, target.getHand().size());
+    assertFalse(target.getHand().contains(stolen));
+  }
 
 //  @Test
 //  public void playTwoMatchingCatsTargetHasFiveCardsReturnsStolenCard() {
