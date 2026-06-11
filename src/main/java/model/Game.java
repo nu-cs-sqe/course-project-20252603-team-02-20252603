@@ -809,10 +809,15 @@ public class Game {
 
     Card namedCard = new Card(wantedCard);
 
-    Card receivedCard = takeFromDiscard(wantedCard);
-    currentPlayer.addCard(receivedCard);
+    try {
+      Card receivedCard = takeFromDiscard(wantedCard);
+      currentPlayer.addCard(receivedCard);
 
-    return receivedCard;
+      return receivedCard;
+    } catch (IllegalStateException e) {
+      throw new IllegalStateException("discard pile is empty");
+    }
+
   }
 
   public void playCatCards(List<Card> cards, Player target, CardType named) {

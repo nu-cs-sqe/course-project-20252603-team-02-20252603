@@ -4469,7 +4469,7 @@ public class GameTest {
     Exception e = assertThrows(IllegalStateException.class, () ->
         game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR));
 
-    assertEquals("wanted card not in discard pile", e.getMessage());
+    assertEquals("discard pile is empty", e.getMessage());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
