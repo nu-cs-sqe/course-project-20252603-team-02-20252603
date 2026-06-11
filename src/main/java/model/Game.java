@@ -679,20 +679,18 @@ public class Game {
     return false;
   }
 
-  public Card playTwoMatchingCats(List<Card> cards, Player target) {
+  public void playTwoMatchingCats(List<Card> cards, Player target) {
     Player currentPlayer = getCurrentPlayer();
 
     List<Card> targetHand = target.getHand();
     if (targetHand.isEmpty()) {
-      return null;
+      throw new IllegalArgumentException("target player has no cards left");
     }
 
     int index = random.nextInt(targetHand.size());
     Card stolenCard = targetHand.get(index);
     target.removeCard(stolenCard);
     currentPlayer.addCard(stolenCard);
-
-    return stolenCard;
   }
 
   public void playNeko(List<Card> cards) {
@@ -730,19 +728,18 @@ public class Game {
     gameOver = true;
   }
 
-  public boolean playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
+  public void playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
     Player currentPlayer = getCurrentPlayer();
 
     Card namedCard = new Card(wantedCard);
     List<Card> targetHand = target.getHand();
 
     if (!targetHand.contains(namedCard)) {
-      return false;
+      throw new IllegalArgumentException("target does not have that card");
     }
 
     target.removeCard(namedCard);
     currentPlayer.addCard(namedCard);
-    return true;
   }
 
   public void playFavor(Player target, Card given) {
@@ -764,13 +761,17 @@ public class Game {
     currentPlayer.addCard(given);
   }
 
-  public Card playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
+  public void playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
     Player currentPlayer = getCurrentPlayer();
+
+    Card namedCard = new Card(wantedCard);
+
+    if (!getDiscardPile().contains(namedCard)) {
+      throw new IllegalArgumentException("discard pile does not have that card");
+    }
 
     Card receivedCard = takeFromDiscard(wantedCard);
     currentPlayer.addCard(receivedCard);
-
-    return receivedCard;
   }
 
   public void playCatCards(List<Card> cards, Player target, CardType named) {
