@@ -2826,33 +2826,33 @@ public class GameIntegrationTest {
     assertEquals("cards not in hand", e.getMessage());
   }
 
-//  @Test
-//  public void playFiveDifferentCatsEmptyDiscardPileThrowsIllegalArgumentException() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
-//    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
-//    Card cat4 = new Card(CardType.BEARD_CAT);
-//    Card cat5 = new Card(CardType.CATTERMELON);
-//
-//    currentPlayer.addCard(cat1);
-//    currentPlayer.addCard(cat2);
-//    currentPlayer.addCard(cat3);
-//    currentPlayer.addCard(cat4);
-//    currentPlayer.addCard(cat5);
-//
-//    Exception e = assertThrows(IllegalStateException.class, () -> {
-//      game.playFiveDifferentCats(
-//          List.of(cat1, cat2, cat3, cat4, cat5),
-//          CardType.FAVOR
-//      );
-//    });
-//
-//    assertEquals("discard pile is empty", e.getMessage());
-//  }
+  @Test
+  public void playFiveDifferentCatsEmptyDiscardPileThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+
+    Exception e = assertThrows(IllegalStateException.class, () -> {
+      game.playFiveDifferentCats(
+          List.of(cat1, cat2, cat3, cat4, cat5),
+          CardType.FAVOR
+      );
+    });
+
+    assertEquals("discard pile is empty", e.getMessage());
+  }
 
 //  @Test
 //  public void playFiveDifferentCatsDiscardHasOneNonMatchingCardThrowsIllegalArgumentException() {
