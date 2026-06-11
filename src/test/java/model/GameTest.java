@@ -978,6 +978,76 @@ public class GameTest {
   }
 
   @Test
+  public void playCardWithNekoListBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(List.of(new Card(CardType.NEKO))));
+  }
+
+  @Test
+  public void playCardWithNekoListAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(SECOND_PLAYER_INDEX).die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(List.of(new Card(CardType.NEKO))));
+  }
+
+  @Test
+  public void playCardWithNekoListNullCardsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard((List<Card>) null));
+  }
+
+  @Test
+  public void playCardWithNekoListEmptyCardsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(Collections.emptyList()));
+  }
+
+  @Test
+  public void playCardWithNekoListNonNekoCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(List.of(new Card(CardType.ATTACK))));
+  }
+
+  @Test
+  public void playCardWithNekoListEndsGameAfterResolve() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(neko3);
+
+    game.playCard(List.of(neko1, neko2, neko3));
+    List<Card> result = game.resolvePendingAction();
+
+    assertEquals(Collections.emptyList(), result);
+    assertTrue(game.isGameOver());
+    for (Player player : game.getPlayers()) {
+      if (player != currentPlayer) {
+        assertFalse(player.isAlive());
+      }
+    }
+  }
+
+  @Test
   public void checkWinnerMoreThanOnePlayerAlive() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
