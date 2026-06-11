@@ -1496,7 +1496,7 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-    @Test
+  @Test
   public void playTwoMatchingCatsCardsNotInHandThrowsIllegalArgumentException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
@@ -1558,7 +1558,7 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-    @Test
+  @Test
   public void playThreeMatchingCatsCardsNotInHandThrowsIllegalArgumentException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);

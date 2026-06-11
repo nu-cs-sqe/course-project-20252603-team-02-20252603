@@ -764,7 +764,7 @@ public class Game {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
-    if (cards.size() != 3 || !isValidCatCombo(cards)) {
+    if (cards.size() != THREE_CAT_COMBO_SIZE || !isValidCatCombo(cards)) {
       throw new IllegalArgumentException("invalid three-cat combo");
     }
 
@@ -808,7 +808,7 @@ public class Game {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
-    if (cards.size() != 5 || !isValidCatCombo(cards)) {
+    if (cards.size() != FIVE_CAT_COMBO_SIZE || !isValidCatCombo(cards)) {
       throw new IllegalArgumentException("invalid five-cat combo");
     }
 
@@ -819,7 +819,8 @@ public class Game {
       currentPlayer.addCard(receivedCard);
 
       return receivedCard;
-    } catch (IllegalStateException e) {
+    }
+    catch (IllegalStateException e) {
       throw new IllegalStateException("discard pile is empty");
     }
 
