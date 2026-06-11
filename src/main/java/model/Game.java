@@ -753,7 +753,7 @@ public class Game {
       throw new IllegalArgumentException("cannot target yourself");
     }
 
-    if (wantedCard == null) {
+    if (wantedCard == null || wantedCard == CardType.EXPLODING_KITTEN) {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
