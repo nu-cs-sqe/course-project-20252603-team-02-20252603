@@ -2939,39 +2939,39 @@ public class GameIntegrationTest {
     assertEquals(1, countCards(currentPlayer, CardType.FAVOR));
   }
 
-//  @Test
-//  public void playFiveDifferentCatsDiscardHasWantedCardAmongOtherCardsReturnsWantedCard() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
-//    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
-//    Card cat4 = new Card(CardType.BEARD_CAT);
-//    Card cat5 = new Card(CardType.CATTERMELON);
-//    Card attack = new Card(CardType.ATTACK);
-//    Card favor = new Card(CardType.FAVOR);
-//    Card skip = new Card(CardType.SKIP);
-//
-//    currentPlayer.addCard(cat1);
-//    currentPlayer.addCard(cat2);
-//    currentPlayer.addCard(cat3);
-//    currentPlayer.addCard(cat4);
-//    currentPlayer.addCard(cat5);
-//    game.addToDiscard(attack);
-//    game.addToDiscard(favor);
-//    game.addToDiscard(skip);
-//
-//    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
-//        CardType.FAVOR);
-//
-//    assertEquals(CardType.FAVOR, result.getType());
-//    assertTrue(currentPlayer.getHand().contains(favor));
-//    assertFalse(game.getDiscardPile().contains(favor));
-//    assertTrue(game.getDiscardPile().contains(attack));
-//    assertTrue(game.getDiscardPile().contains(skip));
-//  }
+  @Test
+  public void playFiveDifferentCatsDiscardHasWantedCardAmongOtherCardsReturnsWantedCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card attack = new Card(CardType.ATTACK);
+    Card favor = new Card(CardType.FAVOR);
+    Card skip = new Card(CardType.SKIP);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.addToDiscard(attack);
+    game.addToDiscard(favor);
+    game.addToDiscard(skip);
+
+    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+        CardType.FAVOR);
+
+    assertEquals(CardType.FAVOR, result.getType());
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(game.getDiscardPile().contains(favor));
+    assertTrue(game.getDiscardPile().contains(attack));
+    assertTrue(game.getDiscardPile().contains(skip));
+  }
 
   @Test
   public void playCatCardsGameNotLaunchedThrowsIllegalStateException() {
