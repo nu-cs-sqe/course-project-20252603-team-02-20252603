@@ -690,7 +690,7 @@ public class Game {
       throw new IllegalArgumentException("cannot target yourself");
     }
 
-    if (!isValidCatCombo(cards)) {
+    if (cards.size() != 2 || !isValidCatCombo(cards)) {
       throw new IllegalArgumentException("invalid two-cat combo");
     }
 
