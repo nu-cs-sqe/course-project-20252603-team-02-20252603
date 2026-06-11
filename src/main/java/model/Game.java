@@ -45,7 +45,7 @@ public class Game {
     this.players = new ArrayList<>(players);
     this.numberOfPlayers = players.size();
     this.deck = deck;
-    this.random = new Random(random.nextLong());
+    this.random = random;
     this.currentPlayerIndex = 0;
   }
 
@@ -679,7 +679,7 @@ public class Game {
     return false;
   }
 
-  public void playTwoMatchingCats(List<Card> cards, Player target) {
+  public Card playTwoMatchingCats(List<Card> cards, Player target) {
     if (target == null || !target.isAlive()) {
       throw new IllegalArgumentException("target cannot be null or dead");
     }
@@ -699,10 +699,12 @@ public class Game {
       throw new IllegalArgumentException("target player has no cards left");
     }
 
-    int index = random.nextInt(targetHand.size());
+    int index = this.random.nextInt(targetHand.size());
     Card stolenCard = targetHand.get(index);
     target.removeCard(stolenCard);
     currentPlayer.addCard(stolenCard);
+
+    return stolenCard;
   }
 
   public void playNeko(List<Card> cards) {

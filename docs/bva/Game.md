@@ -547,7 +547,7 @@
 
 - **TC#117: target has exactly 1 card in hand** ( :white_check_mark: )
   - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP]
-  - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, SKIP transferred to current player, target hand is empty, returns SKIP
+  - **Expected output**: SKIP transferred to current player, target hand is empty, returns SKIP
 
 - **TC#118: target has exactly 2 cards in hand** ( :white_check_mark: )
   - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP, ATTACK]

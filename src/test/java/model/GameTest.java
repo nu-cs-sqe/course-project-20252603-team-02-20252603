@@ -3337,44 +3337,40 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-//  @Test
-//  public void playTwoMatchingCatsTargetHasOneCardReturnsStolenCard() {
-//    Player mockPlayer1 = createMock(Player.class);
-//    Player mockPlayer2 = createMock(Player.class);
-//    Player mockPlayer3 = createMock(Player.class);
-//    Deck mockDeck = createMock(Deck.class);
-//    Random mockRandom = createMock(Random.class);
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.TACOCAT);
-//    Card skip = new Card(CardType.SKIP);
-//
-//    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
-//    expect(mockPlayer1.getHand()).andReturn(List.of(cat1, cat2)).anyTimes();
-//    mockPlayer1.removeCard(cat1);
-//    mockPlayer1.removeCard(cat2);
-//    mockDeck.discardCard(cat1);
-//    mockDeck.discardCard(cat2);
-//    expect(mockPlayer2.getHand()).andReturn(List.of(skip)).anyTimes();
-//    expect(mockRandom.nextInt(1)).andReturn(0).once();
-//    mockPlayer2.removeCard(skip);
-//    mockPlayer1.addCard(skip);
-//
-//    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
-//
-//    Game game = new Game(
-//        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-//        mockDeck,
-//        mockRandom
-//    );
-//
-//    game.startGame();
-//    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), mockPlayer2);
-//
-//    assertEquals(skip, stolen);
-//
-//    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
-//  }
+  @Test
+  public void playTwoMatchingCatsTargetHasOneCardReturnsStolenCard() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+    Random mockRandom = createMock(Random.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card skip = new Card(CardType.SKIP);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer1.getHand()).andReturn(List.of(cat1, cat2)).anyTimes();
+    expect(mockPlayer2.getHand()).andReturn(List.of(skip)).anyTimes();
+    expect(mockRandom.nextInt(1)).andReturn(0).once();
+    mockPlayer2.removeCard(skip);
+    mockPlayer1.addCard(skip);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        mockRandom
+    );
+
+    game.startGame();
+    Card stolen = game.playTwoMatchingCats(List.of(cat1, cat2), mockPlayer2);
+
+    assertEquals(skip, stolen);
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
+  }
 
 //  @Test
 //  public void playThreeMatchingCatsNullTargetThrowsIllegalArgumentException() {
