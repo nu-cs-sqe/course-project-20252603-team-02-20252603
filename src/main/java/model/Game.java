@@ -742,7 +742,7 @@ public class Game {
     gameOver = true;
   }
 
-  public void playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
+  public boolean playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
     if (target == null || !target.isAlive()) {
       throw new IllegalArgumentException("target cannot be null or dead");
     }
@@ -765,11 +765,12 @@ public class Game {
     List<Card> targetHand = target.getHand();
 
     if (!targetHand.contains(namedCard)) {
-      throw new IllegalArgumentException("target does not have that card");
+      return false;
     }
 
     target.removeCard(namedCard);
     currentPlayer.addCard(namedCard);
+    return true;
   }
 
   public void playFavor(Player target, Card given) {
