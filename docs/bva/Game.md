@@ -251,6 +251,14 @@
   ~~- **State of the system**: Game is started, game is not over, and current player has a Blessing card~~
   ~~- **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn~~~~
 
+- **TC#115: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: current player's hand does not contain the passed cards, target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#116: current player has only 1 of the 2 required cards** ( :white_check_mark: )
+  - **State of the system**: current player has 1 TACOCAT in hand, cards = [TACOCAT, TACOCAT], target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
 ### Method under test: `checkWinner()`
 
 - **TC48: More than one player alive** ( :white_check_mark: )
@@ -536,14 +544,6 @@
 - **TC#114: combo is invalid because size is 3 instead of 2** ( :white_check_mark: )
   - **State of the system**: cards = [TACOCAT, TACOCAT, TACOCAT], target is valid
   - **Expected output**: Throws `IllegalArgumentException`, "invalid two-cat combo"
-
-- **TC#115: cards are not in current player's hand** ( :white_check_mark: )
-  - **State of the system**: current player's hand does not contain the passed cards, target is valid
-  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
-
-- **TC#116: current player has only 1 of the 2 required cards** ( :white_check_mark: )
-  - **State of the system**: current player has 1 TACOCAT in hand, cards = [TACOCAT, TACOCAT], target is valid
-  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
 
 - **TC#117: target has exactly 1 card in hand** ( :white_check_mark: )
   - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP]

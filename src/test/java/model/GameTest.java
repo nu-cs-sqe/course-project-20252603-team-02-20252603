@@ -3275,36 +3275,36 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-//  @Test
-//  public void playTwoMatchingCatsCardsNotInHandThrowsIllegalArgumentException() {
-//    Player mockPlayer1 = createMock(Player.class);
-//    Player mockPlayer2 = createMock(Player.class);
-//    Player mockPlayer3 = createMock(Player.class);
-//    Deck mockDeck = createMock(Deck.class);
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.TACOCAT);
-//
-//    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
-//    expect(mockPlayer1.getHand()).andReturn(Collections.emptyList()).anyTimes();
-//
-//    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//
-//    Game game = new Game(
-//        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-//        mockDeck,
-//        new Random(RANDOM_SEED)
-//    );
-//
-//    game.startGame();
-//
-//    Exception e = assertThrows(IllegalArgumentException.class, () ->
-//        game.playTwoMatchingCats(List.of(cat1, cat2), mockPlayer2));
-//
-//    assertEquals("cards not in hand", e.getMessage());
-//
-//    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//  }
+  @Test
+  public void playTwoMatchingCatsCardsNotInHandThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer1.getHand()).andReturn(Collections.emptyList()).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playCard(List.of(cat1, cat2), mockPlayer2, null));
+
+    assertEquals("cards not in hand", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 
 //  @Test
 //  public void playTwoMatchingCatsOnlyOneRequiredCardInHandThrowsIllegalArgumentException() {
