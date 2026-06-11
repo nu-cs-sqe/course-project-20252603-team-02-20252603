@@ -912,6 +912,72 @@ public class GameTest {
   }
 
   @Test
+  public void playCardWithFavorBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(new Card(CardType.FAVOR), new Player(), new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardWithFavorAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    Player target = players.get(SECOND_PLAYER_INDEX);
+    players.get(SECOND_PLAYER_INDEX).die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(new Card(CardType.FAVOR), target, new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardWithFavorNonPlayableCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card defuse = new Card(CardType.DEFUSE);
+    game.getCurrentPlayer().addCard(defuse);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(defuse, target, new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardWithFavorNonFavorCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card skip = new Card(CardType.SKIP);
+    game.getCurrentPlayer().addCard(skip);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(skip, target, new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardWithFavorTransfersGivenCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card favor = new Card(CardType.FAVOR);
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(favor);
+    target.addCard(skip);
+
+    game.playCard(favor, target, skip);
+    List<Card> result = game.resolvePendingAction();
+
+    assertEquals(Collections.emptyList(), result);
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(game.getDiscardPile().contains(favor));
+  }
+
+  @Test
   public void checkWinnerMoreThanOnePlayerAlive() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
