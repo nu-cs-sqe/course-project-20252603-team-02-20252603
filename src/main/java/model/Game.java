@@ -753,6 +753,10 @@ public class Game {
       throw new IllegalArgumentException("cannot target yourself");
     }
 
+    if (wantedCard == null) {
+      throw new IllegalArgumentException("invalid wanted card type");
+    }
+
     Card namedCard = new Card(wantedCard);
     List<Card> targetHand = target.getHand();
 
