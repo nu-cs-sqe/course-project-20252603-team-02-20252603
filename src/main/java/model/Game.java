@@ -743,7 +743,7 @@ public class Game {
   }
 
   public void playThreeMatchingCats(List<Card> cards, Player target, CardType wantedCard) {
-    if (target == null) {
+    if (target == null || !target.isAlive()) {
       throw new IllegalArgumentException("target cannot be null or dead");
     }
 
