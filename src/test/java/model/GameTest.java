@@ -2005,34 +2005,37 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
   }
 
-//  @Test
-//  public void playSeeTheFutureEmptyDeckThrowsException() {
-//    Player mockPlayer1 = createMock(Player.class);
-//    Player mockPlayer2 = createMock(Player.class);
-//    Player mockPlayer3 = createMock(Player.class);
-//    Deck mockDeck = createMock(Deck.class);
-//
-//    Card seeTheFutureCard = new Card(CardType.SEE_THE_FUTURE);
-//    mockPlayer1.removeCard(seeTheFutureCard);
-//    mockDeck.discardCard(seeTheFutureCard);
-//    expectLastCall().once();
-//    expect(mockDeck.peekTopCards())
-//        .andThrow(new IllegalStateException("Draw pile is empty"))
-//        .once();
-//    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//
-//    Game game = new Game(
-//        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-//        mockDeck,
-//        new Random(RANDOM_SEED)
-//    );
-//
-//    game.startGame();
-//
-//    assertThrows(IllegalStateException.class, () -> game.playCard(seeTheFutureCard));
-//
-//    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//  }
+  @Test
+  public void playSeeTheFutureEmptyDeckThrowsException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card seeTheFutureCard = new Card(CardType.SEE_THE_FUTURE);
+    mockPlayer1.removeCard(seeTheFutureCard);
+    mockDeck.discardCard(seeTheFutureCard);
+    expectLastCall().once();
+    expect(mockDeck.peekTopCards())
+        .andThrow(new IllegalStateException("Draw pile is empty"))
+        .once();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    assertThrows(IllegalStateException.class, () -> {
+      game.playCard(seeTheFutureCard);
+      game.resolvePendingAction();
+    });
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 
   @Test
   public void playSeeTheFutureOneDeckCardReturnsOne() {
