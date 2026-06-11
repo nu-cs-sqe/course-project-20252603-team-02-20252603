@@ -641,7 +641,7 @@
 
 - **TC#140: discard has 1 card that matches wanted_card** ( :white_check_mark: )
   - **State of the system**: Discard has [FAVOR], wanted_card = FAVOR
-  - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred to current player, returns FAVOR
+  - **Expected output**: FAVOR transferred to current player, returns FAVOR
 
 - **TC#141: discard has 2 copies of wanted_card** ( :white_check_mark: )
   - **State of the system**: Discard has [FAVOR, FAVOR], wanted_card = FAVOR

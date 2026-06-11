@@ -792,7 +792,7 @@ public class Game {
     currentPlayer.addCard(given);
   }
 
-  public void playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
+  public Card playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
     if (cards == null) {
       throw new IllegalArgumentException("cards cannot be null");
     }
@@ -809,12 +809,10 @@ public class Game {
 
     Card namedCard = new Card(wantedCard);
 
-    try {
-      Card receivedCard = takeFromDiscard(wantedCard);
-      currentPlayer.addCard(receivedCard);
-    } catch (IllegalStateException e) {
-      throw new IllegalStateException("wanted card not in discard pile");
-    }
+    Card receivedCard = takeFromDiscard(wantedCard);
+    currentPlayer.addCard(receivedCard);
+
+    return receivedCard;
   }
 
   public void playCatCards(List<Card> cards, Player target, CardType named) {
