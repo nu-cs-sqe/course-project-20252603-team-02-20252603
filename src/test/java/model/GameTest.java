@@ -700,6 +700,21 @@ public class GameTest {
   }
 
   @Test
+  public void playCardWithReorderNonAlterFutureCardDoesNotSetPendingAction() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(skip);
+
+    game.playCard(skip, Collections.emptyList());
+
+    assertFalse(currentPlayer.getHand().contains(skip));
+    assertTrue(game.getDiscardPile().contains(skip));
+    assertEquals(Collections.emptyList(), game.resolvePendingAction());
+  }
+
+  @Test
   public void curseNextPlayerHasNoDefuse() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -1012,6 +1027,16 @@ public class GameTest {
     game.startGame();
 
     assertThrows(IllegalArgumentException.class, () -> game.playCard(Collections.emptyList()));
+  }
+
+  @Test
+  public void playCardWithNekoListNullCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Card> cards = new ArrayList<>();
+    cards.add(null);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(cards));
   }
 
   @Test
@@ -3242,6 +3267,36 @@ public class GameTest {
   }
 
   @Test
+  public void playFiveDifferentCatsThroughPlayCardReturnsWantedCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card favor = new Card(CardType.FAVOR);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.addToDiscard(favor);
+
+    game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR);
+    List<Card> result = game.resolvePendingAction();
+
+    assertEquals(Collections.emptyList(), result);
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(currentPlayer.getHand().contains(cat1));
+    assertFalse(currentPlayer.getHand().contains(cat5));
+    assertFalse(game.getDiscardPile().contains(favor));
+  }
+
+  @Test
   public void playCatCardsGameNotLaunchedThrowsIllegalStateException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     List<Card> cards = List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT));
@@ -3686,6 +3741,20 @@ public class GameTest {
 
     assertThrows(IllegalArgumentException.class, () ->
             game.playNope(noper, attackCard), "Card must be of type NOPE");
+  }
+
+  @Test
+  void nopeWithNullCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player = game.getCurrentPlayer();
+    Card skipCard = new Card(CardType.SKIP);
+    player.addCard(skipCard);
+    game.playCard(skipCard);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playNope(player, null), "Card must be of type NOPE");
   }
 
   @Test
