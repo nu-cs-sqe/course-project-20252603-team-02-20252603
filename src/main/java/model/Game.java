@@ -797,6 +797,10 @@ public class Game {
       throw new IllegalArgumentException("cards cannot be null");
     }
 
+    if (wantedCard == null) {
+      throw new IllegalArgumentException("invalid wanted card type");
+    }
+
     Player currentPlayer = getCurrentPlayer();
 
     Card namedCard = new Card(wantedCard);
