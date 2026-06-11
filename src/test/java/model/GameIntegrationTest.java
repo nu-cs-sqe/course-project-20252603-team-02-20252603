@@ -2882,33 +2882,33 @@ public class GameIntegrationTest {
     assertTrue(game.getDiscardPile().contains(attack));
   }
 
-//  @Test
-//  public void playFiveDifferentCatsDiscardHasOneMatchingCardReturnsWantedCard() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
-//    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
-//    Card cat4 = new Card(CardType.BEARD_CAT);
-//    Card cat5 = new Card(CardType.CATTERMELON);
-//    Card favor = new Card(CardType.FAVOR);
-//
-//    currentPlayer.addCard(cat1);
-//    currentPlayer.addCard(cat2);
-//    currentPlayer.addCard(cat3);
-//    currentPlayer.addCard(cat4);
-//    currentPlayer.addCard(cat5);
-//    game.addToDiscard(favor);
-//
-//    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
-//        CardType.FAVOR);
-//
-//    assertEquals(CardType.FAVOR, result.getType());
-//    assertTrue(currentPlayer.getHand().contains(favor));
-//    assertFalse(game.getDiscardPile().contains(favor));
-//  }
+  @Test
+  public void playFiveDifferentCatsDiscardHasOneMatchingCardReturnsWantedCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card favor = new Card(CardType.FAVOR);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.addToDiscard(favor);
+
+    Card result = game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5),
+        CardType.FAVOR);
+
+    assertEquals(CardType.FAVOR, result.getType());
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(game.getDiscardPile().contains(favor));
+  }
 
 //  @Test
 //  public void playFiveDifferentCatsDiscardHasTwoMatchingCardsTransfersOneCard() {
