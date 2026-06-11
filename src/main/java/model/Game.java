@@ -801,6 +801,10 @@ public class Game {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
+    if (!isValidCatCombo(cards)) {
+      throw new IllegalArgumentException("invalid five-cat combo");
+    }
+
     Player currentPlayer = getCurrentPlayer();
 
     Card namedCard = new Card(wantedCard);
