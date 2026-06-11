@@ -121,9 +121,6 @@ public class Game {
     Player currentPlayer = getCurrentPlayer();
     Card card = deck.drawCard();
     if (card.getType() == CardType.EXPLODING_KITTEN && currentPlayer.hasDefuse()) {
-      Card defuse = new Card(CardType.DEFUSE);
-      currentPlayer.removeCard(defuse);
-      deck.discardCard(defuse);
       defuse(position);
       completeOneTurn();
       return;
@@ -480,10 +477,20 @@ public class Game {
   }
 
   public void defuse(int position) {
+    Player currentPlayer = getCurrentPlayer();
+
+    if (!currentPlayer.hasDefuse()) {
+      throw new IllegalStateException("Player does not have a Defuse card to play.");
+    }
 
     if (position < 0 || position > deck.getDeck().size()) {
       throw new IllegalArgumentException("position cannot be negative");
     }
+
+    Card defuse = new Card(CardType.DEFUSE);
+    currentPlayer.removeCard(defuse);
+    deck.discardCard(defuse);
+
     deck.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), position);
   }
 

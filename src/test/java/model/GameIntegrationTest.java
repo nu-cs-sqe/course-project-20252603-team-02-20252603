@@ -1434,17 +1434,17 @@ public class GameIntegrationTest {
     assertEquals(targetHand, result);
   }
 
-//  @Test
-//  public void defuseWithoutDefuseCardThrowException() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//    while (currentPlayer.hasDefuse()) {
-//      currentPlayer.removeCard(new Card(CardType.DEFUSE));
-//    }
-//
-//    assertThrows(IllegalStateException.class, () -> game.defuse(0));
-//  }
+  @Test
+  public void defuseWithoutDefuseCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.hasDefuse()) {
+      currentPlayer.removeCard(new Card(CardType.DEFUSE));
+    }
+
+    assertThrows(IllegalStateException.class, () -> game.defuse(0));
+  }
 
   @Test
   public void defuseWithNegativePositionThrowException() {
