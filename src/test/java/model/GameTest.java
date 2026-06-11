@@ -2162,6 +2162,7 @@ public class GameTest {
     Deck mockDeck = createMock(Deck.class);
 
     Card topCard = new Card(CardType.SKIP);
+    expect(mockPlayer1.hasDefuse()).andReturn(true).once();
     expect(mockDeck.getDeck()).andReturn(List.of(topCard)).once();
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
