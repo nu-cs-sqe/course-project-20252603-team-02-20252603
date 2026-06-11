@@ -4889,39 +4889,39 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-//  @Test
-//  public void playCatCardsFiveDifferentCatsNamedCardNotInDiscardThrowsIllegalStateException() {
-//    Player mockPlayer1 = createMock(Player.class);
-//    Player mockPlayer2 = createMock(Player.class);
-//    Player mockPlayer3 = createMock(Player.class);
-//    Deck mockDeck = createMock(Deck.class);
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
-//    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
-//    Card cat4 = new Card(CardType.BEARD_CAT);
-//    Card cat5 = new Card(CardType.CATTERMELON);
-//
-//    expect(mockPlayer1.getHand())
-//        .andReturn(List.of(cat1, cat2, cat3, cat4, cat5)).anyTimes();
-//    expect(mockDeck.takeFromDiscard(CardType.FAVOR))
-//        .andThrow(new IllegalStateException("discard pile is empty")).once();
-//
-//    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//
-//    Game game = new Game(
-//        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-//        mockDeck,
-//        new Random(RANDOM_SEED)
-//    );
-//
-//    game.startGame();
-//
-//    Exception e = assertThrows(IllegalStateException.class, () ->
-//        game.playCatCards(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR));
-//
-//    assertEquals("discard pile is empty", e.getMessage());
-//
-//    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//  }
+  @Test
+  public void playCatCardsFiveDifferentCatsNamedCardNotInDiscardThrowsIllegalStateException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    expect(mockPlayer1.getHand())
+        .andReturn(List.of(cat1, cat2, cat3, cat4, cat5)).anyTimes();
+    expect(mockDeck.takeFromDiscard(CardType.FAVOR))
+        .andThrow(new IllegalStateException("discard pile is empty")).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalStateException.class, () ->
+        game.playCatCards(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR));
+
+    assertEquals("discard pile is empty", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 }
