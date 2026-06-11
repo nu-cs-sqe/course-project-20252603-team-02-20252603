@@ -843,6 +843,23 @@ public class GameTest {
   }
 
   @Test
+  public void playCardNullCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard((Card) null));
+  }
+
+  @Test
+  public void playCardExplodingKittenThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Card explodingKitten = new Card(CardType.EXPLODING_KITTEN);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(explodingKitten));
+  }
+
+  @Test
   public void playCardBeforeGameStartsThrowException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
@@ -2525,6 +2542,27 @@ public class GameTest {
   }
 
   @Test
+  public void playThreeMatchingCatsDefuseNamedCardThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.DEFUSE);
+      game.resolvePendingAction();
+    });
+
+    assertEquals("invalid wanted card type for 3-cat combo", e.getMessage());
+  }
+
+  @Test
   public void playThreeMatchingCatsNonMatchingCatsThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -3047,6 +3085,32 @@ public class GameTest {
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
       game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null,
           CardType.EXPLODING_KITTEN);
+      game.resolvePendingAction();
+    });
+
+    assertEquals("invalid wanted card type for 5-cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playFiveDifferentCatsDefuseWantedCardThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.DEFUSE);
       game.resolvePendingAction();
     });
 
