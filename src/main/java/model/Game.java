@@ -689,6 +689,10 @@ public class Game {
   public Card playTwoMatchingCats(List<Card> cards, Player target) {
     Player currentPlayer = getCurrentPlayer();
 
+    if (target == null || !target.isAlive()) {
+      throw new IllegalArgumentException("target cannot be null or dead");
+    }
+
     if (target == currentPlayer) {
       throw new IllegalArgumentException("cannot target yourself");
     }

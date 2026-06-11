@@ -58,7 +58,7 @@ public class ConsoleUI {
 
     if (input.equals("D")) {
       int defusesBefore = countDefuses(currentPlayer);
-      game.drawCard();
+      game.drawCard(0);
       int defusesAfter = countDefuses(currentPlayer);
 
       if (!currentPlayer.isAlive()) {
