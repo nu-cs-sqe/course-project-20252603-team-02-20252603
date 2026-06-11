@@ -2293,36 +2293,36 @@ public class GameIntegrationTest {
     assertEquals("cards not in hand", e.getMessage());
   }
 
-//  @Test
-//  public void playThreeMatchingCatsTargetHasNoNamedCardReturnsFalse() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
-//
-//    while (!target.getHand().isEmpty()) {
-//      target.removeCard(target.getHand().get(0));
-//    }
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.TACOCAT);
-//    Card cat3 = new Card(CardType.TACOCAT);
-//    currentPlayer.addCard(cat1);
-//    currentPlayer.addCard(cat2);
-//    currentPlayer.addCard(cat3);
-//    target.addCard(new Card(CardType.ATTACK));
-//    int discardSizeBefore = game.getDiscardPile().size();
-//
-//    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
-//    game.resolvePendingAction();
-//
-//    assertFalse(currentPlayer.getHand().contains(cat1));
-//    assertFalse(currentPlayer.getHand().contains(cat2));
-//    assertFalse(currentPlayer.getHand().contains(cat3));
-//    assertEquals(1, target.getHand().size());
-//    assertEquals(CardType.ATTACK, target.getHand().get(0).getType());
-//    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
-//  }
+  @Test
+  public void playThreeMatchingCatsTargetHasNoNamedCardReturnsFalse() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    target.addCard(new Card(CardType.ATTACK));
+    int discardSizeBefore = game.getDiscardPile().size();
+
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
+
+    assertFalse(currentPlayer.getHand().contains(cat1));
+    assertFalse(currentPlayer.getHand().contains(cat2));
+    assertFalse(currentPlayer.getHand().contains(cat3));
+    assertEquals(1, target.getHand().size());
+    assertEquals(CardType.ATTACK, target.getHand().get(0).getType());
+    assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
+  }
 
   @Test
   public void playNekoCardsIsNullThrowsIllegalArgumentException() {
