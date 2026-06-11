@@ -880,6 +880,38 @@ public class GameTest {
   }
 
   @Test
+  public void playCardWithCardListBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(new Card(CardType.ALTER_FUTURE), Collections.emptyList()));
+  }
+
+  @Test
+  public void playCardWithCardListAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(SECOND_PLAYER_INDEX).die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(new Card(CardType.ALTER_FUTURE), Collections.emptyList()));
+  }
+
+  @Test
+  public void playCardWithCardListNonPlayableCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Card defuse = new Card(CardType.DEFUSE);
+    game.getCurrentPlayer().addCard(defuse);
+
+    assertThrows(IllegalArgumentException.class, () ->
+            game.playCard(defuse, Collections.emptyList()));
+  }
+
+  @Test
   public void checkWinnerMoreThanOnePlayerAlive() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
