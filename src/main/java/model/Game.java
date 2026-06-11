@@ -809,12 +809,12 @@ public class Game {
 
     Card namedCard = new Card(wantedCard);
 
-    if (!getDiscardPile().contains(namedCard)) {
-      throw new IllegalArgumentException("discard pile does not have that card");
+    try {
+      Card receivedCard = takeFromDiscard(wantedCard);
+      currentPlayer.addCard(receivedCard);
+    } catch (IllegalStateException e) {
+      throw new IllegalStateException("wanted card not in discard pile");
     }
-
-    Card receivedCard = takeFromDiscard(wantedCard);
-    currentPlayer.addCard(receivedCard);
   }
 
   public void playCatCards(List<Card> cards, Player target, CardType named) {
