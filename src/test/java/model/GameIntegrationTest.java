@@ -3100,33 +3100,33 @@ public class GameIntegrationTest {
     assertTrue(game.getDiscardPile().contains(cat3));
   }
 
-//  @Test
-//  public void playCatCardsThreeMatchingCatsTargetLacksNamedCardNothingTransferred() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//    Player target = game.getPlayers().get(1);
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.TACOCAT);
-//    Card cat3 = new Card(CardType.TACOCAT);
-//    currentPlayer.addCard(cat1);
-//    currentPlayer.addCard(cat2);
-//    currentPlayer.addCard(cat3);
-//
-//    new ArrayList<>(target.getHand())
-//        .stream()
-//        .filter(c -> c.getType() == CardType.FAVOR)
-//        .forEach(target::removeCard);
-//
-//    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
-//    game.resolvePendingAction();
-//
-//    assertFalse(currentPlayer.getHand().contains(new Card(CardType.FAVOR)));
-//    assertTrue(game.getDiscardPile().contains(cat1));
-//    assertTrue(game.getDiscardPile().contains(cat2));
-//    assertTrue(game.getDiscardPile().contains(cat3));
-//  }
+  @Test
+  public void playCatCardsThreeMatchingCatsTargetLacksNamedCardNothingTransferred() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(1);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    new ArrayList<>(target.getHand())
+        .stream()
+        .filter(c -> c.getType() == CardType.FAVOR)
+        .forEach(target::removeCard);
+
+    game.playCard(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+    game.resolvePendingAction();
+
+    assertFalse(currentPlayer.getHand().contains(new Card(CardType.FAVOR)));
+    assertTrue(game.getDiscardPile().contains(cat1));
+    assertTrue(game.getDiscardPile().contains(cat2));
+    assertTrue(game.getDiscardPile().contains(cat3));
+  }
 
   @Test
   public void playCatCardsFiveDifferentCatsNamedCardInDiscardTransfersCard() {
