@@ -687,10 +687,6 @@ public class Game {
   }
 
   public Card playTwoMatchingCats(List<Card> cards, Player target) {
-    if (target == null || !target.isAlive()) {
-      throw new IllegalArgumentException("target cannot be null or dead");
-    }
-
     Player currentPlayer = getCurrentPlayer();
 
     if (target == currentPlayer) {

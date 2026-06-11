@@ -4410,7 +4410,7 @@ public class GameTest {
     game.startGame();
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR);
     });
 
     assertEquals("invalid five-cat combo", e.getMessage());
@@ -4442,7 +4442,8 @@ public class GameTest {
     game.startGame();
 
     Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3), CardType.FAVOR);
+      game.playCard(List.of(cat1, cat2, cat3), null, CardType.FAVOR);
+      game.resolvePendingAction();
     });
 
     assertEquals("invalid five-cat combo", e.getMessage());
