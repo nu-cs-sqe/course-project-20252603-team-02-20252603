@@ -2639,39 +2639,39 @@ public class GameIntegrationTest {
     assertEquals(discardSizeBefore + THREE_CARDS, game.getDiscardPile().size());
   }
 
-//  @Test
-//  public void playThreeMatchingCatsTargetHasNamedCardAndOtherCardsReturnsTrue() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
-//
-//    while (!target.getHand().isEmpty()) {
-//      target.removeCard(target.getHand().get(0));
-//    }
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.TACOCAT);
-//    Card cat3 = new Card(CardType.TACOCAT);
-//    Card favor = new Card(CardType.FAVOR);
-//    Card attack = new Card(CardType.ATTACK);
-//    Card skip = new Card(CardType.SKIP);
-//    currentPlayer.addCard(cat1);
-//    currentPlayer.addCard(cat2);
-//    currentPlayer.addCard(cat3);
-//    target.addCard(favor);
-//    target.addCard(attack);
-//    target.addCard(skip);
-//
-//    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
-//
-//    assertTrue(result);
-//    assertTrue(currentPlayer.getHand().contains(favor));
-//    assertFalse(target.getHand().contains(favor));
-//    assertTrue(target.getHand().contains(attack));
-//    assertTrue(target.getHand().contains(skip));
-//    assertEquals(2, target.getHand().size());
-//  }
+  @Test
+  public void playThreeMatchingCatsTargetHasNamedCardAndOtherCardsReturnsTrue() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    Card favor = new Card(CardType.FAVOR);
+    Card attack = new Card(CardType.ATTACK);
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    target.addCard(favor);
+    target.addCard(attack);
+    target.addCard(skip);
+
+    boolean result = game.playThreeMatchingCats(List.of(cat1, cat2, cat3), target, CardType.FAVOR);
+
+    assertTrue(result);
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(target.getHand().contains(favor));
+    assertTrue(target.getHand().contains(attack));
+    assertTrue(target.getHand().contains(skip));
+    assertEquals(2, target.getHand().size());
+  }
 
   @Test
   public void playFavorTargetHasOneMatchingCardTransfersCard() {
