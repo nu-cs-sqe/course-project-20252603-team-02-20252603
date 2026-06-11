@@ -1048,6 +1048,56 @@ public class GameTest {
   }
 
   @Test
+  public void playCatComboBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(List.of(cat1, cat2), new Player(), null));
+  }
+
+  @Test
+  public void playCatComboAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    Player target = players.get(SECOND_PLAYER_INDEX);
+    players.get(SECOND_PLAYER_INDEX).die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+            game.playCard(List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT)),
+                    target, null));
+  }
+
+  @Test
+  public void resolvePendingActionWithNoPendingActionReturnsEmptyList() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertEquals(Collections.emptyList(), game.resolvePendingAction());
+  }
+
+  @Test
+  public void playTargetedAttackNullTargetThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playTargetedAttack(null));
+  }
+
+  @Test
+  public void playNekoBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    List<Card> cards = List.of(new Card(CardType.NEKO), new Card(CardType.NEKO),
+            new Card(CardType.NEKO));
+
+    assertThrows(IllegalStateException.class, () -> game.playNeko(cards));
+  }
+
+  @Test
   public void checkWinnerMoreThanOnePlayerAlive() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -1824,6 +1874,7 @@ public class GameTest {
     assertEquals(originalTop, game.getDrawPile().get(deckSizeBefore - 1));
   }
 
+  @Test
   public void isCatCardTypeIsNull() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
@@ -2267,6 +2318,22 @@ public class GameTest {
     assertFalse(currentPlayer.getHand().contains(cat2));
 
     assertEquals(0, target.getHand().size());
+  }
+
+  @Test
+  public void playTwoMatchingCatsTargetHasNoCardsReturnsNull() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+
+    assertNull(game.playTwoMatchingCats(List.of(cat1, cat2), target));
   }
 
   @Test
