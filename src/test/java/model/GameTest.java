@@ -3526,36 +3526,36 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-//  @Test
-//  public void playThreeMatchingCatsNonMatchingCatsThrowsIllegalArgumentException() {
-//    Player mockPlayer1 = createMock(Player.class);
-//    Player mockPlayer2 = createMock(Player.class);
-//    Player mockPlayer3 = createMock(Player.class);
-//    Deck mockDeck = createMock(Deck.class);
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.BEARD_CAT);
-//    Card cat3 = new Card(CardType.CATTERMELON);
-//
-//    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
-//
-//    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//
-//    Game game = new Game(
-//        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-//        mockDeck,
-//        new Random(RANDOM_SEED)
-//    );
-//
-//    game.startGame();
-//
-//    Exception e = assertThrows(IllegalArgumentException.class, () ->
-//        game.playThreeMatchingCats(List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR));
-//
-//    assertEquals("invalid three-cat combo", e.getMessage());
-//
-//    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//  }
+  @Test
+  public void playThreeMatchingCatsNonMatchingCatsThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.BEARD_CAT);
+    Card cat3 = new Card(CardType.CATTERMELON);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () ->
+        game.playThreeMatchingCats(List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR));
+
+    assertEquals("invalid three-cat combo", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 
 //  @Test
 //  public void playThreeMatchingCatsTwoCardsThrowsIllegalArgumentException() {

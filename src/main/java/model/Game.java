@@ -757,6 +757,10 @@ public class Game {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
+    if (!isValidCatCombo(cards)) {
+      throw new IllegalArgumentException("invalid three-cat combo");
+    }
+
     Card namedCard = new Card(wantedCard);
     List<Card> targetHand = target.getHand();
 
