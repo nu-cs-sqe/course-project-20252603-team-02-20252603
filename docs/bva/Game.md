@@ -263,6 +263,10 @@
   - **State of the system**: combo cards are not held by current player, target is valid, named card = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "card not in hand"
 
+- **TC#137: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: Valid 5-card combo shape, but current player does not hold those cards
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
 ### Method under test: `checkWinner()`
 
 - **TC48: More than one player alive** ( :white_check_mark: )
@@ -626,10 +630,6 @@
 - **TC#136: combo is invalid because size is 3 instead of 5** ( :white_check_mark: )
   - **State of the system**: Cards = [TACOCAT, TACOCAT, TACOCAT], wanted_card = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "invalid five-cat combo"
-
-- **TC#137: cards are not in current player's hand** ( :white_check_mark: )
-  - **State of the system**: Valid 5-card combo shape, but current player does not hold those cards
-  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
 
 - **TC#138: discard pile is empty** ( :white_check_mark: )
   - **State of the system**: Valid combo in hand, discard pile is empty, wanted_card = FAVOR

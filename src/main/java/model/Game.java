@@ -801,7 +801,7 @@ public class Game {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
-    if (!isValidCatCombo(cards)) {
+    if (cards.size() != 5 || !isValidCatCombo(cards)) {
       throw new IllegalArgumentException("invalid five-cat combo");
     }
 
