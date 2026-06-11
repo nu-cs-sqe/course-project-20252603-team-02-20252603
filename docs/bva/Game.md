@@ -259,6 +259,10 @@
   - **State of the system**: current player has 1 TACOCAT in hand, cards = [TACOCAT, TACOCAT], target is valid
   - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
 
+- **TC#127: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: combo cards are not held by current player, target is valid, named card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "card not in hand"
+
 ### Method under test: `checkWinner()`
 
 - **TC48: More than one player alive** ( :white_check_mark: )
@@ -585,10 +589,6 @@
 - **TC#126: combo is invalid because size is 2 instead of 3** ( :white_check_mark: )
   - **State of the system**: cards = [TACOCAT, TACOCAT], target is valid, named = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "invalid three-cat combo"
-
-- **TC#127: cards are not in current player's hand** ( :white_check_mark: )
-  - **State of the system**: combo cards are not held by current player, target is valid, named card = FAVOR
-  - **Expected output**: Throws `IllegalArgumentException`, "card not in hand"
 
 - **TC#128: target has 0 copies of named card** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo in hand, target has no FAVOR, named card = FAVOR
