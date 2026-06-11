@@ -797,7 +797,7 @@ public class Game {
       throw new IllegalArgumentException("cards cannot be null");
     }
 
-    if (wantedCard == null) {
+    if (wantedCard == null || wantedCard == CardType.EXPLODING_KITTEN) {
       throw new IllegalArgumentException("invalid wanted card type");
     }
 
