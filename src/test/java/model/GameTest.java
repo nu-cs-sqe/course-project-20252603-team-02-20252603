@@ -2180,29 +2180,32 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-//  @Test
-//  public void defusePositionZeroInsertsAtTop() {
-//    Player mockPlayer1 = createMock(Player.class);
-//    Player mockPlayer2 = createMock(Player.class);
-//    Player mockPlayer3 = createMock(Player.class);
-//    Deck mockDeck = createMock(Deck.class);
-//
-//    Card explodingKitten = new Card(CardType.EXPLODING_KITTEN);
-//    expect(mockDeck.getDeck()).andReturn(List.of()).once();
-//    mockDeck.addToDrawPile(explodingKitten, 0);
-//    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//
-//    Game game = new Game(
-//        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-//        mockDeck,
-//        new Random(RANDOM_SEED)
-//    );
-//
-//    game.startGame();
-//    game.defuse(0);
-//
-//    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-//  }
+  @Test
+  public void defusePositionZeroInsertsAtTop() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card explodingKitten = new Card(CardType.EXPLODING_KITTEN);
+    expect(mockPlayer1.hasDefuse()).andReturn(true).once();
+    expect(mockDeck.getDeck()).andReturn(List.of()).once();
+    mockPlayer1.removeCard(new Card(CardType.DEFUSE));
+    mockDeck.discardCard(new Card(CardType.DEFUSE));
+    mockDeck.addToDrawPile(explodingKitten, 0);
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.defuse(0);
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
 
 //  @Test
 //  public void defusePositionEqualToSizeInsertsAtBottom() {
