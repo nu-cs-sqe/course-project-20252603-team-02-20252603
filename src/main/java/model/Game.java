@@ -686,6 +686,10 @@ public class Game {
 
     Player currentPlayer = getCurrentPlayer();
 
+    if (target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+
     List<Card> targetHand = target.getHand();
     if (targetHand.isEmpty()) {
       throw new IllegalArgumentException("target player has no cards left");
