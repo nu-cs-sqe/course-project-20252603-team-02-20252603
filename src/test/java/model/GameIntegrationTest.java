@@ -2854,33 +2854,33 @@ public class GameIntegrationTest {
     assertEquals("discard pile is empty", e.getMessage());
   }
 
-//  @Test
-//  public void playFiveDifferentCatsDiscardHasOneNonMatchingCardThrowsIllegalArgumentException() {
-//    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
-//    game.startGame();
-//    Player currentPlayer = game.getCurrentPlayer();
-//
-//    Card cat1 = new Card(CardType.TACOCAT);
-//    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
-//    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
-//    Card cat4 = new Card(CardType.BEARD_CAT);
-//    Card cat5 = new Card(CardType.CATTERMELON);
-//    Card attack = new Card(CardType.ATTACK);
-//
-//    currentPlayer.addCard(cat1);
-//    currentPlayer.addCard(cat2);
-//    currentPlayer.addCard(cat3);
-//    currentPlayer.addCard(cat4);
-//    currentPlayer.addCard(cat5);
-//    game.addToDiscard(attack);
-//
-//    Exception e = assertThrows(IllegalArgumentException.class, () -> {
-//      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
-//    });
-//
-//    assertEquals("card type not in discard pile", e.getMessage());
-//    assertTrue(game.getDiscardPile().contains(attack));
-//  }
+  @Test
+  public void playFiveDifferentCatsDiscardHasOneNonMatchingCardThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card attack = new Card(CardType.ATTACK);
+
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.addToDiscard(attack);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+    });
+
+    assertEquals("card type not in discard pile", e.getMessage());
+    assertTrue(game.getDiscardPile().contains(attack));
+  }
 
 //  @Test
 //  public void playFiveDifferentCatsDiscardHasOneMatchingCardReturnsWantedCard() {
