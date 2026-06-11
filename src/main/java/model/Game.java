@@ -749,6 +749,10 @@ public class Game {
 
     Player currentPlayer = getCurrentPlayer();
 
+    if (currentPlayer == target) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+
     Card namedCard = new Card(wantedCard);
     List<Card> targetHand = target.getHand();
 
