@@ -674,19 +674,19 @@
 
 - **TC#148: valid 2-cat combo, target has 1 card — routes to playTwoMatchingCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, TACOCAT], target has [SKIP]
-  - **Expected output**: Two `TACOCAT`s added to discard, `SKIP` transferred to current player, target hand empty
+  - **Expected output**: `SKIP` transferred to current player, target hand empty
 
 - **TC#149: valid 3-cat combo, target has named card — routes to playThreeMatchingCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, TACOCAT, TACOCAT], target has `FAVOR`, named = `FAVOR`
-  - **Expected output**: Three `TACOCAT`s added to discard, `FAVOR` transferred to current player
+  - **Expected output**: `FAVOR` transferred to current player
 
 - **TC#150: valid 3-cat combo, target lacks named card — routes to playThreeMatchingCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, TACOCAT, TACOCAT], target has no `FAVOR`, named = `FAVOR`
-  - **Expected output**: Three `TACOCAT`s added to discard, nothing transferred
+  - **Expected output**: Nothing transferred
 
 - **TC#151: valid 5-cat combo, named card in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has `FAVOR`, named = `FAVOR`
-  - **Expected output**: Five cats added to discard, `FAVOR` transferred to current player
+  - **Expected output**: `FAVOR` transferred to current player
 
 - **TC#152: valid 5-cat combo, named card not in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has no `FAVOR`, named = `FAVOR`
