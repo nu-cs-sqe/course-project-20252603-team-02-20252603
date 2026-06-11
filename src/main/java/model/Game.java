@@ -690,6 +690,10 @@ public class Game {
       throw new IllegalArgumentException("cannot target yourself");
     }
 
+    if (!isValidCatCombo(cards)) {
+      throw new IllegalArgumentException("invalid two-cat combo");
+    }
+
     List<Card> targetHand = target.getHand();
     if (targetHand.isEmpty()) {
       throw new IllegalArgumentException("target player has no cards left");
