@@ -1896,35 +1896,35 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
   }
 
-//  @Test
-//  public void playBubonicPlagueAllOtherPlayersHaveNoCards() {
-//    Player mockPlayer1 = createMock(Player.class);
-//    Player mockPlayer2 = createMock(Player.class);
-//    Player mockPlayer3 = createMock(Player.class);
-//    Deck mockDeck = createMock(Deck.class);
-//    Random mockRandom = createMock(Random.class);
-//
-//    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
-//    expect(mockPlayer2.getHand()).andReturn(List.of()).once();
-//
-//    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
-//    expect(mockPlayer3.getHand()).andReturn(List.of()).once();
-//
-//    mockDeck.shuffle();
-//
-//    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
-//
-//    Game game = new Game(
-//        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-//        mockDeck,
-//        mockRandom
-//    );
-//
-//    game.startGame();
-//    game.playBubonicPlague();
-//
-//    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
-//  }
+  @Test
+  public void playBubonicPlagueAllOtherPlayersHaveNoCards() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+    Random mockRandom = createMock(Random.class);
+
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.getHand()).andReturn(List.of()).once();
+
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.getHand()).andReturn(List.of()).once();
+
+    mockDeck.shuffle();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        mockRandom
+    );
+
+    game.startGame();
+    game.playBubonicPlague();
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
+  }
 
 //  @Test
 //  public void playBubonicPlagueOneOtherPlayerAlive() {
