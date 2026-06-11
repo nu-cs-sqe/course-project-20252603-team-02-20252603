@@ -645,11 +645,11 @@
 
 - **TC#141: discard has 2 copies of wanted_card** ( :white_check_mark: )
   - **State of the system**: Discard has [FAVOR, FAVOR], wanted_card = FAVOR
-  - **Expected output**: Five cats removed from hand and discarded, exactly 1 FAVOR transferred, discard still has 1 FAVOR remaining, returns FAVOR
+  - **Expected output**: Exactly 1 FAVOR transferred, discard still has 1 FAVOR remaining, returns FAVOR
 
 - **TC#142: discard has wanted_card among other cards** ( :white_check_mark: )
   - **State of the system**: Discard has [ATTACK, FAVOR, SKIP], wanted_card = FAVOR
-  - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
+  - **Expected output**: FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
 
 ### Method under test: `playCatCards()`
 - **TC#143: game has not been launched** ( :white_check_mark: )
