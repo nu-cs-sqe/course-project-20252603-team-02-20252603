@@ -793,6 +793,10 @@ public class Game {
   }
 
   public void playFiveDifferentCats(List<Card> cards, CardType wantedCard) {
+    if (cards == null) {
+      throw new IllegalArgumentException("cards cannot be null");
+    }
+
     Player currentPlayer = getCurrentPlayer();
 
     Card namedCard = new Card(wantedCard);
