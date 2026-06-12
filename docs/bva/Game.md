@@ -14,25 +14,6 @@
     - **State of the system**: Game has 5 players
     - **Expected output**: Game starts successfully
 
-- **TC2: Start game with lower boundary player count** (:white_check_mark:)
-    - **State of the system**: Game has 3 players
-    - **Expected output**: Game starts successfully
-
-- **TC3: Start game with upper boundary player count** (:white_check_mark:)
-    - **State of the system**: Game has 5 players
-    - **Expected output**: Game starts successfully
-- **TC1: Start game with valid player count** ( :white_check_mark: )
-  - **State of the system**: Game has 4 players and has not launched yet
-  - **Expected output**: Game is launched, players are created, deck is created, turn order is initialized
-
-- **TC2: Start game with lower boundary player count** ( :white_check_mark: )
-  - **State of the system**: Game has 3 players
-  - **Expected output**: Game starts successfully
-
-- **TC3: Start game with upper boundary player count** ( :white_check_mark: )
-  - **State of the system**: Game has 5 players
-  - **Expected output**: Game starts successfully
-
 - **TC4: Start game with too few players** ( :white_check_mark: )
     - **State of the system**: Game has 2 players
     - **Expected output**: Throws `IllegalArgumentException`
@@ -210,60 +191,7 @@
 - **TC42: Draw Exploding Kitten without Defuse** ( :white_check_mark: )
     - **State of the system**: Current player draws `EXPLODING_KITTEN` and has no `DEFUSE`
     - **Expected output**: Current player dies and game checks for winner
-
-### Method under test: `playDrawFromBottom()`
-
-- **TC#: Draw from bottom with many cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has more than 1 card
-    - **Expected output**: Bottom card is added to current player's hand, played card is discarded, one turn is completed, and empty list is returned
-
-- **TC#: Draw from bottom with exactly 1 card** ( :white_check_mark: )
-    - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has exactly 1 card
-    - **Expected output**: Only card is added to current player's hand, draw pile becomes empty, one turn is completed, and empty list is returned
-
-- **TC#: Draw from bottom with empty draw pile** ( :white_check_mark: )
-    - **State of the system**: Current player resolves `DRAW_FROM_BOTTOM` and draw pile has 0 cards
-    - **Expected output**: Throws `IllegalStateException`
-
-### Method under test: `playAlterTheFuture()`
-
-- **TC#: Alter the Future with more than 3 cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has more than 3 cards, and player gives a valid order for the top 3 cards
-    - **Expected output**: Played card is discarded, top 3 draw pile cards are reordered, cards after the top 3 stay in place, and empty list is returned
-
-- **TC#: Alter the Future with exactly 3 cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 3 cards, and player gives a valid order for all 3 cards
-    - **Expected output**: Played card is discarded, all 3 draw pile cards are reordered, and empty list is returned
-
-- **TC#: Alter the Future with exactly 1 card** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 1 card, and player gives that card back
-    - **Expected output**: Played card is discarded, the only draw pile card remains on top, and empty list is returned
-
-- **TC#: Alter the Future with empty draw pile** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE` and draw pile has 0 cards
-    - **Expected output**: Throws `IllegalStateException`
-
-- **TC#: Alter the Future with invalid order** ( :white_check_mark: )
-    - **State of the system**: Current player plays `ALTER_FUTURE` and reordered cards do not match the visible top cards
-    - **Expected output**: Throws `IllegalArgumentException`
-
-### Method under test: `playCurse()`
-
-- **TC#: Curse next player with no Defuse cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `CURSE` and next player has 0 Defuse cards
-    - **Expected output**: Played card is discarded, next player's hand is unchanged, draw pile size is unchanged, and empty list is returned
-
-- **TC#: Curse next player with exactly 1 Defuse card** ( :white_check_mark: )
-    - **State of the system**: Current player plays `CURSE` and next player has exactly 1 Defuse card
-    - **Expected output**: Defuse is removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
-
-- **TC#: Curse next player with multiple Defuse cards** ( :white_check_mark: )
-    - **State of the system**: Current player plays `CURSE` and next player has more than 1 Defuse card
-    - **Expected output**: All Defuse cards are removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
-
-- **TC#: Curse when exactly one other player is alive** ( :white_check_mark: )
-    - **State of the system**: Current player plays `CURSE`, one other player is alive, and remaining player has a Defuse card
-    - **Expected output**: Defuse is removed from the only other alive player, returned to draw pile, draw pile is shuffled, and empty list is returned
+    
 
 ### Method under test: `playCard()`
 
@@ -287,9 +215,57 @@
     - **State of the system**: Game is over
     - **Expected output**: Throws `IllegalStateException`
 
-- **TC47: Player tries to play Blessing card** ( :white_check_mark: )
-  - **State of the system**: Game is started, game is not over, and current player has a Blessing card
-  - **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn
+- **TC47.1: Player plays a Skip card while owing exactly one turn** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `SKIP` card, and current player owes exactly one turn
+  - **Expected output**: Card is removed from hand, card is discarded, current player's owed turns decreases to 0, and the turn advances to the next alive player
+
+- **TC47.2: Player plays a Super Skip card while owing exactly one turn** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `SUPER_SKIP` card, and current player owes exactly one turn
+  - **Expected output**: Card is removed from hand, card is discarded, current player's owed turns decreases from 1 to 0, and the turn advances to the next alive player
+
+- **TC47.3: Player plays a Super Skip card while owing two turns** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `SUPER_SKIP` card, and current player owes exactly two turns
+  - **Expected output**: Card is removed from hand, card is discarded, current player's owed turns decreases from 2 to 0, and the turn advances to the next alive player
+
+  - **TC47.4: Player plays a See the Future card when deck has at least three cards** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `SEE_THE_FUTURE` card, and the deck has at least three cards to reveal
+  - **Expected output**: Card is removed from hand, card is discarded, the top three cards of the deck are returned, and the current player index stays the same
+
+- **TC47.5: Player plays a Swap Top Bottom card** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `SWAP_TOP_BOTTOM` card, and the deck has cards that can be swapped
+  - **Expected output**: Card is removed from hand, card is discarded, the deck’s top and bottom cards are swapped, and the current player index stays the same
+
+- **TC47.6: Player plays an Attack card and gives the next player an extra turn** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has an `ATTACK` card, and the next player is alive with one turn owed
+  - **Expected output**: Card is removed from hand, card is discarded, the game advances to the next alive player, and that player receives one additional turn
+
+- **TC47.7: Player plays a Draw From Bottom card and draws one bottom card** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `DRAW_FROM_BOTTOM` card, current player owes one turn, and the deck has a bottom card available to draw
+  - **Expected output**: Card is removed from hand, card is discarded, the bottom card is drawn and added to the current player's hand, current player's owed turns decreases to 0, and the turn advances to the next alive player
+
+- **TC47.8: Player plays a Curse card and next player loses one Defuse card** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a `CURSE` card, the next active player is alive, and the next active player has exactly one `DEFUSE` card
+  - **Expected output**: Curse card is removed from hand, Curse card is discarded, the next active player loses their one Defuse card, that Defuse card is added back into the draw pile, the deck is shuffled, and the current player index stays the same
+
+~~- **TC47: Player tries to play Blessing card** ( :white_check_mark: )~~
+  ~~- **State of the system**: Game is started, game is not over, and current player has a Blessing card~~
+  ~~- **Expected output**: Card is removed from hand, card is discarded, and turn flow continues, targeted player drops one turn~~~~
+
+- **TC#115: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: current player's hand does not contain the passed cards, target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#116: current player has only 1 of the 2 required cards** ( :white_check_mark: )
+  - **State of the system**: current player has 1 TACOCAT in hand, cards = [TACOCAT, TACOCAT], target is valid
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
+
+- **TC#127: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: combo cards are not held by current player, target is valid, named card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "card not in hand"
+
+- **TC#137: cards are not in current player's hand** ( :white_check_mark: )
+  - **State of the system**: Valid 5-card combo shape, but current player does not hold those cards
+  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
 
 ### Method under test: `checkWinner()`
 
@@ -318,8 +294,8 @@
 
 - **TC53: Player plays Skip card and owes 1 turns** ( :white_check_mark: )
     - **State of the system**: Game is started, game is not over, current player has a Skip card, turnsOwed = 1
-    - **Expected output**: turnsOwed decreases to 1, card removed from hand, card added to discard pile, turn does not
-      move to next player
+    - **Expected output**: turnsOwed decreases to 0, card removed from hand, card added to discard pile, turn moves to
+    next player
 
 - **TC54: Player plays Skip card and owes 2 turns** ( :white_check_mark: )
     - **State of the system**: Game is started, game is not over, current player has a Skip card, turnsOwed = 2
@@ -388,9 +364,9 @@
 
 ### Method under test: `defuse(int position)`
 
-- **TC69: Defuse when player has no Defuse card** ( :white_check_mark: )
+~~- **TC69: Defuse when player has no Defuse card** ( :white_check_mark: )
     - **State of the system**: Current player does not have a Defuse card
-    - **Expected output**: Throws `IllegalStateException`
+    - **Expected output**: Throws `IllegalStateException`~~
 
 - **TC70: Defuse with position out of bounds (negative)** ( :white_check_mark: )
     - **State of the system**: Position is -1
@@ -485,7 +461,7 @@
   - **State of the system**: Game is running, cards list is null
   - **Expected output**: IllegalArgumentException
 
-- **TC#689: list is empty (size 0)** ( :white_check_mark: )
+- **TC#89: list is empty (size 0)** ( :white_check_mark: )
   - **State of the system**: Game is running, cards list is empty
   - **Expected output**: IllegalArgumentException
 
@@ -590,17 +566,9 @@
   - **State of the system**: cards = [TACOCAT, TACOCAT, TACOCAT], target is valid
   - **Expected output**: Throws `IllegalArgumentException`, "invalid two-cat combo"
 
-- **TC#115: cards are not in current player's hand** ( :white_check_mark: )
-  - **State of the system**: current player's hand does not contain the passed cards, target is valid
-  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
-
-- **TC#116: current player has only 1 of the 2 required cards** ( :white_check_mark: )
-  - **State of the system**: current player has 1 TACOCAT in hand, cards = [TACOCAT, TACOCAT], target is valid
-  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
-
 - **TC#117: target has exactly 1 card in hand** ( :white_check_mark: )
   - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP]
-  - **Expected output**: Both cat cards removed from current player's hand, both cards added to discard pile, SKIP transferred to current player, target hand is empty, returns SKIP
+  - **Expected output**: SKIP transferred to current player, target hand is empty, returns SKIP
 
 - **TC#118: target has exactly 2 cards in hand** ( :white_check_mark: )
   - **State of the system**: current player has valid 2-card combo in hand, target hand = [SKIP, ATTACK]
@@ -639,10 +607,6 @@
   - **State of the system**: cards = [TACOCAT, TACOCAT], target is valid, named = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "invalid three-cat combo"
 
-- **TC#127: cards are not in current player's hand** ( :white_check_mark: )
-  - **State of the system**: combo cards are not held by current player, target is valid, named card = FAVOR
-  - **Expected output**: Throws `IllegalArgumentException`, "card not in hand"
-
 - **TC#128: target has 0 copies of named card** ( :white_check_mark: )
   - **State of the system**: current player has valid 3-cat combo in hand, target has no FAVOR, named card = FAVOR
   - **Expected output**: Three cats removed from current player's hand, three cats added to discard pile, no card transferred, returns false
@@ -680,10 +644,6 @@
   - **State of the system**: Cards = [TACOCAT, TACOCAT, TACOCAT], wanted_card = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "invalid five-cat combo"
 
-- **TC#137: cards are not in current player's hand** ( :white_check_mark: )
-  - **State of the system**: Valid 5-card combo shape, but current player does not hold those cards
-  - **Expected output**: Throws `IllegalArgumentException`, "cards not in hand"
-
 - **TC#138: discard pile is empty** ( :white_check_mark: )
   - **State of the system**: Valid combo in hand, discard pile is empty, wanted_card = FAVOR
   - **Expected output**: Throws `IllegalArgumentException`, "wanted card not in discard pile"
@@ -694,15 +654,15 @@
 
 - **TC#140: discard has 1 card that matches wanted_card** ( :white_check_mark: )
   - **State of the system**: Discard has [FAVOR], wanted_card = FAVOR
-  - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred to current player, returns FAVOR
+  - **Expected output**: FAVOR transferred to current player, returns FAVOR
 
 - **TC#141: discard has 2 copies of wanted_card** ( :white_check_mark: )
   - **State of the system**: Discard has [FAVOR, FAVOR], wanted_card = FAVOR
-  - **Expected output**: Five cats removed from hand and discarded, exactly 1 FAVOR transferred, discard still has 1 FAVOR remaining, returns FAVOR
+  - **Expected output**: Exactly 1 FAVOR transferred, discard still has 1 FAVOR remaining, returns FAVOR
 
 - **TC#142: discard has wanted_card among other cards** ( :white_check_mark: )
   - **State of the system**: Discard has [ATTACK, FAVOR, SKIP], wanted_card = FAVOR
-  - **Expected output**: Five cats removed from hand and discarded, FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
+  - **Expected output**: FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
 
 ### Method under test: `playCatCards()`
 - **TC#143: game has not been launched** ( :white_check_mark: )
@@ -727,19 +687,19 @@
 
 - **TC#148: valid 2-cat combo, target has 1 card — routes to playTwoMatchingCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, TACOCAT], target has [SKIP]
-  - **Expected output**: Two `TACOCAT`s added to discard, `SKIP` transferred to current player, target hand empty
+  - **Expected output**: `SKIP` transferred to current player, target hand empty
 
 - **TC#149: valid 3-cat combo, target has named card — routes to playThreeMatchingCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, TACOCAT, TACOCAT], target has `FAVOR`, named = `FAVOR`
-  - **Expected output**: Three `TACOCAT`s added to discard, `FAVOR` transferred to current player
+  - **Expected output**: `FAVOR` transferred to current player
 
 - **TC#150: valid 3-cat combo, target lacks named card — routes to playThreeMatchingCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, TACOCAT, TACOCAT], target has no `FAVOR`, named = `FAVOR`
-  - **Expected output**: Three `TACOCAT`s added to discard, nothing transferred
+  - **Expected output**: Nothing transferred
 
 - **TC#151: valid 5-cat combo, named card in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has `FAVOR`, named = `FAVOR`
-  - **Expected output**: Five cats added to discard, `FAVOR` transferred to current player
+  - **Expected output**: `FAVOR` transferred to current player
 
 - **TC#152: valid 5-cat combo, named card not in discard — routes to playFiveDifferentCats** ( :white_check_mark: )
   - **State of the system**: Game running, current player has [TACOCAT, HAIRY_POTATO_CAT, RAINBOW_RALPHING_CAT, BEARD_CAT, CATTERMELON], discard has no `FAVOR`, named = `FAVOR`
@@ -907,27 +867,56 @@
     - **State of the system**: Game is started, current player has a Nosy card, target is a different alive player
     - **Expected output**: Card removed from hand, card added to discard, target player's hand is returned
 
-### Method under test: `playNope()`
-- **TC199: Play Nope on any card** ( :white_check_mark: )
-  - **State of the system**: Game is started, current player plays a card, another player nopes it
-  - **Expected output**: Card removed from hand, card added to discard, action not performed
+### Method under test: `playDrawFromBottom()`
 
-- **TC200: Play Nope when no action is pending** ( :white_check_mark: )
-  - **State of the system**: Game is started, it is a player's turn, but no action card has been played (pendingAction is NONE), player attempts to play a Nope card.
-  - **Expected output**: IllegalStateException is thrown, Nope card remains in hand, game state remains unchanged.
+- **TC#199: Draw from bottom with many cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has more than 1 card
+  - **Expected output**: Bottom card is added to current player's hand, played card is discarded, one turn is completed, and empty list is returned
 
-- **TC201: Play Nope card not present in player's hand** ( :white_check_mark: )
-  - **State of the system**: Game is started, an action is pending, a player attempts to play a Nope card that is not currently in their inventory.
-  - **Expected output**: IllegalArgumentException is thrown, action remains pending.
+- **TC#200: Draw from bottom with exactly 1 card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `DRAW_FROM_BOTTOM` and draw pile has exactly 1 card
+  - **Expected output**: Only card is added to current player's hand, draw pile becomes empty, one turn is completed, and empty list is returned
 
-- **TC202: Pass a non-Nope card into the nope method** ( :white_check_mark: )
-  - **State of the system**: Game is started, an action is pending, a player attempts to pass a different card type (e.g., SKIP) into the playNope() method.
-  - **Expected output**: IllegalArgumentException is thrown, card remains in hand, action remains pending.
+- **TC#201: Draw from bottom with empty draw pile** ( :white_check_mark: )
+  - **State of the system**: Current player resolves `DRAW_FROM_BOTTOM` and draw pile has 0 cards
+  - **Expected output**: Throws `IllegalStateException`
 
-- **TC203: Play Nope out of turn** (Third-party intervention) ( :white_check_mark: )
-  - **State of the system**: Game is started, Player 1 plays an action targeting Player 2. Player 3 (who is neither the initiator nor the target) plays a Nope card.
-  - **Expected output**: Nope card removed from Player 3's hand, added to discard, Player 1's action is not performed.
+### Method under test: `playAlterTheFuture()`
 
-- **TC204: Play Nope on a multiple-card Cat Combo** ( :white_check_mark: )
-  - **State of the system**: Game is started, current player plays a Two-Cat (or Three-Cat/Five-Cat) combo to steal a card, another player nopes it.
-  - **Expected output**: Nope card consumed, all combo cards removed from attacker's hand and added to discard, no card is stolen from the target.
+- **TC#202: Alter the Future with more than 3 cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has more than 3 cards, and player gives a valid order for the top 3 cards
+  - **Expected output**: Played card is discarded, top 3 draw pile cards are reordered, cards after the top 3 stay in place, and empty list is returned
+
+- **TC#203: Alter the Future with exactly 3 cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 3 cards, and player gives a valid order for all 3 cards
+  - **Expected output**: Played card is discarded, all 3 draw pile cards are reordered, and empty list is returned
+
+- **TC#204: Alter the Future with exactly 1 card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE`, draw pile has exactly 1 card, and player gives that card back
+  - **Expected output**: Played card is discarded, the only draw pile card remains on top, and empty list is returned
+
+- **TC#205: Alter the Future with empty draw pile** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE` and draw pile has 0 cards
+  - **Expected output**: Throws `IllegalStateException`
+
+- **TC#206: Alter the Future with invalid order** ( :white_check_mark: )
+  - **State of the system**: Current player plays `ALTER_FUTURE` and reordered cards do not match the visible top cards
+  - **Expected output**: Throws `IllegalArgumentException`
+
+### Method under test: `playCurse()`
+
+- **TC#207: Curse next player with no Defuse cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has 0 Defuse cards
+  - **Expected output**: Played card is discarded, next player's hand is unchanged, draw pile size is unchanged, and empty list is returned
+
+- **TC#208: Curse next player with exactly 1 Defuse card** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has exactly 1 Defuse card
+  - **Expected output**: Defuse is removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
+
+- **TC#209: Curse next player with multiple Defuse cards** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE` and next player has more than 1 Defuse card
+  - **Expected output**: All Defuse cards are removed from next player's hand, returned to draw pile, draw pile is shuffled, and empty list is returned
+
+- **TC#210: Curse when exactly one other player is alive** ( :white_check_mark: )
+  - **State of the system**: Current player plays `CURSE`, one other player is alive, and remaining player has a Defuse card
+  - **Expected output**: Defuse is removed from the only other alive player, returned to draw pile, draw pile is shuffled, and empty list is returned
