@@ -45,3 +45,7 @@
 - **TC5: Compare card to null** ( :white_check_mark: )
   - **Inputs**: A valid Card instance, `null`
   - **Outputs**: False
+
+- **TC6: Compare card to a different object type** ( :white_check_mark: )
+  - **Inputs**: A valid Card instance, an object of a completely different class 
+  - **Outputs**: False

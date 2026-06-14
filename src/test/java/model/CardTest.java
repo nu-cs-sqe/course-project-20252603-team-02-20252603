@@ -61,4 +61,12 @@ public class CardTest {
 
     assertFalse(card.equals(null));
   }
+
+  @Test
+  void testEqualsDifferentClassReturnsFalse() {
+    Card card = new Card(CardType.DEFUSE);
+    Object completelyDifferentObject = new Object();
+
+    assertFalse(card.equals(completelyDifferentObject));
+  }
 }
