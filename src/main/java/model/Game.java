@@ -240,6 +240,23 @@ public class Game {
     if (!isPlayableCard(card)) {
       throw new IllegalArgumentException("card is not playable");
     }
+
+    // execute validation logic before removing the card from the deck
+    if (card.getType() == CardType.ALTER_FUTURE) {
+      List<Card> topCards = deck.peekTopCards();
+
+      if (reorderedCards.size() != topCards.size()) {
+        throw new IllegalArgumentException("must reorder all visible cards");
+      }
+
+      List<Card> remainingCards = new ArrayList<>(topCards);
+      for (Card reorderedCard : reorderedCards) {
+        if (!remainingCards.remove(reorderedCard)) {
+          throw new IllegalArgumentException("invalid reordered cards");
+        }
+      }
+    }
+
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
