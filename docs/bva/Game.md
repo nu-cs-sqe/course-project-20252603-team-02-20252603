@@ -822,6 +822,10 @@
     - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 2
     - **Expected output**:  turnsOwed decreases by 2 to 0, turn moves to next player
 
+- **TC181: Player plays `Super Skip` with turnsOwed > 2 (e.g., heavily targeted)** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 3
+  - **Expected output**: turnsOwed decreases by 2 (down to 1); current player remains the active player
+
 
 ### Method under test: `playSeeTheFuture()`
 
