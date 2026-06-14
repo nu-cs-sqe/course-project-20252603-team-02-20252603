@@ -55,7 +55,7 @@ public class Game {
     }
     validatePlayerCount();
 
-    if (this.players == null || this.players.isEmpty()) {
+    if (this.players.isEmpty()) {
       this.players = new ArrayList<>();
       for (int i = 0; i < numberOfPlayers; i++) {
         this.players.add(new Player());
