@@ -1,9 +1,12 @@
 package ui;
 
 import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import model.Card;
 import model.CardType;
@@ -18,13 +21,16 @@ public class ConsoleUI {
 
   private final Scanner scanner;
   private Game game;
+  private Locale locale;
 
-  public ConsoleUI() {
+  public ConsoleUI(Locale locale) {
     this.scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
+    this.locale = locale;
   }
 
   public void start() {
-    System.out.println("Enter number of players (3-5):");
+    ResourceBundle labels = ResourceBundle.getBundle("labels", locale);
+    System.out.println(labels.getString("promptNumPlayers"));
     int numPlayers = Integer.parseInt(scanner.nextLine().trim());
 
     game = new Game(numPlayers, new Random());
@@ -34,10 +40,11 @@ public class ConsoleUI {
       playTurn();
     }
 
-    System.out.println("Game Over!");
+    System.out.println(labels.getString("gameOver"));
   }
 
   private void playTurn() {
+    ResourceBundle labels = ResourceBundle.getBundle("labels", locale);
     Player currentPlayer = game.getCurrentPlayer();
 
     if (!currentPlayer.isAlive() || currentPlayer.getTurnsOwed() == 0) {
@@ -45,27 +52,31 @@ public class ConsoleUI {
       return;
     }
 
-    System.out.println("\n--- Player " + game.getCurrentPlayerIndex() + "'s Turn ---");
-    System.out.println("Turns owed: " + currentPlayer.getTurnsOwed());
+    System.out.println(
+            MessageFormat.format(labels.getString("turnHeader"), game.getCurrentPlayerIndex()));
+    System.out.println(
+            MessageFormat.format(labels.getString("turnTurnsOwed"), currentPlayer.getTurnsOwed()));
     List<Card> hand = currentPlayer.getHand();
 
     for (int i = 0; i < hand.size(); i++) {
       System.out.println("[" + i + "] " + hand.get(i).getType());
     }
 
-    System.out.println("Action: [number(s) separated by commas] to play, [D] to draw");
+    System.out.println(labels.getString("turnAction"));
     String input = scanner.nextLine().trim().toUpperCase();
 
     if (input.equals("D")) {
       int defusesBefore = countDefuses(currentPlayer);
-      game.drawCard();
+      game.drawCard(0);
       int defusesAfter = countDefuses(currentPlayer);
 
       if (!currentPlayer.isAlive()) {
-        System.out.println("KABOOM! Player " + game.getCurrentPlayerIndex() + " exploded.");
+        String msg = MessageFormat.format(
+                labels.getString("turnExploded"), game.getCurrentPlayerIndex());
+        System.out.println(msg);
       } else if (defusesAfter < defusesBefore) {
-        System.out.println("\n*** PHEW! You drew an Exploding Kitten! ***");
-        System.out.println("*** Your model auto-defused it and placed it back on top! ***");
+        System.out.println(labels.getString("turnDefused"));
+        System.out.println(labels.getString("turnDefusedAuto"));
       }
     } else {
       try {
@@ -90,19 +101,21 @@ public class ConsoleUI {
 
       }
       catch (Exception e) {
-        System.out.println("Invalid input or move (" + e.getMessage() + "). Try again.");
+        System.out.println(
+                MessageFormat.format(labels.getString("errorInvalidMove"), e.getMessage()));
       }
     }
   }
 
   private void handleSingleCard(Card cardToPlay) {
+    ResourceBundle labels = ResourceBundle.getBundle("labels", locale);
     CardType type = cardToPlay.getType();
 
     if (type == CardType.NOSY) {
-      System.out.println("Enter target Player ID to see their hand:");
+      System.out.println(labels.getString("cardNosyPrompt"));
       int targetId = Integer.parseInt(scanner.nextLine().trim());
       List<Card> targetHand = game.playNosy(targetId);
-      System.out.println("Player " + targetId + "'s hand:");
+      System.out.println(MessageFormat.format(labels.getString("cardNosyResult"), targetId));
       for (Card c : targetHand) {
         System.out.println("- " + c.getType());
       }
@@ -110,12 +123,12 @@ public class ConsoleUI {
     }
 
     if (type == CardType.FAVOR) {
-      System.out.println("Enter target Player ID:");
+      System.out.println(labels.getString("cardFavorPrompt"));
       int targetId = Integer.parseInt(scanner.nextLine().trim());
       Player target = game.getPlayers().get(targetId);
 
-      System.out.println("Player " + targetId + ", choose a card to give (0-"
-          + (target.getHand().size() - 1) + "):");
+      System.out.println(MessageFormat.format(labels.getString("cardFavorChoose"),
+              targetId, target.getHand().size() - 1));
       for (int i = 0; i < target.getHand().size(); i++) {
         System.out.println("[" + i + "] " + target.getHand().get(i).getType());
       }
@@ -125,7 +138,7 @@ public class ConsoleUI {
       game.playCard(cardToPlay, target, givenCard);
 
     } else if (type == CardType.TARGETED_ATTACK || type == CardType.BLESSING) {
-      System.out.println("Enter target Player ID:");
+      System.out.println(labels.getString("cardTargetPrompt"));
       int targetId = Integer.parseInt(scanner.nextLine().trim());
       Player target = game.getPlayers().get(targetId);
 
@@ -136,13 +149,13 @@ public class ConsoleUI {
       int numCards = Math.min(MAX_FUTURE_CARDS, drawPile.size());
       List<Card> topCards = new ArrayList<>();
 
-      System.out.println("Top cards are:");
+      System.out.println(labels.getString("cardAlterFutureTop"));
       for (int i = 0; i < numCards; i++) {
         topCards.add(drawPile.get(i));
         System.out.println("[" + i + "] " + drawPile.get(i).getType());
       }
 
-      System.out.println("Enter the new order of indices separated by commas (e.g. 2,0,1):");
+      System.out.println(labels.getString("cardAlterFutureReorder"));
       String[] orderParts = scanner.nextLine().trim().split(",");
       List<Card> reordered = new ArrayList<>();
       for (String orderPart : orderParts) {
@@ -159,7 +172,7 @@ public class ConsoleUI {
     List<Card> resolvedResult = game.resolvePendingAction();
 
     if (type == CardType.SEE_THE_FUTURE && !resolvedResult.isEmpty()) {
-      System.out.println("The future holds:");
+      System.out.println(labels.getString("cardFutureResult"));
       for (Card c : resolvedResult) {
         System.out.println("- " + c.getType());
       }
@@ -167,28 +180,29 @@ public class ConsoleUI {
   }
 
   private void handleMultiCard(List<Card> cardsToPlay) {
+    ResourceBundle labels = ResourceBundle.getBundle("labels", locale);
     int size = cardsToPlay.size();
 
     if (size == COMBO_SIZE_THREE && cardsToPlay.get(0).getType() == CardType.NEKO) {
       game.playCard(cardsToPlay);
     } else if (size == 2) {
-      System.out.println("Enter target Player ID to steal a random card:");
+      System.out.println(labels.getString("comboTwoPrompt"));
       int targetId = Integer.parseInt(scanner.nextLine().trim());
       Player target = game.getPlayers().get(targetId);
       game.playCard(cardsToPlay, target, null);
     } else if (size == COMBO_SIZE_THREE) {
-      System.out.println("Enter target Player ID:");
+      System.out.println(labels.getString("comboThreePrompt"));
       int targetId = Integer.parseInt(scanner.nextLine().trim());
       Player target = game.getPlayers().get(targetId);
-      System.out.println("Enter exact CardType you want to demand (e.g., DEFUSE, TACOCAT):");
+      System.out.println(labels.getString("comboThreeDemand"));
       CardType named = CardType.valueOf(scanner.nextLine().trim().toUpperCase());
       game.playCard(cardsToPlay, target, named);
     } else if (size == COMBO_SIZE_FIVE) {
-      System.out.println("Enter exact CardType you want from the discard pile:");
+      System.out.println(labels.getString("comboFiveDemand"));
       CardType named = CardType.valueOf(scanner.nextLine().trim().toUpperCase());
       game.playCard(cardsToPlay, null, named);
     } else {
-      throw new IllegalArgumentException("Invalid multi-card combo size.");
+      throw new IllegalArgumentException(labels.getString("comboInvalid"));
     }
 
     handleNopePhase();
@@ -206,11 +220,11 @@ public class ConsoleUI {
   }
 
   private void handleNopePhase() {
+    ResourceBundle labels = ResourceBundle.getBundle("labels", locale);
     boolean acceptingNopes = true;
 
     while (acceptingNopes) {
-      System.out.println("Does anyone want to play a NOPE card? "
-          + "Enter Player ID, or 'N' to skip:");
+      System.out.println(labels.getString("nopePrompt"));
       String input = scanner.nextLine().trim().toUpperCase();
 
       if (input.equals("N")) {
@@ -230,22 +244,16 @@ public class ConsoleUI {
 
           if (nopeCard != null) {
             game.playNope(p, nopeCard);
-            System.out.println("NOPE played automatically for Player "
-                + playerId + "!");
+            System.out.println(MessageFormat.format(labels.getString("nopePlayed"), playerId));
           } else {
-            System.out.println("Player " + playerId
-                + " does not have a NOPE card. Try again.");
+            System.out.println(MessageFormat.format(labels.getString("nopeNoCard"), playerId));
           }
         }
         catch (Exception e) {
-          System.out.println("Invalid Nope attempt. Resuming...");
+          System.out.println(labels.getString("nopeInvalid"));
           acceptingNopes = false;
         }
       }
     }
-  }
-
-  public static void main(String[] args) {
-    new ConsoleUI().start();
   }
 }
