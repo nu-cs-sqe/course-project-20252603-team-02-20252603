@@ -66,17 +66,25 @@ public class ConsoleUI {
     String input = scanner.nextLine().trim().toUpperCase();
 
     if (input.equals("D")) {
-      int defusesBefore = countDefuses(currentPlayer);
-      game.drawCard(0);
-      int defusesAfter = countDefuses(currentPlayer);
+      List<Card> drawPile = game.getDrawPile();
+      boolean willDefuse = !drawPile.isEmpty()
+              && drawPile.get(0).getType() == CardType.EXPLODING_KITTEN
+              && currentPlayer.hasDefuse();
+
+      int position = 0;
+      if (willDefuse) {
+        System.out.println(labels.getString("turnDefused"));
+        int maxPos = drawPile.size() - 1;
+        System.out.println(MessageFormat.format(labels.getString("turnDefusedPlace"), maxPos));
+        position = Integer.parseInt(scanner.nextLine().trim());
+      }
+
+      game.drawCard(position);
 
       if (!currentPlayer.isAlive()) {
         String msg = MessageFormat.format(
                 labels.getString("turnExploded"), game.getCurrentPlayerIndex());
         System.out.println(msg);
-      } else if (defusesAfter < defusesBefore) {
-        System.out.println(labels.getString("turnDefused"));
-        System.out.println(labels.getString("turnDefusedAuto"));
       }
     } else {
       try {
