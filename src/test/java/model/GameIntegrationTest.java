@@ -3379,6 +3379,9 @@ public class GameIntegrationTest {
     Card skipCard = new Card(CardType.SKIP);
     player1.addCard(skipCard);
 
+    while (player2.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE)) {
+      player2.removeCard(new Card(CardType.NOPE));
+    }
     Card nopeCard = new Card(CardType.NOPE);
     player2.addCard(nopeCard);
 

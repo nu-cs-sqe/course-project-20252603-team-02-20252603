@@ -4832,6 +4832,20 @@ public class GameTest {
     while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
       currentPlayer.removeCard(new Card(CardType.TACOCAT));
     }
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType()
+        == CardType.HAIRY_POTATO_CAT)) {
+      currentPlayer.removeCard(new Card(CardType.HAIRY_POTATO_CAT));
+    }
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType()
+        == CardType.RAINBOW_RALPHING_CAT)) {
+      currentPlayer.removeCard(new Card(CardType.RAINBOW_RALPHING_CAT));
+    }
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.BEARD_CAT)) {
+      currentPlayer.removeCard(new Card(CardType.BEARD_CAT));
+    }
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.CATTERMELON)) {
+      currentPlayer.removeCard(new Card(CardType.CATTERMELON));
+    }
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
     Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
