@@ -1019,13 +1019,17 @@ public class GameTest {
   }
 
   @Test
-  public void drawCardEmptyDeckThrowsException() {
+  public void drawCardEmptyDeckKillsCurrentPlayer() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
     expect(mockDeck.drawCard()).andThrow(new IllegalStateException("Draw pile is empty")).once();
+    mockPlayer1.die();
+    expect(mockPlayer1.isAlive()).andReturn(false).anyTimes();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
@@ -1036,8 +1040,9 @@ public class GameTest {
     );
 
     game.startGame();
+    game.drawCard(0);
 
-    assertThrows(IllegalStateException.class, () -> game.drawCard(0));
+    assertFalse(game.isGameOver());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
@@ -2931,6 +2936,7 @@ public class GameTest {
 
     List<Card> reorderedCards = List.of(thirdCard, firstCard, secondCard);
 
+    expect(mockDeck.peekTopCards()).andReturn(List.of(firstCard, secondCard, thirdCard)).once();
     mockPlayer1.removeCard(alterFuture);
     mockDeck.discardCard(alterFuture);
     expectLastCall().once();
@@ -2967,6 +2973,7 @@ public class GameTest {
 
     List<Card> reorderedCards = List.of(secondCard, thirdCard, firstCard);
 
+    expect(mockDeck.peekTopCards()).andReturn(List.of(firstCard, secondCard, thirdCard)).once();
     mockPlayer1.removeCard(alterFuture);
     mockDeck.discardCard(alterFuture);
     expectLastCall().once();
@@ -2998,6 +3005,7 @@ public class GameTest {
 
     List<Card> reorderedCards = List.of(onlyCard);
 
+    expect(mockDeck.peekTopCards()).andReturn(List.of(onlyCard)).once();
     mockPlayer1.removeCard(alterFuture);
     mockDeck.discardCard(alterFuture);
     expectLastCall().once();
@@ -3029,11 +3037,7 @@ public class GameTest {
 
     Card alterFuture = new Card(CardType.ALTER_FUTURE);
 
-    mockPlayer1.removeCard(alterFuture);
-    mockDeck.discardCard(alterFuture);
-    expectLastCall().once();
-    mockDeck.reorderTopCards(Collections.emptyList());
-    expectLastCall().andThrow(new IllegalStateException("deck is empty")).once();
+    expect(mockDeck.peekTopCards()).andThrow(new IllegalStateException("deck is empty")).once();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
@@ -3064,14 +3068,11 @@ public class GameTest {
     Card firstCard = new Card(CardType.FAVOR);
     Card secondCard = new Card(CardType.SHUFFLE);
     Card wrongCard = new Card(CardType.ATTACK);
+    Card thirdCard = new Card(CardType.NOPE);
 
     List<Card> reorderedCards = List.of(wrongCard, firstCard, secondCard);
 
-    mockPlayer1.removeCard(alterFuture);
-    mockDeck.discardCard(alterFuture);
-    expectLastCall().once();
-    mockDeck.reorderTopCards(reorderedCards);
-    expectLastCall().andThrow(new IllegalArgumentException("invalid reorder")).once();
+    expect(mockDeck.peekTopCards()).andReturn(List.of(firstCard, secondCard, thirdCard)).once();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
@@ -3450,9 +3451,6 @@ public class GameTest {
     Deck mockDeck = createMock(Deck.class);
 
     Card targetedAttack = new Card(CardType.TARGETED_ATTACK);
-
-    mockPlayer1.removeCard(targetedAttack);
-    expectLastCall().andThrow(new IllegalArgumentException("cannot target yourself")).once();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
