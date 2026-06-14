@@ -462,14 +462,18 @@ public class GameIntegrationTest {
   }
 
   @Test
-  public void drawCardFromEmptyDeckThrowException() {
+  public void drawCardFromEmptyDeckKillsCurrentPlayer() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     while (!game.getDrawPile().isEmpty()) {
       game.drawFromDeck();
     }
 
-    assertThrows(IllegalStateException.class, () -> game.drawCard(0));
+    Player currentPlayer = game.getCurrentPlayer();
+    game.drawCard(0);
+
+    assertFalse(currentPlayer.isAlive());
+    assertFalse(game.isGameOver());
   }
 
   @Test

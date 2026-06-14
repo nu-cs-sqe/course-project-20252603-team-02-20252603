@@ -1016,13 +1016,17 @@ public class GameTest {
   }
 
   @Test
-  public void drawCardEmptyDeckThrowsException() {
+  public void drawCardEmptyDeckKillsCurrentPlayer() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
     expect(mockDeck.drawCard()).andThrow(new IllegalStateException("Draw pile is empty")).once();
+    mockPlayer1.die();
+    expect(mockPlayer1.isAlive()).andReturn(false).anyTimes();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
@@ -1033,8 +1037,9 @@ public class GameTest {
     );
 
     game.startGame();
+    game.drawCard(0);
 
-    assertThrows(IllegalStateException.class, () -> game.drawCard(0));
+    assertFalse(game.isGameOver());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
