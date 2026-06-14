@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -5389,15 +5390,26 @@ public class GameTest {
             game.playNope(player, null), "Card must be of type NOPE");
   }
 
-  @Test
+ @Test
   void nopeByThirdPartyPlayer() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
-    game.playCatCards(List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR);
 
-    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+    Player currentPlayer = game.getCurrentPlayer();
+    Player thirdParty = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    Card skip = new Card(CardType.SKIP);
+    Card nopeCard = new Card(CardType.NOPE);
+    currentPlayer.addCard(skip);
+    thirdParty.addCard(nopeCard);
+
+    game.playCard(skip);
+    game.playNope(thirdParty, nopeCard);
+    List<Card> result = game.resolvePendingAction();
+
+    assertEquals(Collections.emptyList(), result);
+    assertFalse(thirdParty.getHand().contains(nopeCard));
   }
-
+  
   @Test
   public void playCatCardsFiveDifferentCatsNamedCardInDiscardTransfersCard() {
     Player mockPlayer1 = createMock(Player.class);
