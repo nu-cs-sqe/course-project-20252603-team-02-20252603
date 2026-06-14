@@ -1142,7 +1142,7 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
-
+  
 @Test
   public void playCardCardNotInHandThrowsException() {
     Player mockPlayer1 = createMock(Player.class);
@@ -1210,7 +1210,7 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
-
+  
   @Test
   public void playCardNonPlayableCardThrowsException() {
     Player mockPlayer1 = createMock(Player.class);
