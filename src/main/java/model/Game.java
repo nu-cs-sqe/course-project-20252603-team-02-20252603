@@ -381,7 +381,7 @@ public class Game {
   }
 
   public List<Card> resolvePendingAction() {
-    boolean actionIsNoped = (nopeCount % 2 == 1);
+    boolean actionIsNoped = (nopeCount > 0 && nopeCount % 2 != 0);
 
     if (!actionIsNoped) {
       switch (pendingAction) {
