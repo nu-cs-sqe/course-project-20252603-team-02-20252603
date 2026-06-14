@@ -207,6 +207,13 @@ public class Game {
       throw new IllegalArgumentException("card is not playable");
     }
     Player currentPlayer = getCurrentPlayer();
+
+    if ((card.getType() == CardType.TARGETED_ATTACK
+            || card.getType() == CardType.BLESSING)
+            && target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
