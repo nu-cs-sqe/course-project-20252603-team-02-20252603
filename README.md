@@ -20,3 +20,6 @@ The game is played from the entrypoint in Main.java under src/main/java/ui
 
 ## Acknowledgements
 REFERENCES, SOURCE OF HELP ETC
+
+## Exceptions
+- The exception is regarding the use of task descriptions in our GitHub project management board. Our board is populated with issues/tasks, but they don't contain any descriptions beyond the task names themselves, and we weren't made aware of it until late into the project.
