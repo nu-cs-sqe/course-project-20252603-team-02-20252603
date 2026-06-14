@@ -55,7 +55,7 @@ public class Game {
     }
     validatePlayerCount();
 
-    if (this.players == null || this.players.isEmpty()) {
+    if (this.players.isEmpty()) {
       this.players = new ArrayList<>();
       for (int i = 0; i < numberOfPlayers; i++) {
         this.players.add(new Player());
@@ -84,7 +84,7 @@ public class Game {
   }
 
   public Player getCurrentPlayer() {
-    if (currentPlayerIndex < 0 || currentPlayerIndex >= players.size()) {
+    if (currentPlayerIndex >= players.size()) {
       throw new IllegalStateException("current player index out of bounds");
     }
     return players.get(currentPlayerIndex);
@@ -339,7 +339,7 @@ public class Game {
       if (named == null || named == CardType.EXPLODING_KITTEN || named == CardType.DEFUSE) {
         throw new IllegalArgumentException("invalid wanted card type for 3-cat combo");
       }
-    } else if (size == FIVE_CAT_COMBO_SIZE) {
+    } else {
       if (named == null || named == CardType.EXPLODING_KITTEN || named == CardType.DEFUSE) {
         throw new IllegalArgumentException("invalid wanted card type for 5-cat combo");
       }
@@ -381,10 +381,6 @@ public class Game {
   }
 
   public List<Card> resolvePendingAction() {
-    if (pendingAction == ActionType.NONE) {
-      return Collections.emptyList();
-    }
-
     boolean actionIsNoped = (nopeCount % 2 != 0);
 
     if (!actionIsNoped) {
@@ -735,7 +731,7 @@ public class Game {
 
     List<Card> targetHand = target.getHand();
     if (targetHand.isEmpty()) {
-      throw new IllegalArgumentException("target player has no cards left");
+      return null;
     }
 
     int index = this.random.nextInt(targetHand.size());

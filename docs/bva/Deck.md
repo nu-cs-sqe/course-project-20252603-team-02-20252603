@@ -120,3 +120,8 @@
 - **TC#25: discard has many cards, none match** (:white_check_mark:)
   - **state of the system**: Discard = [ATTACK, SKIP, NOPE], type = FAVOR
   - **Expected output**: throw IllegalArgumentException, "card type not in discard pile"
+
+### Method under test: `reorderTopCards()`
+- **TC26: Reorder with size mismatch (missing or extra cards)** ( :white_check_mark: )
+  - **State of the system**: Draw pile has 3 or more cards. User provides a list of reordered cards that is smaller or larger than the actual number of top cards (e.g., 2 cards).
+  - **Expected output**: Throws IllegalArgumentException with the message "must reorder all visible cards".

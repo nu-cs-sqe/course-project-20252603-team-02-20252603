@@ -362,6 +362,7 @@ public class DeckTests {
     assertEquals(originalTop, deck.getDeck().get(sizeBefore - 1));
   }
   
+  @Test
   public void testTakeFromDiscardTypeIsNull() {
     Deck deck = new Deck(players, new Random(RANDOM_SEED));
     deck.discardCard(new Card(CardType.FAVOR));
@@ -451,5 +452,21 @@ public class DeckTests {
     });
 
     assertEquals("card type not in discard pile", e.getMessage());
+  }
+
+  @Test
+  public void reorderTopCardsSizeMismatch() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    List<Card> topCards = deck.peekTopCards();
+
+    List<Card> invalidReorderedCards = new ArrayList<>(topCards);
+    invalidReorderedCards.remove(0);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      deck.reorderTopCards(invalidReorderedCards);
+    });
+
+    assertEquals("must reorder all visible cards", e.getMessage());
   }
 }

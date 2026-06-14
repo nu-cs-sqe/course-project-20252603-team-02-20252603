@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -28,6 +29,8 @@ public class GameTest {
   private static final int MAX_PLAYERS = 5;
   private static final int RANDOM_SEED = 42;
   private static final int SEE_THE_FUTURE_CARD_COUNT = 3;
+  private static final int SECOND_PLAYER_INDEX = 1;
+  private static final int THIRD_PLAYER_INDEX = 2;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -1154,11 +1157,50 @@ public class GameTest {
     Player mockPlayer2 = createMock(Player.class);
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
-
     Card skipCard = new Card(CardType.SKIP);
 
     mockPlayer1.removeCard(skipCard);
     expectLastCall().andThrow(new IllegalArgumentException("card not in hand")).once();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+    game.startGame();
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(skipCard));
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playCardWithReorderNonAlterFutureCardDoesNotSetPendingAction() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(skip);
+    game.playCard(skip, Collections.emptyList());
+    assertFalse(currentPlayer.getHand().contains(skip));
+    assertTrue(game.getDiscardPile().contains(skip));
+    assertEquals(Collections.emptyList(), game.resolvePendingAction());
+  }
+
+  @Test
+  public void curseNextPlayerHasNoDefuse() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card curseCard = new Card(CardType.CURSE);
+
+    mockPlayer1.removeCard(curseCard);
+    mockDeck.discardCard(curseCard);
+    expectLastCall().once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.hasDefuse()).andReturn(false).once();
+    mockDeck.shuffle();
 
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
@@ -1169,8 +1211,10 @@ public class GameTest {
     );
 
     game.startGame();
+    game.playCard(curseCard);
+    List<Card> result = game.resolvePendingAction();
 
-    assertThrows(IllegalArgumentException.class, () -> game.playCard(skipCard));
+    assertEquals(Collections.emptyList(), result);
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
@@ -1243,6 +1287,318 @@ public class GameTest {
 
     Card skipCard = new Card(CardType.SKIP);
     assertThrows(IllegalStateException.class, () -> game.playCard(skipCard));
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playCardNullCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard((Card) null));
+  }
+
+  @Test
+  public void playCardExplodingKittenThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Card explodingKitten = new Card(CardType.EXPLODING_KITTEN);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(explodingKitten));
+  }
+
+  @Test
+  public void playCardBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    Card skipCard = new Card(CardType.SKIP);
+
+    assertThrows(IllegalStateException.class, () -> game.playCard(skipCard));
+  }
+
+  @Test
+  public void playCardWithTargetBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(new Card(CardType.TARGETED_ATTACK), new Player()));
+  }
+
+  @Test
+  public void playCardWithTargetAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    Player target = players.get(SECOND_PLAYER_INDEX);
+    target.die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(new Card(CardType.TARGETED_ATTACK), target));
+  }
+
+  @Test
+  public void playCardWithTargetNonPlayableCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card defuse = new Card(CardType.DEFUSE);
+    game.getCurrentPlayer().addCard(defuse);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(defuse, target));
+  }
+
+  @Test
+  public void playCardWithCardListBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(new Card(CardType.ALTER_FUTURE), Collections.emptyList()));
+  }
+
+  @Test
+  public void playCardWithCardListAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(SECOND_PLAYER_INDEX).die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(new Card(CardType.ALTER_FUTURE), Collections.emptyList()));
+  }
+
+  @Test
+  public void playCardWithCardListNonPlayableCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Card defuse = new Card(CardType.DEFUSE);
+    game.getCurrentPlayer().addCard(defuse);
+
+    assertThrows(IllegalArgumentException.class, () ->
+        game.playCard(defuse, Collections.emptyList()));
+  }
+
+  @Test
+  public void playCardWithFavorBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(new Card(CardType.FAVOR), new Player(), new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardWithFavorAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    Player target = players.get(SECOND_PLAYER_INDEX);
+    players.get(SECOND_PLAYER_INDEX).die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(new Card(CardType.FAVOR), target, new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardWithFavorNonPlayableCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card defuse = new Card(CardType.DEFUSE);
+    game.getCurrentPlayer().addCard(defuse);
+
+    assertThrows(IllegalArgumentException.class, () ->
+        game.playCard(defuse, target, new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardWithFavorNonFavorCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card skip = new Card(CardType.SKIP);
+    game.getCurrentPlayer().addCard(skip);
+
+    assertThrows(IllegalArgumentException.class, () ->
+        game.playCard(skip, target, new Card(CardType.SKIP)));
+  }
+
+  @Test
+  public void playCardWithFavorTransfersGivenCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card favor = new Card(CardType.FAVOR);
+    Card skip = new Card(CardType.SKIP);
+    currentPlayer.addCard(favor);
+    target.addCard(skip);
+
+    game.playCard(favor, target, skip);
+    List<Card> result = game.resolvePendingAction();
+
+    assertEquals(Collections.emptyList(), result);
+    assertTrue(currentPlayer.getHand().contains(skip));
+    assertFalse(target.getHand().contains(skip));
+    assertTrue(game.getDiscardPile().contains(favor));
+  }
+
+  @Test
+  public void playCardWithNekoListBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(List.of(new Card(CardType.NEKO))));
+  }
+
+  @Test
+  public void playCardWithNekoListAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    players.get(SECOND_PLAYER_INDEX).die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(List.of(new Card(CardType.NEKO))));
+  }
+
+  @Test
+  public void playCardWithNekoListNullCardsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard((List<Card>) null));
+  }
+
+  @Test
+  public void playCardWithNekoListEmptyCardsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(Collections.emptyList()));
+  }
+
+  @Test
+  public void playCardWithNekoListNullCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Card> cards = new ArrayList<>();
+    cards.add(null);
+
+    assertThrows(IllegalArgumentException.class, () -> game.playCard(cards));
+  }
+
+  @Test
+  public void playCardWithNekoListNonNekoCardThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () ->
+        game.playCard(List.of(new Card(CardType.ATTACK))));
+  }
+
+  @Test
+  public void playCardWithNekoListEndsGameAfterResolve() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card neko1 = new Card(CardType.NEKO);
+    Card neko2 = new Card(CardType.NEKO);
+    Card neko3 = new Card(CardType.NEKO);
+    currentPlayer.addCard(neko1);
+    currentPlayer.addCard(neko2);
+    currentPlayer.addCard(neko3);
+
+    game.playCard(List.of(neko1, neko2, neko3));
+    List<Card> result = game.resolvePendingAction();
+
+    assertEquals(Collections.emptyList(), result);
+    assertTrue(game.isGameOver());
+    for (Player player : game.getPlayers()) {
+      if (player != currentPlayer) {
+        assertFalse(player.isAlive());
+      }
+    }
+  }
+
+  @Test
+  public void playCatComboBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(List.of(cat1, cat2), new Player(), null));
+  }
+
+  @Test
+  public void playCatComboAfterGameIsOverThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    List<Player> players = game.getPlayers();
+    Player target = players.get(SECOND_PLAYER_INDEX);
+    players.get(SECOND_PLAYER_INDEX).die();
+    players.get(THIRD_PLAYER_INDEX).die();
+    game.getNextActivePlayer();
+
+    assertThrows(IllegalStateException.class, () ->
+        game.playCard(List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT)),
+            target, null));
+  }
+
+  @Test
+  public void resolvePendingActionWithNoPendingActionReturnsEmptyList() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertEquals(Collections.emptyList(), game.resolvePendingAction());
+  }
+
+  @Test
+  public void playTargetedAttackNullTargetThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    assertThrows(IllegalArgumentException.class, () -> game.playTargetedAttack(null));
+  }
+
+  @Test
+  public void playNekoBeforeGameStartsThrowException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    List<Card> cards = List.of(new Card(CardType.NEKO), new Card(CardType.NEKO),
+        new Card(CardType.NEKO));
+
+    assertThrows(IllegalStateException.class, () -> game.playNeko(cards));
+  }
+
+  @Test
+  public void checkWinnerMoreThanOnePlayerAlive() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.checkWinner();
+
+    assertFalse(game.isGameOver());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
@@ -1340,6 +1696,39 @@ public class GameTest {
     game.resolvePendingAction();
 
     assertEquals(1, game.getCurrentPlayerIndex());
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playCardSuperSkipThreeOwedAdvancesNone() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    Card superSkipCard = new Card(CardType.SUPER_SKIP);
+    mockPlayer1.removeCard(superSkipCard);
+    mockDeck.discardCard(superSkipCard);
+    expectLastCall().once();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(MIN_PLAYERS).once();
+    mockPlayer1.removeTurn();
+    mockPlayer1.removeTurn();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(1).once();
+    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+    game.playCard(superSkipCard);
+    game.resolvePendingAction();
+
+    assertEquals(0, game.getCurrentPlayerIndex());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
@@ -1625,32 +2014,6 @@ public class GameTest {
     });
 
     assertEquals("cards not in hand", e.getMessage());
-
-    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-  }
-
-  @Test
-  public void checkWinnerMoreThanOnePlayerAlive() {
-    Player mockPlayer1 = createMock(Player.class);
-    Player mockPlayer2 = createMock(Player.class);
-    Player mockPlayer3 = createMock(Player.class);
-    Deck mockDeck = createMock(Deck.class);
-
-    expect(mockPlayer1.isAlive()).andReturn(true).anyTimes();
-    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
-    expect(mockPlayer3.isAlive()).andReturn(true).anyTimes();
-    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-
-    Game game = new Game(
-        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-        mockDeck,
-        new Random(RANDOM_SEED)
-    );
-
-    game.startGame();
-    game.checkWinner();
-
-    assertFalse(game.isGameOver());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
@@ -2453,6 +2816,10 @@ public class GameTest {
                 new Card(CardType.TACOCAT)),
             true),
         Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.FERAL_CAT)),
+            true),
+        Arguments.of(List.of(
                 new Card(CardType.FERAL_CAT),
                 new Card(CardType.FERAL_CAT)),
             true),
@@ -2647,9 +3014,9 @@ public class GameTest {
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
     Game game = new Game(
-          List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-          mockDeck,
-          new Random(RANDOM_SEED)
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
     );
 
     game.startGame();
@@ -2721,39 +3088,6 @@ public class GameTest {
       game.playCard(alterFuture, reorderedCards);
       game.resolvePendingAction();
     });
-
-    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-  }
-
-  @Test
-  public void curseNextPlayerHasNoDefuse() {
-    Player mockPlayer1 = createMock(Player.class);
-    Player mockPlayer2 = createMock(Player.class);
-    Player mockPlayer3 = createMock(Player.class);
-    Deck mockDeck = createMock(Deck.class);
-
-    Card curseCard = new Card(CardType.CURSE);
-
-    mockPlayer1.removeCard(curseCard);
-    mockDeck.discardCard(curseCard);
-    expectLastCall().once();
-    expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
-    expect(mockPlayer2.hasDefuse()).andReturn(false).once();
-    mockDeck.shuffle();
-
-    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-
-    Game game = new Game(
-        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-        mockDeck,
-        new Random(RANDOM_SEED)
-    );
-
-    game.startGame();
-    game.playCard(curseCard);
-    List<Card> result = game.resolvePendingAction();
-
-    assertEquals(Collections.emptyList(), result);
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
@@ -3453,31 +3787,37 @@ public class GameTest {
   }
 
   @Test
+  public void playTwoMatchingCatsTargetHasNoCardsReturnsNull() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    while (!target.getHand().isEmpty()) {
+      target.removeCard(target.getHand().get(0));
+    }
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    assertNull(game.playTwoMatchingCats(List.of(cat1, cat2), target));
+  }
+
+  @Test
   public void playThreeMatchingCatsNullTargetThrowsIllegalArgumentException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
-
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
     Card cat3 = new Card(CardType.TACOCAT);
-
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-
     Game game = new Game(
         List.of(mockPlayer1, mockPlayer2, mockPlayer3),
         mockDeck,
         new Random(RANDOM_SEED)
     );
-
     game.startGame();
-
     Exception e = assertThrows(IllegalArgumentException.class, () ->
         game.playThreeMatchingCats(List.of(cat1, cat2, cat3), null, CardType.FAVOR));
-
     assertEquals("target cannot be null or dead", e.getMessage());
-
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
@@ -3604,6 +3944,27 @@ public class GameTest {
     assertEquals("invalid wanted card type", e.getMessage());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playThreeMatchingCatsDefuseNamedCardThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.TACOCAT);
+    Card cat3 = new Card(CardType.TACOCAT);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(List.of(cat1, cat2, cat3), target, CardType.DEFUSE);
+      game.resolvePendingAction();
+    });
+
+    assertEquals("invalid wanted card type for 3-cat combo", e.getMessage());
   }
 
   @Test
@@ -4313,14 +4674,36 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCatsNullWantedCardThrowsIllegalArgumentException() {
+  public void playFiveDifferentCatsDefuseWantedCardThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.DEFUSE);
+      game.resolvePendingAction();
+    });
+    assertEquals("invalid wanted card type for 5-cat combo", e.getMessage());
+  }
+
+  @Test
+  public void playFiveDifferentCatsDuplicateCatTypeThrowsIllegalArgumentException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
 
     Card cat1 = new Card(CardType.TACOCAT);
-    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat2 = new Card(CardType.TACOCAT);
     Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
     Card cat4 = new Card(CardType.BEARD_CAT);
     Card cat5 = new Card(CardType.CATTERMELON);
@@ -4338,11 +4721,38 @@ public class GameTest {
 
     game.startGame();
 
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
+    });
+
+    assertEquals("invalid five-cat combo", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playFiveDifferentCatsNullWantedCardThrowsIllegalArgumentException() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    expect(mockPlayer1.getHand())
+        .andReturn(List.of(cat1, cat2, cat3, cat4, cat5)).anyTimes();
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+    game.startGame();
     Exception e = assertThrows(IllegalArgumentException.class, () ->
         game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), null));
-
     assertEquals("invalid wanted card type", e.getMessage());
-
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
@@ -4382,106 +4792,60 @@ public class GameTest {
   }
 
   @Test
-  public void playFiveDifferentCatsDuplicateCatTypeThrowsIllegalArgumentException() {
-    Player mockPlayer1 = createMock(Player.class);
-    Player mockPlayer2 = createMock(Player.class);
-    Player mockPlayer3 = createMock(Player.class);
-    Deck mockDeck = createMock(Deck.class);
-
-    Card cat1 = new Card(CardType.TACOCAT);
-    Card cat2 = new Card(CardType.TACOCAT);
-    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
-    Card cat4 = new Card(CardType.BEARD_CAT);
-    Card cat5 = new Card(CardType.CATTERMELON);
-
-    expect(mockPlayer1.getHand())
-        .andReturn(List.of(cat1, cat2, cat3, cat4, cat5)).anyTimes();
-
-    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-
-    Game game = new Game(
-        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-        mockDeck,
-        new Random(RANDOM_SEED)
-    );
-
-    game.startGame();
-
-    Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR);
-    });
-
-    assertEquals("invalid five-cat combo", e.getMessage());
-
-    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-  }
-
-  @Test
-  public void playFiveDifferentCatsThreeCardsThrowsIllegalArgumentException() {
-    Player mockPlayer1 = createMock(Player.class);
-    Player mockPlayer2 = createMock(Player.class);
-    Player mockPlayer3 = createMock(Player.class);
-    Deck mockDeck = createMock(Deck.class);
-
-    Card cat1 = new Card(CardType.TACOCAT);
-    Card cat2 = new Card(CardType.TACOCAT);
-    Card cat3 = new Card(CardType.TACOCAT);
-
-    expect(mockPlayer1.getHand()).andReturn(List.of(cat1, cat2, cat3)).anyTimes();
-
-    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-
-    Game game = new Game(
-        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-        mockDeck,
-        new Random(RANDOM_SEED)
-    );
-
-    game.startGame();
-
-    Exception e = assertThrows(IllegalArgumentException.class, () -> {
-      game.playFiveDifferentCats(List.of(cat1, cat2, cat3), CardType.FAVOR);
-    });
-
-    assertEquals("invalid five-cat combo", e.getMessage());
-
-    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-  }
-
-  @Test
   public void playFiveDifferentCatsEmptyDiscardPileThrowsIllegalStateException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
-
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
     Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
     Card cat4 = new Card(CardType.BEARD_CAT);
     Card cat5 = new Card(CardType.CATTERMELON);
-
     expect(mockPlayer1.getHand())
         .andReturn(List.of(cat1, cat2, cat3, cat4, cat5)).anyTimes();
     expect(mockDeck.takeFromDiscard(CardType.FAVOR))
         .andThrow(new IllegalStateException("discard pile is empty")).once();
-
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-
     Game game = new Game(
         List.of(mockPlayer1, mockPlayer2, mockPlayer3),
         mockDeck,
         new Random(RANDOM_SEED)
     );
-
     game.startGame();
-
     Exception e = assertThrows(IllegalStateException.class, () ->
         game.playFiveDifferentCats(List.of(cat1, cat2, cat3, cat4, cat5), CardType.FAVOR));
-
     assertEquals("discard pile is empty", e.getMessage());
-
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playFiveDifferentCatsThroughPlayCardReturnsWantedCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      currentPlayer.removeCard(new Card(CardType.TACOCAT));
+    }
+    Card cat1 = new Card(CardType.TACOCAT);
+    Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
+    Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
+    Card cat4 = new Card(CardType.BEARD_CAT);
+    Card cat5 = new Card(CardType.CATTERMELON);
+    Card favor = new Card(CardType.FAVOR);
+    currentPlayer.addCard(cat1);
+    currentPlayer.addCard(cat2);
+    currentPlayer.addCard(cat3);
+    currentPlayer.addCard(cat4);
+    currentPlayer.addCard(cat5);
+    game.addToDiscard(favor);
+    game.playCard(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR);
+    List<Card> result = game.resolvePendingAction();
+    assertEquals(Collections.emptyList(), result);
+    assertTrue(currentPlayer.getHand().contains(favor));
+    assertFalse(currentPlayer.getHand().contains(cat1));
+    assertFalse(currentPlayer.getHand().contains(cat5));
+    assertFalse(game.getDiscardPile().contains(favor));
   }
 
   @Test
@@ -4628,6 +4992,37 @@ public class GameTest {
 
     assertEquals(CardType.FAVOR, result.getType());
 
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void playFiveDifferentCatsInvalidComboSize() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    List<Card> invalidFourCatCombo = List.of(
+        new Card(CardType.TACOCAT), new Card(CardType.TACOCAT),
+        new Card(CardType.TACOCAT), new Card(CardType.TACOCAT)
+    );
+
+    expect(mockPlayer1.getHand())
+        .andReturn(invalidFourCatCombo).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(invalidFourCatCombo, CardType.FAVOR);
+    });
+    assertEquals("invalid five-cat combo", e.getMessage());
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
@@ -4847,17 +5242,13 @@ public class GameTest {
     Player mockPlayer2 = createMock(Player.class);
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
-
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
     Card cat3 = new Card(CardType.TACOCAT);
-
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer1.getHand()).andReturn(List.of(cat1, cat2, cat3)).anyTimes();
     expect(mockPlayer2.getHand()).andReturn(List.of(new Card(CardType.ATTACK))).anyTimes();
-
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-
     Game game = new Game(
         List.of(mockPlayer1, mockPlayer2, mockPlayer3),
         mockDeck,
@@ -4868,6 +5259,43 @@ public class GameTest {
     game.playCatCards(List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR);
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  void nopeWithNullCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player player = game.getCurrentPlayer();
+    Card skipCard = new Card(CardType.SKIP);
+    player.addCard(skipCard);
+    game.playCard(skipCard);
+
+    assertThrows(IllegalArgumentException.class, () ->
+        game.playNope(player, null), "Card must be of type NOPE");
+  }
+
+  @Test
+  void nopeByThirdPartyPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+
+    Player currentPlayer = game.getCurrentPlayer();
+    Player thirdParty = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    Card skip = new Card(CardType.SKIP);
+    while (thirdParty.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE)) {
+      thirdParty.removeCard(new Card(CardType.NOPE));
+    }
+    Card nopeCard = new Card(CardType.NOPE);
+    currentPlayer.addCard(skip);
+    thirdParty.addCard(nopeCard);
+
+    game.playCard(skip);
+    game.playNope(thirdParty, nopeCard);
+    List<Card> result = game.resolvePendingAction();
+
+    assertEquals(Collections.emptyList(), result);
+    assertFalse(thirdParty.getHand().contains(nopeCard));
   }
 
   @Test
@@ -4935,6 +5363,30 @@ public class GameTest {
         game.playCatCards(List.of(cat1, cat2, cat3, cat4, cat5), null, CardType.FAVOR));
 
     assertEquals("discard pile is empty", e.getMessage());
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void testResolvePendingActionNone() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+
+    game.startGame();
+
+    List<Card> result = game.resolvePendingAction();
+
+    assertTrue(result.isEmpty());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
