@@ -4827,10 +4827,12 @@ public class GameTest {
     while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
       currentPlayer.removeCard(new Card(CardType.TACOCAT));
     }
-    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.HAIRY_POTATO_CAT)) {
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType()
+        == CardType.HAIRY_POTATO_CAT)) {
       currentPlayer.removeCard(new Card(CardType.HAIRY_POTATO_CAT));
     }
-    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.RAINBOW_RALPHING_CAT)) {
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType()
+        == CardType.RAINBOW_RALPHING_CAT)) {
       currentPlayer.removeCard(new Card(CardType.RAINBOW_RALPHING_CAT));
     }
     while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.BEARD_CAT)) {
