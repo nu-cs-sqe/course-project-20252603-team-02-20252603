@@ -162,7 +162,7 @@ public class PlayerTest {
 
   @Test
   public void removeCardHandHasDuplicates() {
-    // [ATTACK, ATTACK, SKIP] remove ATTACK → [ATTACK, SKIP]
+    // [ATTACK, ATTACK, SKIP] remove ATTACK -> [ATTACK, SKIP]
     Player player = new Player();
     Card attack1 = new Card(CardType.ATTACK);
     Card attack2 = new Card(CardType.ATTACK);
@@ -177,7 +177,7 @@ public class PlayerTest {
 
   @Test
   public void removeCardResultingHandHasDuplicates() {
-    // [ATTACK, ATTACK, SKIP] remove SKIP → [ATTACK, ATTACK]
+    // [ATTACK, ATTACK, SKIP] remove SKIP -> [ATTACK, ATTACK]
     Player player = new Player();
     Card attack1 = new Card(CardType.ATTACK);
     Card attack2 = new Card(CardType.ATTACK);
