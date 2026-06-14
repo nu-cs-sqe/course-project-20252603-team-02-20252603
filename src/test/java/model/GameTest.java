@@ -2811,6 +2811,10 @@ public class GameTest {
                 new Card(CardType.TACOCAT)),
             true),
         Arguments.of(List.of(
+                new Card(CardType.TACOCAT),
+                new Card(CardType.FERAL_CAT)),
+            true),
+        Arguments.of(List.of(
                 new Card(CardType.FERAL_CAT),
                 new Card(CardType.FERAL_CAT)),
             true),

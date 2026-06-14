@@ -481,6 +481,10 @@
   - **State of the system**: Game is running, cards = [FERAL_CAT, TACOCAT]
   - **Expected output**: true
 
+- **TC#93.1: list has 2 cards — one FERAL_CAT + one real cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, FERAL_CAT]
+  - **Expected output**: true
+
 - **TC#94: list has 2 cards — both FERAL_CAT** ( :white_check_mark: )
   - **State of the system**: Game is running, cards = [FERAL_CAT, FERAL_CAT]
   - **Expected output**: true
