@@ -5315,6 +5315,7 @@ public class GameTest {
 
     assertEquals(Collections.emptyList(), result);
     assertFalse(thirdParty.getHand().contains(nopeCard));
+    assertEquals(0, game.getCurrentPlayerIndex());
   }
 
   @Test
@@ -5496,6 +5497,9 @@ public class GameTest {
     game.startGame();
     Player p0 = game.getCurrentPlayer();
     Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    while (p0.getHand().stream().anyMatch(c -> c.getType() == CardType.BLESSING)) {
+      p0.removeCard(new Card(CardType.BLESSING));
+    }
     p0.addCard(new Card(CardType.BLESSING));
     game.playCard(new Card(CardType.BLESSING), p1);
     game.resolvePendingAction();
@@ -5929,5 +5933,23 @@ public class GameTest {
     game.playCard(new Card(CardType.CURSE));
     game.resolvePendingAction();
     assertNotEquals(expectedWithoutShuffle, game.getDrawPile());
+  }
+
+  @Test
+  public void startGameResetsCurrentPlayerIndexToZero() {
+    Player p1 = new Player();
+    Player p2 = new Player();
+    Player p3 = new Player();
+    Deck mockDeck = createMock(Deck.class);
+    replay(mockDeck);
+
+    Game game = new Game(List.of(p1, p2, p3), mockDeck, new Random(RANDOM_SEED));
+    game.moveToNextPlayer();
+    assertEquals(1, game.getCurrentPlayerIndex());
+
+    game.startGame();
+    assertEquals(0, game.getCurrentPlayerIndex());
+
+    verify(mockDeck);
   }
 }
