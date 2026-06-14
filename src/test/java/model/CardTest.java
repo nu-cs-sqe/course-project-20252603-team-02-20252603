@@ -54,4 +54,11 @@ public class CardTest {
 
     assertFalse(card1.equals(card2));
   }
+
+  @Test
+  void testEqualsNullReturnsFalse() {
+    Card card = new Card(CardType.DEFUSE);
+
+    assertFalse(card.equals(null));
+  }
 }

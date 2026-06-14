@@ -41,3 +41,7 @@
 - **TC4: Card Doesn't Equal Another Card** ( :white_check_mark: )
   - Inputs: Cards w/o matching CardTypes
   - Outputs: False
+
+- **TC5: Compare card to null** ( :white_check_mark: )
+  - **Inputs**: A valid Card instance, `null`
+  - **Outputs**: False
