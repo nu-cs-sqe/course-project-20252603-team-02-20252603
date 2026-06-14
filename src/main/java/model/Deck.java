@@ -75,7 +75,8 @@ public class Deck {
   }
   
   private void setupExtraDefuseCards() {
-    for (int i = 0; i < DEFUSE_CARD_COUNT - numPlayers; i++) {
+    int extra = Math.min(2, DEFUSE_CARD_COUNT - numPlayers);
+    for (int i = 0; i < extra; i++) {
       deck.add(new Card(CardType.DEFUSE));
     }
   }

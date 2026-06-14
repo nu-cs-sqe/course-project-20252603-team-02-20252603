@@ -41,6 +41,13 @@ public class ConsoleUI {
     }
 
     System.out.println(labels.getString("gameOver"));
+    List<Player> allPlayers = game.getPlayers();
+    for (int i = 0; i < allPlayers.size(); i++) {
+      if (allPlayers.get(i).isAlive()) {
+        System.out.println(MessageFormat.format(labels.getString("gameWinner"), i));
+        break;
+      }
+    }
   }
 
   private void playTurn() {

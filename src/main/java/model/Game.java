@@ -119,6 +119,11 @@ public class Game {
 
   public void drawCard(int position) {
     Player currentPlayer = getCurrentPlayer();
+    if (deck.getDeck().isEmpty()) {
+      currentPlayer.die();
+      checkWinner();
+      return;
+    }
     Card card = deck.drawCard();
     if (card.getType() == CardType.EXPLODING_KITTEN && currentPlayer.hasDefuse()) {
       defuse(position);
