@@ -307,7 +307,7 @@ public class Game {
       if (named == null || named == CardType.EXPLODING_KITTEN || named == CardType.DEFUSE) {
         throw new IllegalArgumentException("invalid wanted card type for 3-cat combo");
       }
-    } else if (size == FIVE_CAT_COMBO_SIZE) {
+    } else {
       if (named == null || named == CardType.EXPLODING_KITTEN || named == CardType.DEFUSE) {
         throw new IllegalArgumentException("invalid wanted card type for 5-cat combo");
       }
