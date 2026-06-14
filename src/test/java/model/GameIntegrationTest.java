@@ -211,6 +211,7 @@ public class GameIntegrationTest {
   public void runGameWhileGameIsNotOver() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
+    game.addToDrawPile(new Card(CardType.SKIP), 0);
     Player firstPlayer = game.getCurrentPlayer();
     int handSizeBefore = firstPlayer.getHand().size();
 
@@ -432,6 +433,7 @@ public class GameIntegrationTest {
   public void drawCardNormalCardForCurrentPlayer() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
+    game.addToDrawPile(new Card(CardType.SKIP), 0);
     Player firstPlayer = game.getCurrentPlayer();
     int handSizeBefore = firstPlayer.getHand().size();
     int deckSizeBefore = game.getDrawPile().size();
@@ -2028,6 +2030,9 @@ public class GameIntegrationTest {
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
     Player target = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      currentPlayer.removeCard(new Card(CardType.TACOCAT));
+    }
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
     currentPlayer.addCard(cat1);
@@ -2049,6 +2054,9 @@ public class GameIntegrationTest {
 
     while (!target.getHand().isEmpty()) {
       target.removeCard(target.getHand().get(0));
+    }
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      currentPlayer.removeCard(new Card(CardType.TACOCAT));
     }
 
     Card cat1 = new Card(CardType.TACOCAT);
@@ -2307,6 +2315,9 @@ public class GameIntegrationTest {
     while (!target.getHand().isEmpty()) {
       target.removeCard(target.getHand().get(0));
     }
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      currentPlayer.removeCard(new Card(CardType.TACOCAT));
+    }
 
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
@@ -2472,6 +2483,9 @@ public class GameIntegrationTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.NEKO)) {
+      currentPlayer.removeCard(new Card(CardType.NEKO));
+    }
 
     Card neko1 = new Card(CardType.NEKO);
     Card neko2 = new Card(CardType.NEKO);
@@ -2572,6 +2586,9 @@ public class GameIntegrationTest {
     while (!target.getHand().isEmpty()) {
       target.removeCard(target.getHand().get(0));
     }
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      currentPlayer.removeCard(new Card(CardType.TACOCAT));
+    }
 
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
@@ -2618,6 +2635,9 @@ public class GameIntegrationTest {
 
     while (!target.getHand().isEmpty()) {
       target.removeCard(target.getHand().get(0));
+    }
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      currentPlayer.removeCard(new Card(CardType.TACOCAT));
     }
 
     Card cat1 = new Card(CardType.TACOCAT);
@@ -3438,6 +3458,9 @@ public class GameIntegrationTest {
     Card attackCard = new Card(CardType.TARGETED_ATTACK);
     attacker.addCard(attackCard);
 
+    while (thirdParty.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE)) {
+      thirdParty.removeCard(new Card(CardType.NOPE));
+    }
     Card nopeCard = new Card(CardType.NOPE);
     thirdParty.addCard(nopeCard);
 
