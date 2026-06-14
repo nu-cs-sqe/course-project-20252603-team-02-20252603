@@ -24,13 +24,14 @@ public class Deck {
     setupSpecialCards();
     setupRareCards();
     setupSingletonCards();
+
+    dealStartingHands(players);
+    dealDefuseCards(players);
+
     setupExtraDefuseCards();
     addExplodingKittens();
 
     shuffle();
-
-    dealStartingHands(players);
-    dealDefuseCards(players);
   }
   
   private void setupStandardCards() {
