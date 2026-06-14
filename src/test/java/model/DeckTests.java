@@ -362,6 +362,7 @@ public class DeckTests {
     assertEquals(originalTop, deck.getDeck().get(sizeBefore - 1));
   }
   
+  @Test
   public void testTakeFromDiscardTypeIsNull() {
     Deck deck = new Deck(players, new Random(RANDOM_SEED));
     deck.discardCard(new Card(CardType.FAVOR));
