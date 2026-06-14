@@ -24,11 +24,12 @@ public class Deck {
     setupSpecialCards();
     setupRareCards();
     setupSingletonCards();
+    setupExtraDefuseCards();
+
+    shuffle();
 
     dealStartingHands(players);
     dealDefuseCards(players);
-
-    setupExtraDefuseCards();
     addExplodingKittens();
 
     shuffle();
