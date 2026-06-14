@@ -932,3 +932,8 @@
 - **TC#210: Curse when exactly one other player is alive** ( :white_check_mark: )
   - **State of the system**: Current player plays `CURSE`, one other player is alive, and remaining player has a Defuse card
   - **Expected output**: Defuse is removed from the only other alive player, returned to draw pile, draw pile is shuffled, and empty list is returned
+
+### Method under test: `resolvePendingAction()`
+- **TC211: Resolve action when pendingAction is NONE** ( :white_check_mark: )
+  - **State of the system**: Game is initialized and started, no cards have been played, so `pendingAction` is `ActionType.NONE`.
+  - **Expected output**: Hits the `NONE` branch, returns an empty list, and the game state remains entirely unchanged.

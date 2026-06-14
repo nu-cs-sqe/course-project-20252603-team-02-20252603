@@ -349,10 +349,6 @@ public class Game {
   }
 
   public List<Card> resolvePendingAction() {
-    if (pendingAction == ActionType.NONE) {
-      return Collections.emptyList();
-    }
-
     boolean actionIsNoped = (nopeCount % 2 != 0);
 
     if (!actionIsNoped) {
