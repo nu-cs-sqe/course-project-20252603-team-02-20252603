@@ -122,7 +122,8 @@ public class Game {
     Card card;
     try {
       card = deck.drawCard();
-    } catch (IllegalStateException e) {
+    }
+    catch (IllegalStateException e) {
       currentPlayer.die();
       checkWinner();
       return;
