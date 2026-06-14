@@ -8,6 +8,8 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,6 +33,9 @@ public class GameTest {
   private static final int SEE_THE_FUTURE_CARD_COUNT = 3;
   private static final int SECOND_PLAYER_INDEX = 1;
   private static final int THIRD_PLAYER_INDEX = 2;
+  private static final int STARTING_HAND_SIZE = 8;
+  private static final int TOTAL_DEFUSE_COUNT = 6;
+  private static final int NUM_NEKO_CARDS = 3;
 
   @Test
   public void startGameValidPlayerCount() {
@@ -5389,5 +5394,526 @@ public class GameTest {
     assertTrue(result.isEmpty());
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
+  public void isGameLaunchedReturnsFalseBeforeStartGame() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    assertFalse(game.isGameLaunched());
+  }
+
+  @Test
+  public void drawCardExplodingKittenNoDefuseLastOpponentAliveEndsGame() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    game.getPlayers().get(SECOND_PLAYER_INDEX).die();
+    while (p0.getHand().stream().anyMatch(c -> c.getType() == CardType.DEFUSE)) {
+      p0.removeCard(new Card(CardType.DEFUSE));
+    }
+    game.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), 0);
+    game.drawCard(0);
+    assertFalse(p0.isAlive());
+    assertTrue(game.isGameOver());
+  }
+
+  @Test
+  public void drawCardExplodingKittenWithDefuseAdvancesTurnToNextPlayer() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    assertTrue(game.getCurrentPlayer().hasDefuse());
+    game.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), 0);
+    game.drawCard(0);
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void defuseAddsDefuseCardToDiscardPile() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    game.addToDrawPile(new Card(CardType.EXPLODING_KITTEN), 0);
+    game.drawCard(0);
+    assertTrue(game.getDiscardPile().stream()
+        .anyMatch(c -> c.getType() == CardType.DEFUSE));
+  }
+
+  @Test
+  public void targetedAttackRemovedFromHandAfterPlay() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p2 = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    while (p0.getHand().stream().anyMatch(c -> c.getType() == CardType.TARGETED_ATTACK)) {
+      p0.removeCard(new Card(CardType.TARGETED_ATTACK));
+    }
+    p0.addCard(new Card(CardType.TARGETED_ATTACK));
+    game.playCard(new Card(CardType.TARGETED_ATTACK), p2);
+    game.resolvePendingAction();
+    assertFalse(p0.getHand().stream()
+        .anyMatch(c -> c.getType() == CardType.TARGETED_ATTACK));
+  }
+
+  @Test
+  public void targetedAttackAppearsInDiscardPileAfterPlay() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p2 = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    p0.addCard(new Card(CardType.TARGETED_ATTACK));
+    game.playCard(new Card(CardType.TARGETED_ATTACK), p2);
+    game.resolvePendingAction();
+    assertTrue(game.getDiscardPile().stream()
+        .anyMatch(c -> c.getType() == CardType.TARGETED_ATTACK));
+  }
+
+  @Test
+  public void blessingTargetingSelfThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    p0.addCard(new Card(CardType.BLESSING));
+    assertThrows(IllegalArgumentException.class,
+        () -> game.playCard(new Card(CardType.BLESSING), p0));
+  }
+
+  @Test
+  public void blessingRemovedFromHandAndAppearsInDiscardAfterPlay() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    p0.addCard(new Card(CardType.BLESSING));
+    game.playCard(new Card(CardType.BLESSING), p1);
+    game.resolvePendingAction();
+    assertFalse(p0.getHand().stream()
+        .anyMatch(c -> c.getType() == CardType.BLESSING));
+    assertTrue(game.getDiscardPile().stream()
+        .anyMatch(c -> c.getType() == CardType.BLESSING));
+  }
+
+  @Test
+  public void threeNopesResultsInActionBeingCancelled() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    game.addToDrawPile(new Card(CardType.SKIP), 0);
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Player p2 = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    while (p1.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE)) {
+      p1.removeCard(new Card(CardType.NOPE));
+    }
+    while (p2.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE)) {
+      p2.removeCard(new Card(CardType.NOPE));
+    }
+    p0.addCard(new Card(CardType.SKIP));
+    p1.addCard(new Card(CardType.NOPE));
+    p1.addCard(new Card(CardType.NOPE));
+    p2.addCard(new Card(CardType.NOPE));
+    game.playCard(new Card(CardType.SKIP));
+    game.playNope(p1, p1.getHand().stream()
+        .filter(c -> c.getType() == CardType.NOPE).findFirst().orElseThrow());
+    game.playNope(p1, p1.getHand().stream()
+        .filter(c -> c.getType() == CardType.NOPE).findFirst().orElseThrow());
+    game.playNope(p2, p2.getHand().stream()
+        .filter(c -> c.getType() == CardType.NOPE).findFirst().orElseThrow());
+    game.resolvePendingAction();
+    assertEquals(0, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void playNosyTargetIndexEqualToPlayerCountThrowsException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    p0.addCard(new Card(CardType.NOSY));
+    int outOfBounds = game.getPlayers().size();
+    assertThrows(IllegalArgumentException.class, () -> game.playNosy(outOfBounds));
+  }
+
+  @Test
+  public void drawFromDeckReturnsNonNullCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    assertNotNull(game.drawFromDeck());
+  }
+
+  @Test
+  public void drawFromDeckReturnsTopCard() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    CardType expectedType = game.getDrawPile().get(0).getType();
+    assertEquals(expectedType, game.drawFromDeck().getType());
+  }
+
+  @Test
+  public void playNekoDiscardsAllThreeNekoCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    while (p0.getHand().stream().anyMatch(c -> c.getType() == CardType.NEKO)) {
+      p0.removeCard(new Card(CardType.NEKO));
+    }
+    Card n1 = new Card(CardType.NEKO);
+    Card n2 = new Card(CardType.NEKO);
+    Card n3 = new Card(CardType.NEKO);
+    p0.addCard(n1);
+    p0.addCard(n2);
+    p0.addCard(n3);
+    game.playNeko(List.of(n1, n2, n3));
+    assertFalse(p0.getHand().stream().anyMatch(c -> c.getType() == CardType.NEKO));
+    assertEquals(NUM_NEKO_CARDS, game.getDiscardPile().stream()
+        .filter(c -> c.getType() == CardType.NEKO).count());
+  }
+
+  @Test
+  public void playThreeMatchingCatsWantedCardAddedToRequesterHand() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    while (p0.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      p0.removeCard(new Card(CardType.TACOCAT));
+    }
+    while (!p1.getHand().isEmpty()) {
+      p1.removeCard(p1.getHand().get(0));
+    }
+    p0.addCard(new Card(CardType.TACOCAT));
+    p0.addCard(new Card(CardType.TACOCAT));
+    p0.addCard(new Card(CardType.TACOCAT));
+    p1.addCard(new Card(CardType.FAVOR));
+    game.playCard(
+        List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT)),
+        p1, CardType.FAVOR);
+    game.resolvePendingAction();
+    assertTrue(p0.getHand().stream().anyMatch(c -> c.getType() == CardType.FAVOR));
+    assertFalse(p1.getHand().stream().anyMatch(c -> c.getType() == CardType.FAVOR));
+  }
+
+  @Test
+  public void playThreeMatchingCatsReturnsFalseWhenWantedCardAbsent() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    while (p0.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      p0.removeCard(new Card(CardType.TACOCAT));
+    }
+    while (p1.getHand().stream().anyMatch(c -> c.getType() == CardType.FAVOR)) {
+      p1.removeCard(new Card(CardType.FAVOR));
+    }
+    p0.addCard(new Card(CardType.TACOCAT));
+    p0.addCard(new Card(CardType.TACOCAT));
+    p0.addCard(new Card(CardType.TACOCAT));
+    boolean result = game.playThreeMatchingCats(
+        List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT),
+            new Card(CardType.TACOCAT)),
+        p1, CardType.FAVOR);
+    assertFalse(result);
+  }
+
+  @Test
+  public void playFiveDifferentCatsAddsWantedCardFromDiscardToRequesterHand() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    while (p0.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      p0.removeCard(new Card(CardType.TACOCAT));
+    }
+    while (p0.getHand().stream().anyMatch(c -> c.getType() == CardType.BEARD_CAT)) {
+      p0.removeCard(new Card(CardType.BEARD_CAT));
+    }
+    p0.addCard(new Card(CardType.TACOCAT));
+    p0.addCard(new Card(CardType.HAIRY_POTATO_CAT));
+    p0.addCard(new Card(CardType.RAINBOW_RALPHING_CAT));
+    p0.addCard(new Card(CardType.BEARD_CAT));
+    p0.addCard(new Card(CardType.CATTERMELON));
+    game.addToDiscard(new Card(CardType.ATTACK));
+    game.playCard(
+        List.of(new Card(CardType.TACOCAT), new Card(CardType.HAIRY_POTATO_CAT),
+            new Card(CardType.RAINBOW_RALPHING_CAT), new Card(CardType.BEARD_CAT),
+            new Card(CardType.CATTERMELON)),
+        null, CardType.ATTACK);
+    game.resolvePendingAction();
+    assertTrue(p0.getHand().stream().anyMatch(c -> c.getType() == CardType.ATTACK));
+  }
+
+  @Test
+  public void bubonicPlagueAddsRemovedCardsToDrawPile() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    int deckSizeBefore = game.getDrawPile().size();
+    p0.addCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
+    assertEquals(deckSizeBefore + 2, game.getDrawPile().size());
+  }
+
+  @Test
+  public void playDrawFromBottomAddsBottomCardToCurrentPlayerHand() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    List<Card> pile = game.getDrawPile();
+    CardType bottomType = pile.get(pile.size() - 1).getType();
+    int handSizeBefore = p0.getHand().size();
+    p0.addCard(new Card(CardType.DRAW_FROM_BOTTOM));
+    game.playCard(new Card(CardType.DRAW_FROM_BOTTOM));
+    game.resolvePendingAction();
+    assertTrue(p0.getHand().stream().anyMatch(c -> c.getType() == bottomType));
+    assertEquals(handSizeBefore + 1, p0.getHand().size());
+  }
+
+  @Test
+  public void playCurseAddsNextPlayerDefusesToDrawPile() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    int p1DefusesBefore = (int) p1.getHand().stream()
+        .filter(c -> c.getType() == CardType.DEFUSE).count();
+    assertTrue(p1DefusesBefore > 0);
+    int deckSizeBefore = game.getDrawPile().size();
+    p0.addCard(new Card(CardType.CURSE));
+    game.playCard(new Card(CardType.CURSE));
+    game.resolvePendingAction();
+    assertEquals(deckSizeBefore + p1DefusesBefore, game.getDrawPile().size());
+  }
+
+  @Test
+  public void cardHashCodeDifferentForDifferentCardTypes() {
+    Card skip = new Card(CardType.SKIP);
+    Card attack = new Card(CardType.ATTACK);
+    assertNotEquals(skip.hashCode(), attack.hashCode());
+  }
+
+  @Test
+  public void cardHashCodeConsistentForSameType() {
+    Card c1 = new Card(CardType.NOPE);
+    Card c2 = new Card(CardType.NOPE);
+    assertEquals(c1.hashCode(), c2.hashCode());
+  }
+
+  @Test
+  public void drawCardEmptyDeckWhenOnlyOneOpponentAliveEndsGame() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    game.getPlayers().get(SECOND_PLAYER_INDEX).die();
+    while (!game.getDrawPile().isEmpty()) {
+      game.drawFromDeck();
+    }
+    game.drawCard(0);
+    assertFalse(p0.isAlive());
+    assertTrue(game.isGameOver());
+  }
+
+  @Test
+  public void twoNopesResultsInActionProceeding() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Player p2 = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    while (p1.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE)) {
+      p1.removeCard(new Card(CardType.NOPE));
+    }
+    while (p2.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE)) {
+      p2.removeCard(new Card(CardType.NOPE));
+    }
+    p0.addCard(new Card(CardType.SKIP));
+    p1.addCard(new Card(CardType.NOPE));
+    p2.addCard(new Card(CardType.NOPE));
+    game.playCard(new Card(CardType.SKIP));
+    game.playNope(p1, p1.getHand().stream()
+        .filter(c -> c.getType() == CardType.NOPE).findFirst().orElseThrow());
+    game.playNope(p2, p2.getHand().stream()
+        .filter(c -> c.getType() == CardType.NOPE).findFirst().orElseThrow());
+    game.resolvePendingAction();
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void blessingDecreasesTargetTurnsOwed() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    p1.addTurn();
+    assertEquals(2, p1.getTurnsOwed());
+    p0.addCard(new Card(CardType.BLESSING));
+    game.playCard(new Card(CardType.BLESSING), p1);
+    game.resolvePendingAction();
+    assertEquals(1, p1.getTurnsOwed());
+  }
+
+  @Test
+  public void resolvePendingActionAfterSeeTheFutureIsNoOp() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    p0.addCard(new Card(CardType.SEE_THE_FUTURE));
+    game.playCard(new Card(CardType.SEE_THE_FUTURE));
+    List<Card> first = game.resolvePendingAction();
+    assertEquals(SEE_THE_FUTURE_CARD_COUNT, first.size());
+    List<Card> second = game.resolvePendingAction();
+    assertEquals(Collections.emptyList(), second);
+  }
+
+  @Test
+  public void resolvePendingActionAfterShuffleIsNoOp() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    p0.addCard(new Card(CardType.SHUFFLE));
+    game.playCard(new Card(CardType.SHUFFLE));
+    List<Card> first = game.resolvePendingAction();
+    assertFalse(first.isEmpty());
+    List<Card> second = game.resolvePendingAction();
+    assertEquals(Collections.emptyList(), second);
+  }
+
+  @Test
+  public void resolvePendingActionIsNoOpWhenCalledTwiceAfterSkip() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    p0.addCard(new Card(CardType.SKIP));
+    game.playCard(new Card(CardType.SKIP));
+    game.resolvePendingAction();
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+    game.resolvePendingAction();
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+  }
+
+  @Test
+  public void startGameFivePlayersTotalDefuseCountIsCorrect() {
+    Game game = new Game(MAX_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    long defusesInHands = game.getPlayers().stream()
+        .flatMap(p -> p.getHand().stream())
+        .filter(c -> c.getType() == CardType.DEFUSE)
+        .count();
+    long defusesInDeck = game.getDrawPile().stream()
+        .filter(c -> c.getType() == CardType.DEFUSE)
+        .count();
+    assertEquals(TOTAL_DEFUSE_COUNT, defusesInHands + defusesInDeck);
+  }
+
+  @Test
+  public void startGameEachPlayerHasEightCards() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    for (Player player : game.getPlayers()) {
+      assertEquals(STARTING_HAND_SIZE, player.getHand().size());
+    }
+  }
+
+  @Test
+  public void playNosyTargetIndexZeroFromNonFirstPlayerReturnsHand() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    game.completeOneTurn();
+    assertEquals(SECOND_PLAYER_INDEX, game.getCurrentPlayerIndex());
+    p1.addCard(new Card(CardType.NOSY));
+    List<Card> result = game.playNosy(0);
+    assertEquals(p0.getHand(), result);
+  }
+
+  @Test
+  public void playCardTargetedAttackTargetingSelfThrowsIllegalArgumentException() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    p0.addCard(new Card(CardType.TARGETED_ATTACK));
+    assertThrows(IllegalArgumentException.class,
+        () -> game.playCard(new Card(CardType.TARGETED_ATTACK), p0));
+  }
+
+  @Test
+  public void playCardFavorRemovedFromCurrentPlayerHand() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Card favor = new Card(CardType.FAVOR);
+    Card skip = new Card(CardType.SKIP);
+    p0.addCard(favor);
+    p1.addCard(skip);
+    long favorsBefore = p0.getHand().stream()
+        .filter(c -> c.getType() == CardType.FAVOR).count();
+    game.playCard(favor, p1, skip);
+    game.resolvePendingAction();
+    long favorsAfter = p0.getHand().stream()
+        .filter(c -> c.getType() == CardType.FAVOR).count();
+    assertEquals(favorsBefore - 1, favorsAfter);
+  }
+
+  @Test
+  public void bubonicPlagueWithOneDeckCardSucceeds() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    while (game.getDrawPile().size() > 1) {
+      game.drawFromDeck();
+    }
+    Player p0 = game.getCurrentPlayer();
+    p0.addCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    assertDoesNotThrow(() -> game.resolvePendingAction());
+  }
+
+  @Test
+  public void playShuffleChangesDrawPileOrder() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    List<Card> before = game.getDrawPile();
+    p0.addCard(new Card(CardType.SHUFFLE));
+    game.playCard(new Card(CardType.SHUFFLE));
+    List<Card> after = game.resolvePendingAction();
+    assertNotEquals(before, after);
+  }
+
+  @Test
+  public void bubonicPlagueShufflesDrawPile() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    Player p2 = game.getPlayers().get(THIRD_PLAYER_INDEX);
+    while (!p1.getHand().isEmpty()) {
+      p1.removeCard(p1.getHand().get(0));
+    }
+    while (!p2.getHand().isEmpty()) {
+      p2.removeCard(p2.getHand().get(0));
+    }
+    List<Card> before = game.getDrawPile();
+    p0.addCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.playCard(new Card(CardType.BUBONIC_PLAGUE));
+    game.resolvePendingAction();
+    assertNotEquals(before, game.getDrawPile());
+  }
+
+  @Test
+  public void playCurseShufflesDrawPile() {
+    Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
+    game.startGame();
+    Player p0 = game.getCurrentPlayer();
+    Player p1 = game.getPlayers().get(SECOND_PLAYER_INDEX);
+    int p1DefuseCount = (int) p1.getHand().stream()
+        .filter(c -> c.getType() == CardType.DEFUSE).count();
+    List<Card> before = game.getDrawPile();
+    List<Card> expectedWithoutShuffle = new ArrayList<>();
+    for (int i = 0; i < p1DefuseCount; i++) {
+      expectedWithoutShuffle.add(new Card(CardType.DEFUSE));
+    }
+    expectedWithoutShuffle.addAll(before);
+    p0.addCard(new Card(CardType.CURSE));
+    game.playCard(new Card(CardType.CURSE));
+    game.resolvePendingAction();
+    assertNotEquals(expectedWithoutShuffle, game.getDrawPile());
   }
 }
