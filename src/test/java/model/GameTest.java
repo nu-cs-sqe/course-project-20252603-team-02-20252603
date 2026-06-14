@@ -1145,8 +1145,8 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
-  
-@Test
+
+  @Test
   public void playCardCardNotInHandThrowsException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
@@ -1213,7 +1213,7 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
-  
+
   @Test
   public void playCardNonPlayableCardThrowsException() {
     Player mockPlayer1 = createMock(Player.class);
@@ -1258,7 +1258,7 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-@Test
+  @Test
   public void playCardAfterGameOverThrowsException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
@@ -1316,7 +1316,7 @@ public class GameTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(new Card(CardType.TARGETED_ATTACK), new Player()));
+        game.playCard(new Card(CardType.TARGETED_ATTACK), new Player()));
   }
 
   @Test
@@ -1330,7 +1330,7 @@ public class GameTest {
     game.getNextActivePlayer();
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(new Card(CardType.TARGETED_ATTACK), target));
+        game.playCard(new Card(CardType.TARGETED_ATTACK), target));
   }
 
   @Test
@@ -1349,7 +1349,7 @@ public class GameTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(new Card(CardType.ALTER_FUTURE), Collections.emptyList()));
+        game.playCard(new Card(CardType.ALTER_FUTURE), Collections.emptyList()));
   }
 
   @Test
@@ -1362,7 +1362,7 @@ public class GameTest {
     game.getNextActivePlayer();
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(new Card(CardType.ALTER_FUTURE), Collections.emptyList()));
+        game.playCard(new Card(CardType.ALTER_FUTURE), Collections.emptyList()));
   }
 
   @Test
@@ -1373,7 +1373,7 @@ public class GameTest {
     game.getCurrentPlayer().addCard(defuse);
 
     assertThrows(IllegalArgumentException.class, () ->
-            game.playCard(defuse, Collections.emptyList()));
+        game.playCard(defuse, Collections.emptyList()));
   }
 
   @Test
@@ -1381,7 +1381,7 @@ public class GameTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(new Card(CardType.FAVOR), new Player(), new Card(CardType.SKIP)));
+        game.playCard(new Card(CardType.FAVOR), new Player(), new Card(CardType.SKIP)));
   }
 
   @Test
@@ -1395,7 +1395,7 @@ public class GameTest {
     game.getNextActivePlayer();
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(new Card(CardType.FAVOR), target, new Card(CardType.SKIP)));
+        game.playCard(new Card(CardType.FAVOR), target, new Card(CardType.SKIP)));
   }
 
   @Test
@@ -1407,7 +1407,7 @@ public class GameTest {
     game.getCurrentPlayer().addCard(defuse);
 
     assertThrows(IllegalArgumentException.class, () ->
-            game.playCard(defuse, target, new Card(CardType.SKIP)));
+        game.playCard(defuse, target, new Card(CardType.SKIP)));
   }
 
   @Test
@@ -1419,7 +1419,7 @@ public class GameTest {
     game.getCurrentPlayer().addCard(skip);
 
     assertThrows(IllegalArgumentException.class, () ->
-            game.playCard(skip, target, new Card(CardType.SKIP)));
+        game.playCard(skip, target, new Card(CardType.SKIP)));
   }
 
   @Test
@@ -1447,7 +1447,7 @@ public class GameTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(List.of(new Card(CardType.NEKO))));
+        game.playCard(List.of(new Card(CardType.NEKO))));
   }
 
   @Test
@@ -1460,7 +1460,7 @@ public class GameTest {
     game.getNextActivePlayer();
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(List.of(new Card(CardType.NEKO))));
+        game.playCard(List.of(new Card(CardType.NEKO))));
   }
 
   @Test
@@ -1495,7 +1495,7 @@ public class GameTest {
     game.startGame();
 
     assertThrows(IllegalArgumentException.class, () ->
-            game.playCard(List.of(new Card(CardType.ATTACK))));
+        game.playCard(List.of(new Card(CardType.ATTACK))));
   }
 
   @Test
@@ -1529,7 +1529,7 @@ public class GameTest {
     Card cat2 = new Card(CardType.TACOCAT);
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(List.of(cat1, cat2), new Player(), null));
+        game.playCard(List.of(cat1, cat2), new Player(), null));
   }
 
   @Test
@@ -1543,8 +1543,8 @@ public class GameTest {
     game.getNextActivePlayer();
 
     assertThrows(IllegalStateException.class, () ->
-            game.playCard(List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT)),
-                    target, null));
+        game.playCard(List.of(new Card(CardType.TACOCAT), new Card(CardType.TACOCAT)),
+            target, null));
   }
 
   @Test
@@ -1567,7 +1567,7 @@ public class GameTest {
   public void playNekoBeforeGameStartsThrowException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     List<Card> cards = List.of(new Card(CardType.NEKO), new Card(CardType.NEKO),
-            new Card(CardType.NEKO));
+        new Card(CardType.NEKO));
 
     assertThrows(IllegalStateException.class, () -> game.playNeko(cards));
   }
@@ -2969,9 +2969,9 @@ public class GameTest {
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
 
     Game game = new Game(
-          List.of(mockPlayer1, mockPlayer2, mockPlayer3),
-          mockDeck,
-          new Random(RANDOM_SEED)
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
     );
 
     game.startGame();
@@ -3751,7 +3751,7 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck, mockRandom);
   }
 
-@Test
+  @Test
   public void playTwoMatchingCatsTargetHasNoCardsReturnsNull() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -4638,7 +4638,7 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-@Test
+  @Test
   public void playFiveDifferentCatsDefuseWantedCardThrowsIllegalArgumentException() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -4755,8 +4755,8 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
-  
-@Test
+
+  @Test
   public void playFiveDifferentCatsEmptyDiscardPileThrowsIllegalStateException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
@@ -4809,7 +4809,7 @@ public class GameTest {
     assertFalse(currentPlayer.getHand().contains(cat5));
     assertFalse(game.getDiscardPile().contains(favor));
   }
-  
+
   @Test
   public void playFiveDifferentCatsDiscardHasOneNonMatchingCardThrowsIllegalArgumentException() {
     Player mockPlayer1 = createMock(Player.class);
@@ -5167,7 +5167,7 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
- @Test
+  @Test
   public void playCatCardsThreeMatchingCatsTargetLacksNamedCardNothingTransferred() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
@@ -5191,7 +5191,7 @@ public class GameTest {
 
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
-  
+
   @Test
   void nopeWithNullCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
@@ -5203,10 +5203,10 @@ public class GameTest {
     game.playCard(skipCard);
 
     assertThrows(IllegalArgumentException.class, () ->
-            game.playNope(player, null), "Card must be of type NOPE");
+        game.playNope(player, null), "Card must be of type NOPE");
   }
 
- @Test
+  @Test
   void nopeByThirdPartyPlayer() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
@@ -5225,7 +5225,7 @@ public class GameTest {
     assertEquals(Collections.emptyList(), result);
     assertFalse(thirdParty.getHand().contains(nopeCard));
   }
-  
+
   @Test
   public void playCatCardsFiveDifferentCatsNamedCardInDiscardTransfersCard() {
     Player mockPlayer1 = createMock(Player.class);

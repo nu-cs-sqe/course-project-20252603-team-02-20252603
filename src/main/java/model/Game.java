@@ -703,7 +703,7 @@ public class Game {
 
     List<Card> targetHand = target.getHand();
     if (targetHand.isEmpty()) {
-      throw new IllegalArgumentException("target player has no cards left");
+      return null;
     }
 
     int index = this.random.nextInt(targetHand.size());
