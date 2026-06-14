@@ -5350,29 +5350,31 @@ public class GameTest {
     verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
   }
 
-  @Test
+ @Test
   public void playCatCardsThreeMatchingCatsTargetLacksNamedCardNothingTransferred() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);
     Player mockPlayer3 = createMock(Player.class);
     Deck mockDeck = createMock(Deck.class);
-
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.TACOCAT);
     Card cat3 = new Card(CardType.TACOCAT);
-
     expect(mockPlayer2.isAlive()).andReturn(true).anyTimes();
     expect(mockPlayer1.getHand()).andReturn(List.of(cat1, cat2, cat3)).anyTimes();
     expect(mockPlayer2.getHand()).andReturn(List.of(new Card(CardType.ATTACK))).anyTimes();
-
     replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
-
     Game game = new Game(
         List.of(mockPlayer1, mockPlayer2, mockPlayer3),
         mockDeck,
         new Random(RANDOM_SEED)
     );
 
+    game.startGame();
+    game.playCatCards(List.of(cat1, cat2, cat3), mockPlayer2, CardType.FAVOR);
+
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+  
   @Test
   void nopeWithNullCard() {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
