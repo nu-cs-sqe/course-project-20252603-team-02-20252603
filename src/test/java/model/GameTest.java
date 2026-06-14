@@ -1705,7 +1705,7 @@ public class GameTest {
     mockPlayer1.removeCard(superSkipCard);
     mockDeck.discardCard(superSkipCard);
     expectLastCall().once();
-    expect(mockPlayer1.getTurnsOwed()).andReturn(3).once();
+    expect(mockPlayer1.getTurnsOwed()).andReturn(MIN_PLAYERS).once();
     mockPlayer1.removeTurn();
     mockPlayer1.removeTurn();
     expect(mockPlayer1.getTurnsOwed()).andReturn(1).once();
@@ -5375,7 +5375,7 @@ public class GameTest {
     Game game = new Game(
         List.of(mockPlayer1, mockPlayer2, mockPlayer3),
         mockDeck,
-        new Random(42)
+        new Random(RANDOM_SEED)
     );
 
     game.startGame();
