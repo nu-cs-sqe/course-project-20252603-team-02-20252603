@@ -4995,6 +4995,37 @@ public class GameTest {
   }
 
   @Test
+  public void playFiveDifferentCatsInvalidComboSize() {
+    Player mockPlayer1 = createMock(Player.class);
+    Player mockPlayer2 = createMock(Player.class);
+    Player mockPlayer3 = createMock(Player.class);
+    Deck mockDeck = createMock(Deck.class);
+
+    List<Card> invalidFourCatCombo = List.of(
+        new Card(CardType.TACOCAT), new Card(CardType.TACOCAT),
+        new Card(CardType.TACOCAT), new Card(CardType.TACOCAT)
+    );
+
+    expect(mockPlayer1.getHand())
+        .andReturn(invalidFourCatCombo).anyTimes();
+
+    replay(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+
+    Game game = new Game(
+        List.of(mockPlayer1, mockPlayer2, mockPlayer3),
+        mockDeck,
+        new Random(RANDOM_SEED)
+    );
+    game.startGame();
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      game.playFiveDifferentCats(invalidFourCatCombo, CardType.FAVOR);
+    });
+    assertEquals("invalid five-cat combo", e.getMessage());
+    verify(mockPlayer1, mockPlayer2, mockPlayer3, mockDeck);
+  }
+
+  @Test
   public void playCatCardsGameNotLaunchedThrowsIllegalStateException() {
     Player mockPlayer1 = createMock(Player.class);
     Player mockPlayer2 = createMock(Player.class);

@@ -668,6 +668,10 @@
   - **State of the system**: Discard has [ATTACK, FAVOR, SKIP], wanted_card = FAVOR
   - **Expected output**: FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
 
+- **TC#143: combo is invalid because size is 4 instead of 5** ( :white_check_mark: )
+  - **State of the system**: Cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT], wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid five-cat combo"
+
 ### Method under test: `playCatCards()`
 - **TC#143: game has not been launched** ( :white_check_mark: )
   - **State of the system**: gameLaunched = false, cards = [TACOCAT, TACOCAT], target = player2, named = null
