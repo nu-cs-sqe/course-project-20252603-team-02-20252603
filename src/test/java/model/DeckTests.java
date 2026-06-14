@@ -44,7 +44,7 @@ public class DeckTests {
         + (SPECIAL_CARD_COUNT * SPECIAL_CARD_TYPES)
         + (CAT_CARD_COUNT * CAT_CARD_TYPES)
         + SEE_THE_FUTURE_CARD_COUNT;
-    int defuseCards = DEFUSE_CARD_COUNT - numPlayers;
+    int defuseCards = Math.min(2, DEFUSE_CARD_COUNT - numPlayers);
     int dealtCards = STARTING_HAND_SIZE * numPlayers;
     int explodingKittens = numPlayers - 1;
     int expectedSize = initialCards + defuseCards - dealtCards + explodingKittens;
@@ -362,6 +362,7 @@ public class DeckTests {
     assertEquals(originalTop, deck.getDeck().get(sizeBefore - 1));
   }
   
+  @Test
   public void testTakeFromDiscardTypeIsNull() {
     Deck deck = new Deck(players, new Random(RANDOM_SEED));
     deck.discardCard(new Card(CardType.FAVOR));
@@ -451,5 +452,21 @@ public class DeckTests {
     });
 
     assertEquals("card type not in discard pile", e.getMessage());
+  }
+
+  @Test
+  public void reorderTopCardsSizeMismatch() {
+    Deck deck = new Deck(players, new Random(RANDOM_SEED));
+
+    List<Card> topCards = deck.peekTopCards();
+
+    List<Card> invalidReorderedCards = new ArrayList<>(topCards);
+    invalidReorderedCards.remove(0);
+
+    Exception e = assertThrows(IllegalArgumentException.class, () -> {
+      deck.reorderTopCards(invalidReorderedCards);
+    });
+
+    assertEquals("must reorder all visible cards", e.getMessage());
   }
 }

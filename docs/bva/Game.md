@@ -481,6 +481,10 @@
   - **State of the system**: Game is running, cards = [FERAL_CAT, TACOCAT]
   - **Expected output**: true
 
+- **TC#93.1: list has 2 cards — one FERAL_CAT + one real cat** ( :white_check_mark: )
+  - **State of the system**: Game is running, cards = [TACOCAT, FERAL_CAT]
+  - **Expected output**: true
+
 - **TC#94: list has 2 cards — both FERAL_CAT** ( :white_check_mark: )
   - **State of the system**: Game is running, cards = [FERAL_CAT, FERAL_CAT]
   - **Expected output**: true
@@ -664,6 +668,10 @@
   - **State of the system**: Discard has [ATTACK, FAVOR, SKIP], wanted_card = FAVOR
   - **Expected output**: FAVOR transferred, ATTACK and SKIP remain in discard, returns FAVOR
 
+- **TC#143: combo is invalid because size is 4 instead of 5** ( :white_check_mark: )
+  - **State of the system**: Cards = [TACOCAT, TACOCAT, TACOCAT, TACOCAT], wanted_card = FAVOR
+  - **Expected output**: Throws `IllegalArgumentException`, "invalid five-cat combo"
+
 ### Method under test: `playCatCards()`
 - **TC#143: game has not been launched** ( :white_check_mark: )
   - **State of the system**: gameLaunched = false, cards = [TACOCAT, TACOCAT], target = player2, named = null
@@ -822,6 +830,10 @@
     - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 2
     - **Expected output**:  turnsOwed decreases by 2 to 0, turn moves to next player
 
+- **TC181: Player plays `Super Skip` with turnsOwed > 2 (e.g., heavily targeted)** ( :white_check_mark: )
+  - **State of the system**: Game is started, game is not over, current player has a Super Skip card, turnsOwed = 3
+  - **Expected output**: turnsOwed decreases by 2 (down to 1); current player remains the active player
+
 
 ### Method under test: `playSeeTheFuture()`
 
@@ -920,3 +932,8 @@
 - **TC#210: Curse when exactly one other player is alive** ( :white_check_mark: )
   - **State of the system**: Current player plays `CURSE`, one other player is alive, and remaining player has a Defuse card
   - **Expected output**: Defuse is removed from the only other alive player, returned to draw pile, draw pile is shuffled, and empty list is returned
+
+### Method under test: `resolvePendingAction()`
+- **TC211: Resolve action when pendingAction is NONE** ( :white_check_mark: )
+  - **State of the system**: Game is initialized and started, no cards have been played, so `pendingAction` is `ActionType.NONE`.
+  - **Expected output**: Hits the `NONE` branch, returns an empty list, and the game state remains entirely unchanged.

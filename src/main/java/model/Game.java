@@ -55,7 +55,7 @@ public class Game {
     }
     validatePlayerCount();
 
-    if (this.players == null || this.players.isEmpty()) {
+    if (this.players.isEmpty()) {
       this.players = new ArrayList<>();
       for (int i = 0; i < numberOfPlayers; i++) {
         this.players.add(new Player());
@@ -84,7 +84,7 @@ public class Game {
   }
 
   public Player getCurrentPlayer() {
-    if (currentPlayerIndex < 0 || currentPlayerIndex >= players.size()) {
+    if (currentPlayerIndex >= players.size()) {
       throw new IllegalStateException("current player index out of bounds");
     }
     return players.get(currentPlayerIndex);
@@ -119,7 +119,15 @@ public class Game {
 
   public void drawCard(int position) {
     Player currentPlayer = getCurrentPlayer();
-    Card card = deck.drawCard();
+    Card card;
+    try {
+      card = deck.drawCard();
+    }
+    catch (IllegalStateException e) {
+      currentPlayer.die();
+      checkWinner();
+      return;
+    }
     if (card.getType() == CardType.EXPLODING_KITTEN && currentPlayer.hasDefuse()) {
       defuse(position);
       completeOneTurn();
@@ -199,6 +207,13 @@ public class Game {
       throw new IllegalArgumentException("card is not playable");
     }
     Player currentPlayer = getCurrentPlayer();
+
+    if ((card.getType() == CardType.TARGETED_ATTACK
+            || card.getType() == CardType.BLESSING)
+            && target == currentPlayer) {
+      throw new IllegalArgumentException("cannot target yourself");
+    }
+
     currentPlayer.removeCard(card);
     deck.discardCard(card);
 
@@ -225,6 +240,23 @@ public class Game {
     if (!isPlayableCard(card)) {
       throw new IllegalArgumentException("card is not playable");
     }
+
+    // execute validation logic before removing the card from the deck
+    if (card.getType() == CardType.ALTER_FUTURE) {
+      List<Card> topCards = deck.peekTopCards();
+
+      if (reorderedCards.size() != topCards.size()) {
+        throw new IllegalArgumentException("must reorder all visible cards");
+      }
+
+      List<Card> remainingCards = new ArrayList<>(topCards);
+      for (Card reorderedCard : reorderedCards) {
+        if (!remainingCards.remove(reorderedCard)) {
+          throw new IllegalArgumentException("invalid reordered cards");
+        }
+      }
+    }
+
     Player currentPlayer = getCurrentPlayer();
     currentPlayer.removeCard(card);
     deck.discardCard(card);
@@ -307,7 +339,7 @@ public class Game {
       if (named == null || named == CardType.EXPLODING_KITTEN || named == CardType.DEFUSE) {
         throw new IllegalArgumentException("invalid wanted card type for 3-cat combo");
       }
-    } else if (size == FIVE_CAT_COMBO_SIZE) {
+    } else {
       if (named == null || named == CardType.EXPLODING_KITTEN || named == CardType.DEFUSE) {
         throw new IllegalArgumentException("invalid wanted card type for 5-cat combo");
       }
@@ -349,10 +381,6 @@ public class Game {
   }
 
   public List<Card> resolvePendingAction() {
-    if (pendingAction == ActionType.NONE) {
-      return Collections.emptyList();
-    }
-
     boolean actionIsNoped = (nopeCount % 2 != 0);
 
     if (!actionIsNoped) {
@@ -703,7 +731,7 @@ public class Game {
 
     List<Card> targetHand = target.getHand();
     if (targetHand.isEmpty()) {
-      throw new IllegalArgumentException("target player has no cards left");
+      return null;
     }
 
     int index = this.random.nextInt(targetHand.size());
