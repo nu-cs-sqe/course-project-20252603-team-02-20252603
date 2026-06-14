@@ -4824,6 +4824,9 @@ public class GameTest {
     Game game = new Game(MIN_PLAYERS, new Random(RANDOM_SEED));
     game.startGame();
     Player currentPlayer = game.getCurrentPlayer();
+    while (currentPlayer.getHand().stream().anyMatch(c -> c.getType() == CardType.TACOCAT)) {
+      currentPlayer.removeCard(new Card(CardType.TACOCAT));
+    }
     Card cat1 = new Card(CardType.TACOCAT);
     Card cat2 = new Card(CardType.HAIRY_POTATO_CAT);
     Card cat3 = new Card(CardType.RAINBOW_RALPHING_CAT);
@@ -5280,6 +5283,9 @@ public class GameTest {
     Player currentPlayer = game.getCurrentPlayer();
     Player thirdParty = game.getPlayers().get(THIRD_PLAYER_INDEX);
     Card skip = new Card(CardType.SKIP);
+    while (thirdParty.getHand().stream().anyMatch(c -> c.getType() == CardType.NOPE)) {
+      thirdParty.removeCard(new Card(CardType.NOPE));
+    }
     Card nopeCard = new Card(CardType.NOPE);
     currentPlayer.addCard(skip);
     thirdParty.addCard(nopeCard);
