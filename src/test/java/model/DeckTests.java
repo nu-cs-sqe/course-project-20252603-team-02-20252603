@@ -44,7 +44,7 @@ public class DeckTests {
         + (SPECIAL_CARD_COUNT * SPECIAL_CARD_TYPES)
         + (CAT_CARD_COUNT * CAT_CARD_TYPES)
         + SEE_THE_FUTURE_CARD_COUNT;
-    int defuseCards = DEFUSE_CARD_COUNT - numPlayers;
+    int defuseCards = Math.min(2, DEFUSE_CARD_COUNT - numPlayers);
     int dealtCards = STARTING_HAND_SIZE * numPlayers;
     int explodingKittens = numPlayers - 1;
     int expectedSize = initialCards + defuseCards - dealtCards + explodingKittens;
